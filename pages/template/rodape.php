@@ -14,9 +14,13 @@
 
 <script src="../../libs/moment/script.js"></script>
 
-<script src="../../js/mask.js"></script>
+<script src="../../libs/chart.js/script.js"></script>
 
-<script src="../../js/class/Noty.js"></script>
+<!-- Scripts do Sistema -->
+<script src="../../js/mask.js"></script>
+<script src="../../js/utils/Noty.js"></script>
+<script src="../../js/sidebar.js"></script>
+<script src="../../js/dashboard.js"></script>
 
 <script src="../../js/login.js"></script>
 

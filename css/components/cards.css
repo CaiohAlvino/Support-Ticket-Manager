@@ -1,0 +1,229 @@
+/* Cards de Estatísticas */
+.stats-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stats-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+}
+
+.stats-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.stats-icon i {
+    font-size: 24px;
+    color: #fff;
+}
+
+.stats-info {
+    flex: 1;
+}
+
+.stats-number {
+    font-size: 28px;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.stats-label {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Cores dos Cards */
+.stats-card.total {
+    border-left: 4px solid #0d6efd;
+}
+.stats-card.total .stats-icon {
+    background-color: #0d6efd;
+}
+
+.stats-card.ongoing {
+    border-left: 4px solid #ffc107;
+}
+.stats-card.ongoing .stats-icon {
+    background-color: #ffc107;
+}
+
+.stats-card.resolved {
+    border-left: 4px solid #198754;
+}
+.stats-card.resolved .stats-icon {
+    background-color: #198754;
+}
+
+.stats-card.critical {
+    border-left: 4px solid #dc3545;
+}
+.stats-card.critical .stats-icon {
+    background-color: #dc3545;
+}
+
+/* Tabela de Tickets */
+.tickets-table {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    margin-top: 24px;
+}
+
+.tickets-header {
+    padding: 20px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tickets-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.search-box {
+    position: relative;
+    width: 300px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 8px 16px;
+    padding-left: 40px;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.search-box input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 16px;
+}
+
+/* Categorias */
+.categories-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+}
+
+.category-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-name {
+    color: #333;
+    font-size: 14px;
+}
+
+.category-count {
+    background: #e9ecef;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #6c757d;
+}
+
+/* Atividades Recentes */
+.activities-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    margin-top: 24px;
+}
+
+.activity-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 16px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #e9ecef;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.activity-icon i {
+    font-size: 16px;
+    color: #6c757d;
+}
+
+.activity-content {
+    flex: 1;
+}
+
+.activity-text {
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+}
+
+.activity-time {
+    font-size: 12px;
+    color: #6c757d;
+    margin: 4px 0 0;
+} 
