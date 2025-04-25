@@ -1,7 +1,8 @@
 :root {
     /* Cores principais */
     --primary-color: #708238;
-    --primary-hover: #93C572;  /* Pistachio Green */
+    --primary-hover: #93C572;
+    /* Pistachio Green */
     --secondary-color: #6B7280;
     --success-color: #556B2F;
     --background-color: #F3F4F6;

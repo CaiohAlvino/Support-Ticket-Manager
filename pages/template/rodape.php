@@ -1,29 +1,33 @@
-</main>
+        </div>
+        </main>
 
-<script src="../../libs/jquery/script.js"></script>
+        <!-- Scripts -->
+        <script src="../../libs/axios/script.js"></script>
+        <!-- jQuery -->
+        <script src="../../libs/jquery/script.js"></script>
+        <!-- Bootstrap -->
+        <script src="../../libs/bootstrap/script.js"></script>
+        <!-- Select2 -->
+        <script src="../../libs/select2/script.js"></script>
+        <!-- Noty -->
+        <script src="../../libs/noty/script.js"></script>
+        <!-- Moment.js -->
+        <script src="../../libs/moment/script.js"></script>
+        <!-- Axios -->
+        <script src="../../libs/axios/script.js"></script>
+        <!-- Custom Scripts -->
+        <script src="../../js/mask.js"></script>
+        <script src="../../js/sidebar.js"></script>
 
-<script src="../../libs/bootstrap/script.js"></script>
+        <?php
+        // Inclui o script específico da página se existir
+        $current_page = basename($_SERVER['PHP_SELF'], '.php');
+        $script_path = "../../js/pages/{$current_page}.js";
+        if (file_exists($script_path)) {
+            echo "<script src=\"{$script_path}\"></script>";
+        }
+        ?>
 
-<script src="../../libs/select2/script.js"></script>
+        </body>
 
-<script src="../../libs/jquery-mask/script.js"></script>
-
-<script src="../../libs/axios/script.js"></script>
-
-<script src="../../libs/noty/script.js"></script>
-
-<script src="../../libs/moment/script.js"></script>
-
-<script src="../../libs/chart.js/script.js"></script>
-
-<!-- Scripts do Sistema -->
-<script src="../../js/mask.js"></script>
-<script src="../../js/utils/Noty.js"></script>
-<script src="../../js/sidebar.js"></script>
-<script src="../../js/dashboard.js"></script>
-
-<script src="../../js/login.js"></script>
-
-</body>
-
-</html>
+        </html>
