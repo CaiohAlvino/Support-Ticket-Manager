@@ -6,36 +6,27 @@
             <h2>Suporte</h2>
         </div>
         <div class="card-body">
-        <table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">First</th>
-      <th scope="col">Last</th>
-      <th scope="col">Handle</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-    <tr>
-      <th scope="row">1</th>
-      <td>Mark</td>
-      <td>Otto</td>
-      <td>@mdo</td>
-    </tr>
-    <tr>
-      <th scope="row">2</th>
-      <td>Jacob</td>
-      <td>Thornton</td>
-      <td>@fat</td>
-    </tr>
-    <tr>
-      <th scope="row">3</th>
-      <td>John</td>
-      <td>Doe</td>
-      <td>@social</td>
-    </tr>
-  </tbody>
-</table>
+            <table class="table caption-top">
+                <caption>Lista de Tickets para Suporte</caption>
+                <thead>
+                    <tr>
+                    <th scope="col">Status</th>
+                    <th scope="col">Id</th>
+                    <th scope="col">Cliente</th>
+                    <th scope="col">Assunto</th>
+                    <th scope="col">Usuário</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                    <th scope="row"><></th>
+                    <td>#1</td>
+                    <td>Teste</td>
+                    <td>Teste2</td>
+                    <td>Teste3</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
