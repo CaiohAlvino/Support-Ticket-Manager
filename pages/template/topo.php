@@ -20,8 +20,9 @@
     <link rel="stylesheet" href="../../css/pages/dashboard.css">
 </head>
 
+<?php require("../../config/Database.php"); ?>
+
 <body class="layout-fixed">
-    <?php require("../../config/Database.php"); ?>
 
     <!-- Header -->
     <header class="header">
@@ -39,7 +40,7 @@
                 <button class="dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="bi bi-person-circle"></i>
                     <span class="user-name ms-2">Usuário</span>
-                    <i class="bi bi-chevron-down ms-1"></i>
+                    <!-- <i class="bi bi-chevron-down ms-1"></i> -->
                 </button>
                 <ul class="dropdown-menu dropdown-menu-end">
                     <li>
@@ -75,21 +76,37 @@
                 <i class="bi bi-grid-1x2-fill"></i>
                 <span class="menu-text">Dashboard</span>
             </a>
-            <a href="../tickets/meus-tickets.php" class="menu-item">
-                <i class="bi bi-ticket-fill"></i>
-                <span class="menu-text">Meus Tickets</span>
-            </a>
-            <a href="../tickets/todos-tickets.php" class="menu-item">
+            <a href="../suporte/index.php" class="menu-item">
                 <i class="bi bi-list-ul"></i>
                 <span class="menu-text">Todos os Tickets</span>
             </a>
-            <a href="../categorias/index.php" class="menu-item">
-                <i class="bi bi-tag"></i>
-                <span class="menu-text">Categorias</span>
+            <a href="../suporte/meus-tickets.php" class="menu-item">
+                <i class="bi bi-ticket-fill"></i>
+                <span class="menu-text">Meus Tickets</span>
             </a>
-            <a href="../relatorios/index.php" class="menu-item">
-                <i class="bi bi-graph-up"></i>
-                <span class="menu-text">Relatórios</span>
+            <a href="../empresa/index.php" class="menu-item">
+                <i class="bi bi-building"></i>
+                <span class="menu-text">Empresas</span>
+            </a>
+            <a href="../servico/index.php" class="menu-item">
+                <i class="bi bi-award-fill"></i>
+                <span class="menu-text">Serviço</span>
+            </a>
+            <a href="../cliente/index.php" class="menu-item">
+                <i class="bi bi-people"></i>
+                <span class="menu-text">Clientes</span>
+            </a>
+            <a href="../fornecedor/index.php" class="menu-item">
+                <i class="bi bi-shop"></i>
+                <span class="menu-text">Fornecedores</span>
+            </a>
+            <a href="../usuario/index.php" class="menu-item">
+                <i class="bi bi-person"></i>
+                <span class="menu-text">Usuários</span>
+            </a>
+            <a href="../grupo/index.php" class="menu-item">
+                <i class="bi bi-shield-lock"></i>
+                <span class="menu-text">Grupo</span>
             </a>
         </div>
     </nav>
