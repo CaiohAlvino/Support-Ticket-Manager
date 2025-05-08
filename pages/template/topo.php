@@ -37,7 +37,8 @@
         </div>
         <div class="header-right">
             <div class="dropdown">
-                <button class="dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                <button class="dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown"
+                    aria-expanded="false">
                     <i class="bi bi-person-circle"></i>
                     <span class="user-name ms-2">Usuário</span>
                     <!-- <i class="bi bi-chevron-down ms-1"></i> -->

@@ -10,20 +10,22 @@
                 <caption>Lista de Tickets para Suporte</caption>
                 <thead>
                     <tr>
-                    <th scope="col">Status</th>
-                    <th scope="col">Id</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Assunto</th>
-                    <th scope="col">Usuário</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Id</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Assunto</th>
+                        <th scope="col">Usuário</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                    <th scope="row"><></th>
-                    <td>#1</td>
-                    <td>Teste</td>
-                    <td>Teste2</td>
-                    <td>Teste3</td>
+                        <th scope="row">
+                            <>
+                        </th>
+                        <td>#1</td>
+                        <td>Teste</td>
+                        <td>Teste2</td>
+                        <td>Teste3</td>
                     </tr>
                 </tbody>
             </table>
