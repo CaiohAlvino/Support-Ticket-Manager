@@ -22,7 +22,7 @@
 
 <?php require("../../config/Database.php"); ?>
 <?php require("../../config/Cliente.php"); ?>
-<?php require("../../config/Validacao.php"); ?>
+<?php require("../../config/Validador.php"); ?>
 <?php require("../../config/Suporte.php"); ?>
 <?php require("../../config/SuporteMensagem.php"); ?>
 
@@ -31,7 +31,7 @@ $db = new Database();
 $cliente = new Cliente($db->getConnection());
 $suporte = new Suporte($db->getConnection());
 $suporteMensagem = new SuporteMensagem($db->getConnection());
-$validacao = new Validacao();
+$validacao = new Validador();
 ?>
 
 <body class="layout-fixed">
