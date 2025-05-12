@@ -12,8 +12,12 @@ class Select2 {
             $('.select2').each(function () {
                 const $select = $(this);
                 const isModal = $select.closest('.modal').length > 0;
+                const isInputGroup = $select.closest('.input-group').length > 0;
 
-                if (isModal) {
+                if (isInputGroup) {
+                    // Configuração especial para input-groups
+                    Select2.configurarInputGroup($select);
+                } else if (isModal) {
                     const $modalBody = $select.closest('.modal-body');
 
                     // Verifica se os elementos têm IDs válidos
@@ -41,16 +45,64 @@ class Select2 {
     }
 
     /**
- * Configuração padrão que será aplicada a todos os selects
- * @param {jQuery|string} seletor - Seletor jQuery ou elemento jQuery
- * @param {object} opcoesAdicionais - Opções adicionais para personalização
- */
+     * Configuração padrão que será aplicada a todos os selects
+     * @param {jQuery|string} seletor - Seletor jQuery ou elemento jQuery
+     * @param {object} opcoesAdicionais - Opções adicionais para personalização
+     */
     static configurarPadrao($elemento, opcoesAdicionais = {}) {
         if (typeof $elemento === 'string') {
             $elemento = $($elemento);
         }
 
-        const configPadrao = {
+        const configPadrao = this.obterConfigPadrao();
+
+        // Mescla as configurações padrão com as opções adicionais
+        const configFinal = { ...configPadrao, ...opcoesAdicionais };
+
+        $elemento.select2(configFinal);
+    }
+
+    /**
+     * Configura um Select2 para funcionar corretamente dentro de input-groups
+     * @param {jQuery|string} seletor - Seletor jQuery ou elemento jQuery
+     * @param {object} opcoesAdicionais - Opções adicionais para personalização
+     */
+    static configurarInputGroup($elemento, opcoesAdicionais = {}) {
+        if (typeof $elemento === 'string') {
+            $elemento = $($elemento);
+        }
+
+        // Verificar se o elemento está dentro de um input-group
+        const $inputGroup = $elemento.closest('.input-group');
+        if ($inputGroup.length === 0) {
+            console.warn('Select2: Elemento não está dentro de um input-group');
+            // Usar configuração padrão se não estiver em um input-group
+            return this.configurarPadrao($elemento, opcoesAdicionais);
+        }
+
+        // Configurações específicas para input-group
+        const configInputGroup = {
+            width: '100%',
+            containerCssClass: 'select2-container--input-group',
+            // As demais configurações padrões são herdadas
+        };
+
+        // Mescla as configurações com prioridade para as opções adicionais
+        const configFinal = { ...this.obterConfigPadrao(), ...configInputGroup, ...opcoesAdicionais };
+
+        // Inicializa o Select2
+        $elemento.select2(configFinal);
+
+        // Adiciona classe auxiliar ao input-group para os estilos CSS
+        $inputGroup.addClass('has-select2');
+    }
+
+    /**
+     * Extrai a configuração padrão para reuso
+     * @returns {object} Configuração padrão
+     */
+    static obterConfigPadrao() {
+        return {
             width: '100%',
             language: {
                 noResults: function () {
@@ -78,11 +130,6 @@ class Select2 {
                 return data.text;
             }
         };
-
-        // Mescla as configurações padrão com as opções adicionais
-        const configFinal = { ...configPadrao, ...opcoesAdicionais };
-
-        $elemento.select2(configFinal);
     }
 
     /**
@@ -187,7 +234,6 @@ class Select2 {
     }
 }
 
-// Inicialização para selects específicos
 // Inicialização para selects específicos
 $(document).ready(function () {
     // Inicializar todos os selects com classe select2
