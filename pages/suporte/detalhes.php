@@ -1,4 +1,4 @@
-<?php include("../templates/topo.php"); ?>
+<?php include("../template/topo.php"); ?>
 <link rel="stylesheet" href="../../css/paginas/suporte.css">
 
 <?php
@@ -162,4 +162,4 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
     </div>
 </div>
 
-<?php include("../templates/rodape.php"); ?>
+<?php include("../template/rodape.php"); ?>

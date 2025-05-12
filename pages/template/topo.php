@@ -21,6 +21,18 @@
 </head>
 
 <?php require("../../config/Database.php"); ?>
+<?php require("../../config/Cliente.php"); ?>
+<?php require("../../config/Validacao.php"); ?>
+<?php require("../../config/Suporte.php"); ?>
+<?php require("../../config/SuporteMensagem.php"); ?>
+
+<?php
+$db = new Database();
+$cliente = new Cliente($db->getConnection());
+$suporte = new Suporte($db->getConnection());
+$suporteMensagem = new SuporteMensagem($db->getConnection());
+$validacao = new Validacao();
+?>
 
 <body class="layout-fixed">
 
@@ -96,10 +108,6 @@
             <a href="../cliente/index.php" class="menu-item">
                 <i class="bi bi-people"></i>
                 <span class="menu-text">Clientes</span>
-            </a>
-            <a href="../fornecedor/index.php" class="menu-item">
-                <i class="bi bi-shop"></i>
-                <span class="menu-text">Fornecedores</span>
             </a>
             <a href="../usuario/index.php" class="menu-item">
                 <i class="bi bi-person"></i>

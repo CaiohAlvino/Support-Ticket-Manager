@@ -1,4 +1,4 @@
-<?php include("../templates/topo.php"); ?>
+<?php include("../template/topo.php"); ?>
 
 <?php
 $suporte_id = isset($_GET["suporte_id"]) ? $_GET["suporte_id"] : NULL;
@@ -6,8 +6,6 @@ $empresa_id = isset($_GET["empresa_id"]) ? $_GET["empresa_id"] : NULL;
 $status = (isset($_GET["status"]) && $_GET["status"] !== "NULL") ? $_GET["status"] : NULL;
 $assunto = isset($_GET["assunto"]) ? $_GET["assunto"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
-
-$suporte = new Suporte($db->getConnection());
 
 $indexRegistros = $suporte->index([
     "suporte_id" => $suporte_id,
@@ -34,7 +32,7 @@ $paginacao = $indexRegistros["paginacao"];
                     <i class="bi-plus-lg me-2" aria-hidden="true"></i>Novo Suporte
                 </a>
             </div>
-            
+
         </div>
     </header>
 
@@ -69,51 +67,51 @@ $paginacao = $indexRegistros["paginacao"];
                 <p class="mb-0">Confira se os dados estão corretos ou cadastre uma novo.</p>
             </div>
         <?php else: ?>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Situação</th>
-                        <th>Usuário</th>
-                        <th>Assunto</th>
-                        <th>Ultima alteração</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($registros as $registro): ?>
-                        <tr class="<?php echo ($suporte_id == $registro->id) ? 'table-active' : ''; ?>">
-                            <td>
-                                <?php if ($registro->status == "ABERTO"): ?>
-                                    <span class="badge text-bg-success">ABERTO</span>
-                                <?php elseif ($registro->status == "AGUARDANDO_SUPORTE"): ?>
-                                    <span class="badge text-bg-warning">AGUARDANDO SUPORTE</span>
-                                <?php elseif ($registro->status == "RESPONDIDO"): ?>
-                                    <span class="badge text-bg-info">RESPONDIDO</span>
-                                <?php else: ?>
-                                    <span class="badge text-bg-danger">FECHADO</span>
-                                <?php endif; ?>
-                            </td>
-                            <td><?php echo $registro->usuario_nome; ?></td>
-                            <td><?php echo $registro->assunto; ?></td>
-                            <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
-                            <td>
-                                <a href="detalhes.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar"> <i class="bi-eye-fill me-2"></i>Ver</a>
-                            </td>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Situação</th>
+                            <th>Usuário</th>
+                            <th>Assunto</th>
+                            <th>Ultima alteração</th>
+                            <th>Ações</th>
                         </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($registros as $registro): ?>
+                            <tr class="<?php echo ($suporte_id == $registro->id) ? 'table-active' : ''; ?>">
+                                <td>
+                                    <?php if ($registro->status == "ABERTO"): ?>
+                                        <span class="badge text-bg-success">ABERTO</span>
+                                    <?php elseif ($registro->status == "AGUARDANDO_SUPORTE"): ?>
+                                        <span class="badge text-bg-warning">AGUARDANDO SUPORTE</span>
+                                    <?php elseif ($registro->status == "RESPONDIDO"): ?>
+                                        <span class="badge text-bg-info">RESPONDIDO</span>
+                                    <?php else: ?>
+                                        <span class="badge text-bg-danger">FECHADO</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo $registro->usuario_nome; ?></td>
+                                <td><?php echo $registro->assunto; ?></td>
+                                <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
+                                <td>
+                                    <a href="detalhes.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar"> <i class="bi-eye-fill me-2"></i>Ver</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
 
-        
+
     </div>
     <?php $linkPaginacaoUrlParametros = "&limite=" . $paginacao['limite'] . "&assunto=$assunto&status=$status&suporte_id=$suporte_id"; ?>
 
     <?php
-    $limite = 2;
-    $inicio = ((($pagina - $limite) > 1) ? $pagina - $limite : 1);
-    $fim = ((($pagina + $limite) < $paginacao['total_paginas']) ? $pagina + $limite : $paginacao['total_paginas']);
+            $limite = 2;
+            $inicio = ((($pagina - $limite) > 1) ? $pagina - $limite : 1);
+            $fim = ((($pagina + $limite) < $paginacao['total_paginas']) ? $pagina + $limite : $paginacao['total_paginas']);
     ?>
 
     <div class="border border-2 border-warning-subtle rounded p-3 bg-warning-subtle">
@@ -176,10 +174,10 @@ $paginacao = $indexRegistros["paginacao"];
         </ul>
     </nav>
 
-    
-    <?php endif; ?>
 
-    
+<?php endif; ?>
+
+
 </div>
 
-<?php include("../templates/rodape.php"); ?>
+<?php include("../template/rodape.php"); ?>

@@ -1,9 +1,4 @@
 <?php
-
-require_once("phpmailer/src/Exception.php");
-require_once("phpmailer/src/PHPMailer.php");
-require_once("phpmailer/src/SMTP.php");
-
 class Suporte
 {
     private $db;
@@ -16,22 +11,22 @@ class Suporte
     public function index($parametros = array())
     {
         try {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
+            // if (session_status() === PHP_SESSION_NONE) {
+            //     session_start();
+            // }
             $empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
 
-            if (!$empresa_id) {
-                return array(
-                    "resultados" => [],
-                    "paginacao" => array(
-                        "pagina" => 1,
-                        "limite" => 10,
-                        "total" => 0,
-                        "total_paginas" => 1
-                    )
-                );
-            }
+            // if (!$empresa_id) {
+            //     return array(
+            //         "resultados" => [],
+            //         "paginacao" => array(
+            //             "pagina" => 1,
+            //             "limite" => 10,
+            //             "total" => 0,
+            //             "total_paginas" => 1
+            //         )
+            //     );
+            // }
 
             $suporte_id = isset($parametros["suporte_id"]) ? $parametros["suporte_id"] : NULL;
             $status = isset($parametros["status"]) ? $parametros["status"] : NULL;

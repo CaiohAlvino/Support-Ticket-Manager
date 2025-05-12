@@ -1,4 +1,4 @@
-<?php include("../templates/topo.php"); ?>
+<?php include("../template/topo.php"); ?>
 
 <div class="container-fluid">
     <div class="sessao">
@@ -68,4 +68,4 @@
     </div>
 </div>
 
-<?php include("../templates/rodape.php"); ?>
+<?php include("../template/rodape.php"); ?>
