@@ -35,10 +35,25 @@ class FeedbackVisual {
         // Remover mensagens de erro existentes
         $campo.siblings(".invalid-feedback").remove();
 
+        // Se estiver em um input-group, remover mensagens após o input-group também
+        const $inputGroup = $campo.closest('.input-group');
+        if ($inputGroup.length > 0) {
+            $inputGroup.siblings(".invalid-feedback").remove();
+        }
+
         const elementoErro = $(`<div class="invalid-feedback ${opcoes.classeAdicional}">${mensagem}</div>`);
 
-        // Tratamento especial para Select2
-        if ($campo.hasClass("select2")) {
+        // Tratamento especial para Select2 dentro de input-group
+        if ($campo.hasClass("select2") && $inputGroup.length > 0) {
+            $campo.next(".select2-container").addClass("is-invalid");
+            // Coloca a mensagem após o input-group inteiro
+            $inputGroup.after(elementoErro);
+
+            // Adiciona classe is-invalid no input-group também para facilitar estilização
+            $inputGroup.addClass("is-invalid");
+        }
+        // Tratamento especial para Select2 padrão
+        else if ($campo.hasClass("select2")) {
             $campo.next(".select2-container").addClass("is-invalid");
             // Coloca a mensagem após o container do Select2
             $campo.next(".select2-container").after(elementoErro);
@@ -50,6 +65,9 @@ class FeedbackVisual {
             setTimeout(() => {
                 elementoErro.remove();
                 $campo.removeClass("is-invalid");
+                if ($inputGroup.length > 0) {
+                    $inputGroup.removeClass("is-invalid");
+                }
                 if ($campo.hasClass("select2")) {
                     $campo.next(".select2-container").removeClass("is-invalid");
                 }
@@ -72,7 +90,16 @@ class FeedbackVisual {
         const opcoes = { ...opcoesPadrao, ...opcoesPersonalizadas };
 
         $campo.removeClass("is-invalid").addClass("is-valid");
+
+        // Remover mensagens de erro existentes
         $campo.siblings(".invalid-feedback").remove();
+
+        // Se estiver em um input-group, remover mensagens após o input-group também
+        const $inputGroup = $campo.closest('.input-group');
+        if ($inputGroup.length > 0) {
+            $inputGroup.siblings(".invalid-feedback").remove();
+            $inputGroup.removeClass("is-invalid");
+        }
 
         // Tratamento especial para Select2
         if ($campo.hasClass("select2")) {
@@ -90,11 +117,11 @@ class FeedbackVisual {
     }
 
     /**
- * Mostra uma mensagem de aviso para um campo (não impede o envio do formulário)
- * @param {Element|String} campo - O campo que apresentou o aviso
- * @param {String} mensagem - A mensagem de aviso a ser exibida
- * @param {Object} opcoesPersonalizadas - Opções adicionais de estilo
- */
+     * Mostra uma mensagem de aviso para um campo (não impede o envio do formulário)
+     * @param {Element|String} campo - O campo que apresentou o aviso
+     * @param {String} mensagem - A mensagem de aviso a ser exibida
+     * @param {Object} opcoesPersonalizadas - Opções adicionais de estilo
+     */
     static mostrarAviso(campo, mensagem, opcoesPersonalizadas = {}) {
         const $campo = $(campo);
         const opcoesPadrao = {
@@ -109,12 +136,25 @@ class FeedbackVisual {
         $campo.removeClass("is-invalid is-valid").addClass("has-warning");
 
         // Remover mensagens existentes
-        $campo.siblings(".invalid-feedback, .alerta-data-menor-atual").remove();
+        $campo.siblings(".invalid-feedback, .mensagem-alerta").remove();
 
-        const elementoAviso = $(`<div class="alert alerta-data-menor-atual ${opcoes.classeAdicional}"><i class="bi bi-exclamation-triangle mx-2"></i>${mensagem}</div>`);
+        // Se estiver em um input-group, remover mensagens após o input-group também
+        const $inputGroup = $campo.closest('.input-group');
+        if ($inputGroup.length > 0) {
+            $inputGroup.siblings(".invalid-feedback, .mensagem-alerta").remove();
+            $inputGroup.removeClass("is-invalid");
+        }
 
-        // Tratamento especial para Select2
-        if ($campo.hasClass("select2")) {
+        const elementoAviso = $(`<div class="alert mensagem-alerta ${opcoes.classeAdicional}"><i class="bi bi-exclamation-triangle mx-2"></i>${mensagem}</div>`);
+
+        // Tratamento especial para Select2 dentro de input-group
+        if ($campo.hasClass("select2") && $inputGroup.length > 0) {
+            $campo.next(".select2-container").addClass("has-warning");
+            // Coloca a mensagem após o input-group
+            $inputGroup.after(elementoAviso);
+        }
+        // Tratamento para Select2 normal
+        else if ($campo.hasClass("select2")) {
             $campo.next(".select2-container").addClass("has-warning");
             // Coloca a mensagem após o container do Select2
             $campo.next(".select2-container").after(elementoAviso);
@@ -134,12 +174,12 @@ class FeedbackVisual {
     }
 
     /**
- * Mostra feedback de carregamento para um campo que está consultando API
- * @param {Element|String} campo - O campo principal que está realizando a consulta
- * @param {Array|String} camposRelacionados - Campos relacionados para desabilitar durante a consulta
- * @param {String} mensagem - Mensagem de carregamento
- * @param {Object} opcoesPersonalizadas - Opções adicionais
- */
+     * Mostra feedback de carregamento para um campo que está consultando API
+     * @param {Element|String} campo - O campo principal que está realizando a consulta
+     * @param {Array|String} camposRelacionados - Campos relacionados para desabilitar durante a consulta
+     * @param {String} mensagem - Mensagem de carregamento
+     * @param {Object} opcoesPersonalizadas - Opções adicionais
+     */
     static mostrarCarregamento(campo, camposRelacionados = [], mensagem = "Carregando...", opcoesPersonalizadas = {}) {
         const $campo = $(campo);
         const opcoesPadrao = {
@@ -176,6 +216,14 @@ class FeedbackVisual {
 
         // Remover qualquer feedback existente
         $campo.siblings(".invalid-feedback, .valid-feedback, .loading-feedback").remove();
+
+        // Se estiver em um input-group, remover mensagens após o input-group também
+        const $inputGroup = $campo.closest('.input-group');
+        if ($inputGroup.length > 0) {
+            $inputGroup.siblings(".invalid-feedback, .valid-feedback, .loading-feedback").remove();
+            $inputGroup.removeClass("is-invalid");
+        }
+
         $campo.removeClass("is-invalid is-valid").addClass("is-loading");
 
         // Tratamento especial para Select2
@@ -183,13 +231,18 @@ class FeedbackVisual {
             $campo.next(".select2-container").removeClass("is-invalid is-valid").addClass("is-loading");
         }
 
-        // Criar elemento de feedback de carregamento (similar ao invalid-feedback/valid-feedback)
+        // Criar elemento de feedback de carregamento
         const $feedbackCarregamento = $(`<div class="loading-feedback ${opcoes.classeAdicional}">
         <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
         <span>${mensagem}</span>
     </div>`);
 
-        $campo.after($feedbackCarregamento);
+        // Adicionar o feedback após o campo ou após o input-group se existir
+        if ($inputGroup.length > 0) {
+            $inputGroup.after($feedbackCarregamento);
+        } else {
+            $campo.after($feedbackCarregamento);
+        }
 
         // Retornar objeto com método para finalizar o carregamento
         return {
@@ -240,7 +293,14 @@ class FeedbackVisual {
     static limparFeedback(campo) {
         const $campo = $(campo);
         $campo.removeClass("is-invalid is-valid has-warning");
-        $campo.siblings(".invalid-feedback, .alerta-data-menor-atual, .error-message").remove();
+        $campo.siblings(".invalid-feedback, .mensagem-alerta, .error-message").remove();
+
+        // Limpar feedback após o input-group se existir
+        const $inputGroup = $campo.closest('.input-group');
+        if ($inputGroup.length > 0) {
+            $inputGroup.removeClass("is-invalid");
+            $inputGroup.siblings(".invalid-feedback, .mensagem-alerta, .error-message").remove();
+        }
 
         // Tratamento especial para Select2
         if ($campo.hasClass("select2")) {
@@ -258,11 +318,17 @@ class FeedbackVisual {
         $(`${formSelector} .has-warning`).removeClass("has-warning");
         $(`${formSelector} .invalid-feedback`).remove();
         $(`${formSelector} .error-message`).remove();
-        $(`${formSelector} .alerta-data-menor-atual`).remove();
+        $(`${formSelector} .mensagem-alerta`).remove();
 
         // Tratamento especial para Select2
         $(`${formSelector} .select2`).each(function () {
             $(this).next(".select2-container").removeClass("is-invalid is-valid has-warning");
+        });
+
+        // Verificar e remover mensagens após input-groups
+        $(`${formSelector} .input-group`).each(function () {
+            $(this).removeClass("is-invalid");
+            $(this).siblings(".invalid-feedback, .error-message, .mensagem-alerta").remove();
         });
     }
 }
@@ -852,7 +918,7 @@ class ValidadorSenha extends Validador {
      *  @param {String} senha - O senha a ser validado
      *  @returns {Boolean} - Verdadeiro se o senha for válido
      */
-    validar(senha) {
+    validar(senha, validarMinimoCaracteres = true) {
         if (!senha) {
             return false;
         }
@@ -860,7 +926,12 @@ class ValidadorSenha extends Validador {
         if (senha === "") {
             return false;
         }
-        return senha.trim().length >= 3;
+
+        if (validarMinimoCaracteres) {
+            return senha.trim().length >= 3;
+        } else {
+            return true;
+        }
     }
 }
 
@@ -1097,6 +1168,7 @@ class ValidadorSelect extends Validador {
             }
         } else if (valor === "CADASTRE") {
             FeedbackVisual.mostrarErro(campo, "Cadastre uma opção antes de continuar.");
+            return;
         } else {
             FeedbackVisual.limparFeedback(campo);
         }
