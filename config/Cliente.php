@@ -11,23 +11,11 @@ class Cliente
     public function index($parametros = array())
     {
         try {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-            $empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
+            // if (session_status() === PHP_SESSION_NONE) {
+            //     session_start();
+            // }
 
-            if (!$empresa_id) {
-                return array(
-                    "resultados" => [],
-                    "paginacao" => array(
-                        "pagina" => 1,
-                        "limite" => 10,
-                        "total" => 0,
-                        "total_paginas" => 1
-                    )
-                );
-            }
-
+            $empresa_id = isset($parametros["empresa_id"]) ? $parametros["empresa_id"] : NULL;
             $cliente_id = isset($parametros["cliente_id"]) ? $parametros["cliente_id"] : NULL;
             $nome_fantasia = isset($parametros["nome_fantasia"]) ? $parametros["nome_fantasia"] : NULL;
             $documento = isset($parametros["documento"]) ? $parametros["documento"] : NULL;
@@ -35,8 +23,6 @@ class Cliente
             $limite = isset($parametros["limite"]) ? $parametros["limite"] : 10;
 
             $where = array();
-
-            $where[] = "`cliente`.`empresa_id` = {$empresa_id}";
 
             $query = "SELECT `cliente`.*";
             $queryCount = "SELECT COUNT(`cliente`.`id`)";
