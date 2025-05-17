@@ -1,12 +1,10 @@
-<?php include("../templates/topo.php"); ?>
+<?php include("../template/topo.php"); ?>
 
 <?php
 $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
 $aba = isset($_GET["aba"]) ? $_GET["aba"] : "dados";
 
-$fornecedor = new Fornecedor($db->getConnection());
-
-$registro = $fornecedor->pegarPorId($id);
+$registro = $cliente->pegarPorId($id);
 ?>
 
 <div class="fornecedor-edicao container-fluid mt-2">
@@ -188,4 +186,4 @@ $registro = $fornecedor->pegarPorId($id);
     <?php endif ?>
 </div>
 
-<?php include("../templates/rodape.php"); ?>
+<?php include("../template/rodape.php"); ?>

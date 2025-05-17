@@ -25,13 +25,14 @@
 <?php require("../../config/Validador.php"); ?>
 <?php require("../../config/Suporte.php"); ?>
 <?php require("../../config/SuporteMensagem.php"); ?>
+<?php require("../../config/Estado.php"); ?>
 
 <?php
 $db = new Database();
 $cliente = new Cliente($db->getConnection());
 $suporte = new Suporte($db->getConnection());
 $suporteMensagem = new SuporteMensagem($db->getConnection());
-$validacao = new Validador();
+$validacao = new Validador($db->getConnection());
 ?>
 
 <body class="layout-fixed">
