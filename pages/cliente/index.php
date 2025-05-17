@@ -1,6 +1,5 @@
 <?php include("../template/topo.php"); ?>
 
-
 <?php
 $cliente_id = isset($_GET["cliente_id"]) ? $_GET["cliente_id"] : NULL;
 $empresa_id = isset($_GET["empresa_id"]) ? $_GET["empresa_id"] : NULL;
@@ -79,10 +78,10 @@ $paginacao = $indexRegistros["paginacao"];
                         <?php foreach ($registros as $registro): ?>
                             <tr class="<?php echo $registro->id == $focu_cliente_id ? 'table-active' : ''; ?>">
                                 <td>
-                                    <?php if ($registro->ativo == 1): ?>
-                                        <span class="badge status-ativo">Ativo</span>
+                                    <?php if ($registro->situacao == 1): ?>
+                                        <span class="badge status-situacao">Ativo</span>
                                     <?php else: ?>
-                                        <span class="badge status-inativo">Inativo</span>
+                                        <span class="badge status-insituacao">Inativo</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo $registro->nome_fantasia; ?></td>
@@ -105,7 +104,7 @@ $paginacao = $indexRegistros["paginacao"];
 
                             <?php $registroExcluir = $registro; ?>
                             <?php $data_action_excluir = "cliente/excluir.php"; ?>
-                            <?php include("../componentes/excluir.php"); ?>
+                            <?php include("../components/excluir.php"); ?>
                         <?php endforeach; ?>
                     </tbody>
                 </table>

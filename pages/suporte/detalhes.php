@@ -1,5 +1,4 @@
 <?php include("../template/topo.php"); ?>
-<link rel="stylesheet" href="../../css/paginas/suporte.css">
 
 <?php
 $id = isset($_GET["id"]) ? $_GET["id"] : NULL;

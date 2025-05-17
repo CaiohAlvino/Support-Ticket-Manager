@@ -117,7 +117,7 @@ $registro = $cliente->pegarPorId($id);
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <label for="responsavel_cliente" class="form-label dados-label-nome-cliente"></label>
-                            <input type="text" class="form-control input-validar-responsavel campo-obrigatorio" id="responsavel_cliente" name="responsavel" value="<?php echo $registro->responsavel; ?>">
+                            <input type="text" class="form-control input-validar-responsavel campo-obrigatorio" id="responsavel_cliente" name="responsavel_nome" value="<?php echo $registro->responsavel; ?>">
                         </div>
 
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -126,8 +126,8 @@ $registro = $cliente->pegarPorId($id);
                         </div>
 
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <label for="responsavel_whatsapp_cliente" class="form-label dados-label-whatsapp-cliente"></label>
-                            <input type="text" class="form-control input-validar-whatsapp campo-obrigatorio mascara-whatsapp" id="responsavel_whatsapp_cliente" name="responsavel_whatsapp" value="<?php echo $registro->responsavel_whatsapp; ?>">
+                            <label for="responsavel_telefone_cliente" class="form-label dados-label-whatsapp-cliente"></label>
+                            <input type="text" class="form-control input-validar-whatsapp campo-obrigatorio mascara-whatsapp" id="responsavel_telefone_cliente" name="responsavel_telefone" value="<?php echo $registro->responsavel_telefone; ?>">
                         </div>
 
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -146,8 +146,8 @@ $registro = $cliente->pegarPorId($id);
                     </div>
 
                     <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                        <label for="logradouro_cliente" class="form-label">Endereço</label>
-                        <input type="text" class="form-control campo-logradouro" id="logradouro_cliente" name="logradouro" value="<?php echo $registro->logradouro; ?>">
+                        <label for="endereco_cliente" class="form-label">Endereço</label>
+                        <input type="text" class="form-control campo-endereco" id="endereco_cliente" name="endereco" value="<?php echo $registro->endereco; ?>">
                     </div>
 
                     <div class="col-xl-2 col-lg-2 col-md-2 col-sm-12 col-12">

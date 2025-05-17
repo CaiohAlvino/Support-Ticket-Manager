@@ -1,0 +1,64 @@
+/* Estilo exclusivo para a página home */
+@import url('../../theme/variables.css');
+@import url('../../components/hover.css');
+
+.home-header {
+    color: var(--primary-color);
+    font-size: 2.3rem;
+    font-weight: 900;
+    margin-bottom: var(--spacing-xxl, 3rem);
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 12px rgba(147,197,114,0.10);
+}
+
+.home-card {
+    background: #fff;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: calc(var(--spacing-xl) * 1.5);
+    margin-bottom: var(--spacing-xl);
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+    border: 1.5px solid var(--border-color);
+}
+
+.home-card:hover {
+    box-shadow: 0 16px 40px rgba(112, 130, 56, 0.18);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px) scale(1.01);
+}
+
+.home-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: var(--border-radius-lg);
+    padding: 1rem 2.5rem;
+    font-weight: 800;
+    font-size: 1.2rem;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-md);
+    border: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.home-btn:hover {
+    background: var(--primary-hover);
+    color: #fff;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px) scale(1.04);
+}
+
+@media (max-width: 991.98px) {
+    .home-header {
+        font-size: 1.7rem;
+    }
+    .home-card {
+        padding: var(--spacing-lg);
+    }
+}
+@media (max-width: 575.98px) {
+    .home-header {
+        font-size: 1.3rem;
+    }
+    .home-card {
+        padding: var(--spacing-md);
+    }
+}

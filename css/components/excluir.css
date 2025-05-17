@@ -1,0 +1,64 @@
+/* Estilo exclusivo para a página de exclusão de componentes */
+@import url('../../theme/variables.css');
+@import url('../../components/hover.css');
+
+.excluir-header {
+    color: var(--primary-color);
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-xl);
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(147,197,114,0.08);
+}
+
+.excluir-card {
+    background: #fff;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: calc(var(--spacing-xl) * 1.2);
+    margin-bottom: var(--spacing-xl);
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+    border: 1.5px solid var(--border-color);
+}
+
+.excluir-card:hover {
+    box-shadow: 0 12px 32px rgba(112, 130, 56, 0.16);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px) scale(1.01);
+}
+
+.excluir-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: var(--border-radius-lg);
+    padding: 0.7rem 2.2rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+    border: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.excluir-btn:hover {
+    background: var(--primary-hover);
+    color: #fff;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px) scale(1.03);
+}
+
+@media (max-width: 991.98px) {
+    .excluir-header {
+        font-size: 1.5rem;
+    }
+    .excluir-card {
+        padding: var(--spacing-lg);
+    }
+}
+@media (max-width: 575.98px) {
+    .excluir-header {
+        font-size: 1.2rem;
+    }
+    .excluir-card {
+        padding: var(--spacing-md);
+    }
+}

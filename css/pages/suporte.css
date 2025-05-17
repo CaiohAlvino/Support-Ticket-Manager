@@ -1,0 +1,193 @@
+/* Estilo exclusivo para páginas de cadastro e edição de suporte */
+@import url('../../theme/variables.css');
+@import url('../../components/hover.css');
+
+.form-header {
+    color: var(--primary-color);
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-xl);
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(147, 197, 114, 0.08);
+}
+
+.form-card {
+    background: #fff;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: calc(var(--spacing-xl) * 1.2);
+    margin-bottom: var(--spacing-xl);
+    transition: box-shadow 0.2s, border-color 0.2s, transform 0.2s;
+    border: 1.5px solid var(--border-color);
+}
+
+.form-card:hover {
+    box-shadow: 0 12px 32px rgba(112, 130, 56, 0.16);
+    border-color: var(--primary-hover);
+    transform: translateY(-2px) scale(1.01);
+}
+
+.form-btn {
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: var(--border-radius-lg);
+    padding: 0.7rem 2.2rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+    border: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.form-btn:hover {
+    background: var(--primary-hover);
+    color: #fff;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px) scale(1.03);
+}
+
+input.form-control,
+select.form-control,
+textarea.form-control {
+    border-radius: var(--border-radius-md);
+    border: 1.5px solid var(--border-color);
+    padding: 0.8rem 1.1rem;
+    font-size: 1.05rem;
+    background: #f9fafb;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+
+input.form-control:focus,
+select.form-control:focus,
+textarea.form-control:focus {
+    border-color: var(--primary-hover);
+    box-shadow: 0 0 0 3px rgba(147, 197, 114, 0.13);
+    background: #fff;
+}
+
+label.form-label {
+    color: var(--text-primary);
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.2px;
+}
+
+.mensagem-campo-obrigatorio,
+.assunto-campo-obrigatorio {
+    color: #b91c1c;
+    font-size: 1.1em;
+    margin-left: 0.2em;
+}
+
+@media (max-width: 991.98px) {
+    .form-card {
+        padding: var(--spacing-lg);
+    }
+
+    .form-header {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .form-card {
+        padding: var(--spacing-md);
+    }
+
+    .form-header {
+        font-size: 1.2rem;
+    }
+}
+
+
+.suporte-header {
+    color: var(--primary-color);
+    font-size: 2.1rem;
+    font-weight: 800;
+    margin-bottom: var(--spacing-xl);
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 8px rgba(147, 197, 114, 0.08);
+}
+
+.suporte-table {
+    background: #fff;
+    border-radius: var(--border-radius-lg);
+    box-shadow: var(--shadow-lg);
+    margin-bottom: var(--spacing-xl);
+    border: 1.5px solid var(--border-color);
+    overflow: hidden;
+}
+
+.suporte-table th {
+    background: var(--primary-hover);
+    color: #fff;
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: 0.5px;
+    border: none;
+}
+
+.suporte-table tr {
+    transition: background 0.2s;
+}
+
+.suporte-table tr:hover {
+    background: rgba(147, 197, 114, 0.08);
+}
+
+.suporte-btn-add {
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: var(--border-radius-lg);
+    padding: 0.7rem 2.2rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+    letter-spacing: 0.5px;
+    box-shadow: var(--shadow-sm);
+    border: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.suporte-btn-add:hover {
+    background: var(--primary-hover);
+    color: #fff;
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px) scale(1.03);
+}
+
+.suporte-status {
+    font-weight: 700;
+    color: var(--primary-color);
+    letter-spacing: 0.2px;
+}
+
+.suporte-status.fechado {
+    color: #b91c1c;
+}
+
+.suporte-status.aberto {
+    color: var(--primary-hover);
+}
+
+@media (max-width: 991.98px) {
+    .suporte-header {
+        font-size: 1.5rem;
+    }
+
+    .suporte-table th,
+    .suporte-table td {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .suporte-header {
+        font-size: 1.2rem;
+    }
+
+    .suporte-table th,
+    .suporte-table td {
+        font-size: 0.85rem;
+    }
+}

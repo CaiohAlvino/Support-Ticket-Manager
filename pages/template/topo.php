@@ -15,9 +15,21 @@
     <link rel="stylesheet" href="../../libs/noty/style.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../../css/main.css">
-    <link rel="stylesheet" href="../../css/components/layout.css">
+
     <link rel="stylesheet" href="../../css/components/cards.css">
+    <link rel="stylesheet" href="../../css/components/excluir.css">
+    <link rel="stylesheet" href="../../css/components/hover.css">
+    <link rel="stylesheet" href="../../css/components/layout.css">
+
+    <link rel="stylesheet" href="../../css/pages/cliente.css">
     <link rel="stylesheet" href="../../css/pages/dashboard.css">
+    <link rel="stylesheet" href="../../css/pages/empresa.css">
+    <link rel="stylesheet" href="../../css/pages/grupo.css">
+    <link rel="stylesheet" href="../../css/pages/home.css">
+    <link rel="stylesheet" href="../../css/pages/login.css">
+    <link rel="stylesheet" href="../../css/pages/servico.css">
+    <link rel="stylesheet" href="../../css/pages/suporte.css">
+    <link rel="stylesheet" href="../../css/pages/usuario.css">
 </head>
 
 <?php require("../../config/Database.php"); ?>

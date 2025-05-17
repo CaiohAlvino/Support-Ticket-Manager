@@ -1,97 +1,90 @@
 <?php
 require("../../config/Database.php");
-require("../../config/Validacao.php");
-require("../../config/Empresa.php");
-require("../../config/Fornecedor.php");
-require("../../config/JWT.php");
+require("../../config/Validador.php");
+require("../../config/Cliente.php");
+// require("../../config/JWT.php");
 
 $db = new Database();
 
-$tokenEValido = JWT::verificar($db);
+// $tokenEValido = JWT::verificar($db);
 
-if (!$tokenEValido) {
-    echo json_encode(["status" => "error", "message" => "Token inválido."]);
-    exit;
-}
+// if (!$tokenEValido) {
+//     echo json_encode(["status" => "error", "message" => "Token inválido."]);
+//     exit;
+// }
 
 $conexao = $db->getConnection();
 
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-$empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
+// if (session_status() === PHP_SESSION_NONE) {
+//     session_start();
+// }
 
-if (!$empresa_id) {
-    echo json_encode(["status" => "error", "message" => "Empresa não encontrada!"]);
-    exit;
-}
+// Usado para testes
+$usuario_id = 1;
 
-$usuario = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : NULL;
-$usuario_id = isset($usuario->id) ? $usuario->id : NULL;
-
-$dadosFornecedor = [
+$dadosCliente = [
     "id" => isset($_POST["id"]) ? $_POST["id"] : NULL,
     "tipo" => isset($_POST["tipo"]) ? trim($_POST["tipo"]) : NULL,
     "nome_fantasia" => isset($_POST["nome_fantasia"]) ? trim($_POST["nome_fantasia"]) : NULL,
     "razao_social" => isset($_POST["razao_social"]) ? trim($_POST["razao_social"]) : NULL,
     "documento" => isset($_POST["documento"]) ? trim($_POST["documento"]) : NULL,
-    "responsavel" => isset($_POST["responsavel"]) ? trim($_POST["responsavel"]) : NULL,
+    "responsavel_nome" => isset($_POST["responsavel_nome"]) ? trim($_POST["responsavel_nome"]) : NULL,
     "responsavel_documento" => isset($_POST["responsavel_documento"]) ? trim($_POST["responsavel_documento"]) : NULL,
-    "responsavel_whatsapp" => isset($_POST["responsavel_whatsapp"]) ? trim($_POST["responsavel_whatsapp"]) : NULL,
+    "responsavel_telefone" => isset($_POST["responsavel_telefone"]) ? trim($_POST["responsavel_telefone"]) : NULL,
     "responsavel_email" => isset($_POST["responsavel_email"]) ? trim($_POST["responsavel_email"]) : NULL,
     "telefone" => isset($_POST["telefone"]) ? trim($_POST["telefone"]) : NULL,
     "cep" => isset($_POST["cep"]) ? trim($_POST["cep"]) : NULL,
-    "logradouro" => isset($_POST["logradouro"]) ? trim($_POST["logradouro"]) : NULL,
+    "endereco" => isset($_POST["endereco"]) ? trim($_POST["endereco"]) : NULL,
     "numero" => isset($_POST["numero"]) ? trim($_POST["numero"]) : NULL,
     "bairro" => isset($_POST["bairro"]) ? trim($_POST["bairro"]) : NULL,
     "cidade" => isset($_POST["cidade"]) ? trim($_POST["cidade"]) : NULL,
     "estado" => isset($_POST["estado"]) ? trim($_POST["estado"]) : NULL,
 ];
 
-$validacao = Validacao::validarFornecedor($dadosFornecedor, $conexao, $empresa_id);
+// $validacao = Validador::validarCliente($dadosCliente, $conexao);
 
-if (!$validacao["valido"]) {
-    echo json_encode([
-        "status" => "error",
-        "message" => $validacao["mensagem"]
-    ]);
-    exit;
-}
+// if (!$validacao["valido"]) {
+//     echo json_encode([
+//         "status" => "error",
+//         "message" => $validacao["mensagem"]
+//     ]);
+//     exit;
+// }
 
 try {
     $conexao->beginTransaction();
 
-    if ($dadosFornecedor["tipo"] == "CNPJ") {
-        $sql = "INSERT INTO `fornecedor` (
-            `empresa_id`,
+    if ($dadosCliente["tipo"] == "CNPJ") {
+        $sql = "INSERT INTO `cliente` (
+            `usuario_id`,
             `tipo`,
             `nome_fantasia`,
             `razao_social`,
             `documento`,
-            `responsavel`,
+            `responsavel_nome`,
             `responsavel_documento`,
-            `responsavel_whatsapp`,
+            `responsavel_telefone`,
             `responsavel_email`,
             `telefone`,
             `cep`,
-            `logradouro`,
+            `endereco`,
             `numero`,
             `bairro`,
             `cidade`,
             `estado`
             ) VALUES (
-            :empresa_id,
+            :usuario_id,
             :tipo,
             :nome_fantasia,
             :razao_social,
             :documento,
-            :responsavel,
+            :responsavel_nome,
             :responsavel_documento,
-            :responsavel_whatsapp,
+            :responsavel_telefone,
             :responsavel_email,
             :telefone,
             :cep,
-            :logradouro,
+            :endereco,
             :numero,
             :bairro,
             :cidade,
@@ -100,49 +93,49 @@ try {
 
         $stmt = $conexao->prepare($sql);
 
-        $stmt->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-        $stmt->bindParam(":tipo", $dadosFornecedor["tipo"], PDO::PARAM_STR);
-        $stmt->bindParam(":nome_fantasia", $dadosFornecedor["nome_fantasia"], PDO::PARAM_STR);
-        $stmt->bindParam(":razao_social", $dadosFornecedor["razao_social"], PDO::PARAM_STR);
-        $stmt->bindParam(":documento", $dadosFornecedor["documento"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel", $dadosFornecedor["responsavel"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_documento", $dadosFornecedor["responsavel_documento"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_whatsapp", $dadosFornecedor["responsavel_whatsapp"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_email", $dadosFornecedor["responsavel_email"], PDO::PARAM_STR);
-        $stmt->bindParam(":telefone", $dadosFornecedor["telefone"], PDO::PARAM_STR);
-        $stmt->bindParam(":cep", $dadosFornecedor["cep"], PDO::PARAM_STR);
-        $stmt->bindParam(":logradouro", $dadosFornecedor["logradouro"], PDO::PARAM_STR);
-        $stmt->bindParam(":numero", $dadosFornecedor["numero"], PDO::PARAM_STR);
-        $stmt->bindParam(":bairro", $dadosFornecedor["bairro"], PDO::PARAM_STR);
-        $stmt->bindParam(":cidade", $dadosFornecedor["cidade"], PDO::PARAM_STR);
-        $stmt->bindParam(":estado", $dadosFornecedor["estado"], PDO::PARAM_STR);
+        $stmt->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
+        $stmt->bindParam(":tipo", $dadosCliente["tipo"], PDO::PARAM_STR);
+        $stmt->bindParam(":nome_fantasia", $dadosCliente["nome_fantasia"], PDO::PARAM_STR);
+        $stmt->bindParam(":razao_social", $dadosCliente["razao_social"], PDO::PARAM_STR);
+        $stmt->bindParam(":documento", $dadosCliente["documento"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_nome", $dadosCliente["responsavel_nome"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_documento", $dadosCliente["responsavel_documento"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_telefone", $dadosCliente["responsavel_telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_email", $dadosCliente["responsavel_email"], PDO::PARAM_STR);
+        $stmt->bindParam(":telefone", $dadosCliente["telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":cep", $dadosCliente["cep"], PDO::PARAM_STR);
+        $stmt->bindParam(":endereco", $dadosCliente["endereco"], PDO::PARAM_STR);
+        $stmt->bindParam(":numero", $dadosCliente["numero"], PDO::PARAM_STR);
+        $stmt->bindParam(":bairro", $dadosCliente["bairro"], PDO::PARAM_STR);
+        $stmt->bindParam(":cidade", $dadosCliente["cidade"], PDO::PARAM_STR);
+        $stmt->bindParam(":estado", $dadosCliente["estado"], PDO::PARAM_STR);
     } else {
-        $sql = "INSERT INTO `fornecedor` (
-            `empresa_id`,
+        $sql = "INSERT INTO `cliente` (
+            `usuario_id`,
             `tipo`,
             `nome_fantasia`,
-            `responsavel`,
+            `responsavel_nome`,
             `responsavel_documento`,
-            `responsavel_whatsapp`,
+            `responsavel_telefone`,
             `responsavel_email`,
             `telefone`,
             `cep`,
-            `logradouro`,
+            `endereco`,
             `numero`,
             `bairro`,
             `cidade`,
             `estado`
         ) VALUES (
-            :empresa_id,
+            :usuario_id,
             :tipo,
             :nome_fantasia,
-            :responsavel,
+            :responsavel_nome,
             :responsavel_documento,
-            :responsavel_whatsapp,
+            :responsavel_telefone,
             :responsavel_email,
             :telefone,
             :cep,
-            :logradouro,
+            :endereco,
             :numero,
             :bairro,
             :cidade,
@@ -151,20 +144,20 @@ try {
 
         $stmt = $conexao->prepare($sql);
 
-        $stmt->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-        $stmt->bindParam(":tipo", $dadosFornecedor["tipo"], PDO::PARAM_STR);
-        $stmt->bindParam(":nome_fantasia", $dadosFornecedor["nome_fantasia"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel", $dadosFornecedor["responsavel"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_documento", $dadosFornecedor["responsavel_documento"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_whatsapp", $dadosFornecedor["responsavel_whatsapp"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_email", $dadosFornecedor["responsavel_email"], PDO::PARAM_STR);
-        $stmt->bindParam(":telefone", $dadosFornecedor["telefone"], PDO::PARAM_STR);
-        $stmt->bindParam(":cep", $dadosFornecedor["cep"], PDO::PARAM_STR);
-        $stmt->bindParam(":logradouro", $dadosFornecedor["logradouro"], PDO::PARAM_STR);
-        $stmt->bindParam(":numero", $dadosFornecedor["numero"], PDO::PARAM_STR);
-        $stmt->bindParam(":bairro", $dadosFornecedor["bairro"], PDO::PARAM_STR);
-        $stmt->bindParam(":cidade", $dadosFornecedor["cidade"], PDO::PARAM_STR);
-        $stmt->bindParam(":estado", $dadosFornecedor["estado"], PDO::PARAM_STR);
+        $stmt->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
+        $stmt->bindParam(":tipo", $dadosCliente["tipo"], PDO::PARAM_STR);
+        $stmt->bindParam(":nome_fantasia", $dadosCliente["nome_fantasia"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_nome", $dadosCliente["responsavel_nome"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_documento", $dadosCliente["responsavel_documento"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_telefone", $dadosCliente["responsavel_telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_email", $dadosCliente["responsavel_email"], PDO::PARAM_STR);
+        $stmt->bindParam(":telefone", $dadosCliente["telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":cep", $dadosCliente["cep"], PDO::PARAM_STR);
+        $stmt->bindParam(":endereco", $dadosCliente["endereco"], PDO::PARAM_STR);
+        $stmt->bindParam(":numero", $dadosCliente["numero"], PDO::PARAM_STR);
+        $stmt->bindParam(":bairro", $dadosCliente["bairro"], PDO::PARAM_STR);
+        $stmt->bindParam(":cidade", $dadosCliente["cidade"], PDO::PARAM_STR);
+        $stmt->bindParam(":estado", $dadosCliente["estado"], PDO::PARAM_STR);
     }
     $stmt->execute();
 
@@ -172,13 +165,13 @@ try {
 
     echo json_encode([
         "status" => "success",
-        "message" => "Dados do fornecedor cadastrados!"
+        "message" => "Dados do cliente cadastrados!"
     ]);
 } catch (PDOException $e) {
     $conexao->rollBack();
 
     echo json_encode([
         "status" => "error",
-        "message" => "Erro ao cadastrar dados do fornecedor: " . $e->getMessage()
+        "message" => "Erro ao cadastrar dados do cliente: " . $e->getMessage()
     ]);
 }

@@ -5,7 +5,7 @@ $(document).ready(function () {
         documento: $("#documento_cliente").val(),
         telefone: $("#telefone_pj_cliente").val(),
         responsavel: $("#responsavel_cliente").val(),
-        responsavel_whats: $("#responsavel_whatsapp_cliente").val(),
+        responsavel_whats: $("#responsavel_telefone_cliente").val(),
         responsavel_documento: $("#responsavel_documento_cliente").val(),
         responsavel_email: $("#responsavel_email_cliente").val(),
     };
@@ -28,7 +28,7 @@ $(document).ready(function () {
             $(".dados-titulo-cliente").html("Dados do Responsável");
             $(".dados-label-nome-cliente").html("Nome do Responsável <span class='formulario-campo-obrigatorio'>*</span>");
             $(".dados-label-documento-cliente").html("CPF do Responsável <span class='formulario-campo-obrigatorio'>*</span>");
-            $(".dados-label-whatsapp-cliente").html("WhatsApp do Responsável");
+            $(".dados-label-telefone-cliente").html("telefone do Responsável");
             $(".dados-label-email-cliente").html("E-mail do Responsável");
 
             if (dadosOriginaisCliente.razao_social) {
@@ -57,7 +57,7 @@ $(document).ready(function () {
             $(".dados-titulo-cliente").html("Dados Pessoais");
             $(".dados-label-nome-cliente").html("Nome Completo <span class='formulario-campo-obrigatorio'>*</span>");
             $(".dados-label-documento-cliente").html("CPF <span class='formulario-campo-obrigatorio'>*</span>");
-            $(".dados-label-whatsapp-cliente").html("WhatsApp");
+            $(".dados-label-telefone-cliente").html("telefone");
             $(".dados-label-email-cliente").html("E-mail");
         }
     }

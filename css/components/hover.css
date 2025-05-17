@@ -1,0 +1,56 @@
+/* Centralização dos efeitos hover para elementos interativos do sistema */
+@import url('../theme/variables.css');
+
+/* Botões padrão */
+button, .btn, input[type="submit"], input[type="button"] {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+button:hover, .btn:hover, input[type="submit"]:hover, input[type="button"]:hover {
+    background-color: var(--primary-hover);
+    color: #fff;
+}
+
+/* Links */
+a, .link {
+    color: var(--primary-color);
+    transition: color 0.2s;
+}
+a:hover, .link:hover {
+    color: var(--primary-hover);
+    text-decoration: underline;
+}
+
+/* Cards e elementos clicáveis */
+.card, .stats-card, .category-item, .activity-item, .list-group-item {
+    transition: box-shadow 0.2s, border-color 0.2s, background 0.2s, color 0.2s;
+}
+.card:hover, .stats-card:hover, .category-item:hover, .activity-item:hover, .list-group-item:hover {
+    box-shadow: 0 4px 16px rgba(112, 130, 56, 0.10);
+    border-color: var(--primary-hover);
+    color: var(--primary-hover);
+}
+
+/* Inputs focados */
+input:focus, textarea:focus, select:focus {
+    border-color: var(--primary-hover);
+    box-shadow: 0 0 0 2px rgba(147, 197, 114, 0.15);
+    outline: none;
+}
+
+/* Menus e itens de navegação */
+.menu-item:hover, .dropdown-item:hover {
+    background-color: var(--primary-hover);
+    color: #fff;
+}
+.menu-item.active {
+    background-color: var(--primary-color);
+    color: #fff;
+}
+
+/* Ícones interativos */
+.bi:hover, .icon:hover {
+    color: var(--primary-hover) !important;
+}

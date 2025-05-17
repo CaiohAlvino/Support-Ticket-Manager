@@ -3,7 +3,7 @@ class NotyE {
   static config({ type }) {
     Noty.overrideDefaults({
       type: type,  // Tipo de notificação (success, error, warning e info)
-      theme: 'aurora',  // Tema (personalisado ou os ja existentes)
+      theme: 'mint',  // Tema (personalisado ou os ja existentes)
       layout: "topRight",  // possição da notificação
       timeout: 1000,
       progressBar: true,  // Exibir barra de progresso
