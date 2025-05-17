@@ -5,6 +5,7 @@
         <script src="../../libs/axios/script.js"></script>
         <!-- jQuery -->
         <script src="../../libs/jquery/script.js"></script>
+        <script src="../../libs/jquery-mask/script.js"></script>
         <!-- Bootstrap -->
         <script src="../../libs/bootstrap/script.js"></script>
         <!-- Select2 -->
