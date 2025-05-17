@@ -33,14 +33,14 @@
                         <div class="password-field"><input id="senha" type="password" name="senha" class="form-control"
                                 placeholder="Digite sua senha"><button type="button" class="password-toggle"><i class="bi bi-eye"></i></button></div>
                     </div><button type="submit" class="btn btn-login">Entrar no Sistema</button>
-                    <div class="text-center"><a href="esqueciminhasenha.php" class="esqueceu-senha">Esqueceu a senha?</a></div>
+                    <!-- <div class="text-center"><a href="esqueciminhasenha.php" class="esqueceu-senha">Esqueceu a senha?</a></div> -->
                 </form>
             </div>
         </div>
     </div>
     <script src="./libs/jquery/script.js"></script>
     <script src="./libs/bootstrap/script.js"></script>
-    <script src="./js/login.js"></script>
+    <script src="./js/pages/login.js"></script>
 </body>
 
 </html>

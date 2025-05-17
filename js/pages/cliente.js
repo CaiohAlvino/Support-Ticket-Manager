@@ -161,7 +161,7 @@ $(document).ready(function () {
 
         if (isValid) {
             $.ajax({
-                url: `../../executar/${action}`,
+                url: `../../controller/${action}`,
                 type: "POST",
                 dataType: "json",
                 data: $(this).serialize(),
@@ -246,7 +246,7 @@ $(document).ready(function () {
 
         if (isValid) {
             $.ajax({
-                url: `../../executar/${action}`,
+                url: `../../controller/${action}`,
                 type: "POST",
                 dataType: "json",
                 data: $(this).serialize(),
