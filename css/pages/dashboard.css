@@ -4,41 +4,51 @@
 .container-fluid {
     max-width: 1920px;
     margin: 0 auto;
+    padding: var(--spacing-lg);
 }
 
 /* Cards de Estatísticas */
 .card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.2s, box-shadow 0.2s;
     border: none !important;
     height: 100%;
-    /* Garante mesma altura */
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    background: #fff;
 }
 
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+    transform: translateY(-4px) scale(1.01);
+    box-shadow: var(--shadow-md) !important;
 }
 
 .card-header {
-    background-color: transparent;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    background: none;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: var(--spacing-md);
 }
 
 .card-header h5 {
     margin: 0;
     font-size: 1.1rem;
     font-weight: 600;
-    color: var(--bs-gray-700);
+    color: var(--primary-color);
 }
 
 .stats-icon {
-    width: 48px;
-    height: 48px;
+    width: 56px;
+    height: 56px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 12px;
-    transition: transform 0.2s ease;
+    border-radius: var(--border-radius-md);
+    background: var(--gradient-primary);
+    color: #fff;
+    font-size: 2rem;
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s;
 }
 
 .card:hover .stats-icon {
@@ -48,9 +58,11 @@
 /* Gráficos e Distribuição */
 .chart-container {
     position: relative;
-    margin: auto;
+    background: #fff;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--shadow-sm);
+    padding: var(--spacing-md);
     height: 300px;
-    padding: 1rem;
 }
 
 canvas {
@@ -230,6 +242,12 @@ canvas {
     }
 }
 
+@media (max-width: 991.98px) {
+    .container-fluid {
+        padding: var(--spacing-md);
+    }
+}
+
 @media (max-width: 767.98px) {
     .chart-container {
         height: 200px;
@@ -250,4 +268,37 @@ canvas {
     .timeline-item {
         padding-left: 1.5rem;
     }
+}
+
+/* Remove hover de cards, list-group, stats-icon e padroniza visual */
+.card,
+.stats-card,
+.ticket-card,
+.list-group-item {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    border-radius: var(--border-radius-md) !important;
+    transition: none !important;
+}
+.card:hover,
+.stats-card:hover,
+.ticket-card:hover,
+.list-group-item:hover {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    color: inherit !important;
+    transform: none !important;
+}
+.stats-icon,
+.card i,
+.ticket-card i {
+    color: var(--primary-color) !important;
+    transition: none !important;
+}
+.list-group-item:hover .badge {
+    background-color: var(--primary-color) !important;
+    color: #fff !important;
+    transform: none !important;
 }

@@ -29,7 +29,10 @@
     <link rel="stylesheet" href="../../css/pages/login.css">
     <link rel="stylesheet" href="../../css/pages/servico.css">
     <link rel="stylesheet" href="../../css/pages/suporte.css">
+    <link rel="stylesheet" href="../../css/pages/tickets.css">
     <link rel="stylesheet" href="../../css/pages/usuario.css">
+
+    <link rel="stylesheet" href="../../css/theme/variables.css">
 </head>
 
 <?php require("../../config/Database.php"); ?>

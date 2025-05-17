@@ -1,49 +1,47 @@
-/* Cards de Estatísticas */
+/* Modernização dos cards de estatísticas */
 .stats-card {
     background: #fff;
-    border-radius: 12px;
-    padding: 24px;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-lg);
     display: flex;
     align-items: center;
-    gap: 16px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s, box-shadow 0.2s;
+    gap: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    transition: box-shadow 0.2s;
+    border: 1px solid var(--border-color);
 }
-
 .stats-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-color);
+    transform: none;
 }
-
 .stats-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--border-radius-md);
     display: flex;
     align-items: center;
     justify-content: center;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-sm);
 }
-
 .stats-icon i {
-    font-size: 1.5rem;
-    color: #fff;
+    font-size: 2rem;
+    color: var(--primary-color);
 }
-
 .stats-info {
     flex: 1;
 }
-
 .stats-number {
-    font-size: 1.75rem;
-    font-weight: 600;
-    color: #333;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
     line-height: 1.2;
     margin: 0;
 }
-
 .stats-label {
-    font-size: 0.875rem;
-    color: #6c757d;
+    font-size: 1rem;
+    color: var(--text-muted);
     margin: 0;
 }
 
@@ -238,4 +236,51 @@
     font-size: 12px;
     color: #6c757d;
     margin: 4px 0 0;
+}
+
+/* Cards para todas as telas: garantir consistência */
+.card {
+    background: #fff;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-lg);
+    transition: box-shadow 0.2s;
+    padding: var(--spacing-lg);
+}
+.card-header {
+    background: none;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: var(--spacing-md);
+}
+.card-body {
+    padding: var(--spacing-md);
+}
+
+/* Padronização dos cards e remoção de hover */
+.stats-card,
+.card,
+.ticket-card {
+    background: #fff !important;
+    border-radius: var(--border-radius-md) !important;
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    transition: none !important;
+}
+.stats-card:hover,
+.card:hover,
+.ticket-card:hover {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    color: inherit !important;
+    transform: none !important;
+}
+.stats-icon i,
+.card i,
+.ticket-card i {
+    color: var(--primary-color) !important;
+    transition: none !important;
 }

@@ -3,7 +3,7 @@
 <div class="container-fluid p-4">
     <!-- Cabeçalho do Dashboard -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="mb-0">Dashboard</h4><button class="btn btn-primary" data-bs-toggle="modal"
+        <h1 class="mb-0">Dashboard</h1><button class="btn btn-primary" data-bs-toggle="modal"
             data-bs-target="#newTicketModal"><i class="bi bi-plus-lg me-2"></i>Novo Ticket </button>
     </div>
 

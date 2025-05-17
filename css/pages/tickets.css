@@ -1,0 +1,21 @@
+/* Padronização dos cards e remoção de hover/azul */
+.card,
+.stats-card,
+.ticket-card,
+.list-group-item {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    border-radius: var(--border-radius-md) !important;
+    transition: none !important;
+}
+.card:hover,
+.stats-card:hover,
+.ticket-card:hover,
+.list-group-item:hover {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    color: inherit !important;
+    transform: none !important;
+}

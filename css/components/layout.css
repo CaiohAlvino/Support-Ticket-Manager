@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #f8f9fa;
+    background: var(--gradient-background);
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -23,6 +23,10 @@ body {
     top: 0;
     right: 0;
     left: 0;
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: var(--shadow-md);
+    transition: background 0.3s;
 }
 
 .layout-fixed .sidebar {
@@ -30,22 +34,31 @@ body {
     top: 64px;
     bottom: 0;
     left: 0;
+    background: #fff;
+    box-shadow: var(--shadow-md);
+    border-right: 1px solid var(--border-color);
+    transition: width 0.3s, left 0.3s;
 }
 
 .layout-fixed .main-content {
     margin-left: 260px;
     margin-top: 64px;
+    padding: var(--spacing-lg);
+    background: transparent;
+    min-height: calc(100vh - 64px);
+    transition: margin-left 0.3s;
 }
 
 /* Header */
 .header {
     height: 64px;
-    background: var(--bs-white);
-    box-shadow: var(--bs-box-shadow-sm);
+    background: var(--primary-color);
+    color: #fff;
+    box-shadow: var(--shadow-md);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 24px;
+    padding: 0 var(--spacing-lg);
     z-index: 1020;
 }
 
@@ -59,9 +72,12 @@ body {
     text-decoration: none;
     display: flex;
     align-items: center;
-    color: var(--primary-color);
+    color: #fff;
     font-size: 2rem;
-    transition: all 0.3s ease;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    gap: 10px;
+    transition: color 0.2s;
 }
 
 .header-brand i {
@@ -69,10 +85,14 @@ body {
 }
 
 .header-brand .brand-text {
+    text-decoration: none;
     font-size: 1.5rem;
     font-weight: 600;
     margin-left: 10px;
-    color: #333;
+}
+
+.header-brand:hover {
+    color: var(--primary-hover);
 }
 
 .header-logo {
@@ -88,18 +108,19 @@ body {
 .menu-toggle {
     background: none;
     border: none;
-    font-size: 24px;
-    color: #333;
+    font-size: 2rem;
+    color: #fff;
     cursor: pointer;
     padding: 8px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: transform 0.3s ease;
+    transition: background 0.2s;
 }
 
 .menu-toggle:hover {
-    color: var(--primary-hover);
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .sidebar-collapsed .menu-toggle {
@@ -113,15 +134,15 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    color: #333;
+    color: #fff;
     cursor: pointer;
     padding: 8px 16px;
     border-radius: 8px;
-    transition: all 0.2s;
+    transition: background 0.2s;
 }
 
 .dropdown-toggle:hover {
-    background-color: #f8f9fa;
+    background: rgba(255, 255, 255, 0.08);
 }
 
 .dropdown-toggle i {
@@ -132,9 +153,11 @@ body {
     min-width: 220px;
     padding: 8px 0;
     margin-top: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-md);
     border: none;
     border-radius: 8px;
+    background: #fff;
+    color: var(--text-primary);
 }
 
 .dropdown-item {
@@ -142,14 +165,15 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
-    color: #333;
-    transition: all 0.2s;
-    font-size: 14px;
+    color: var(--text-primary);
+    transition: background 0.2s, color 0.2s;
+    font-size: 15px;
+    border-radius: 6px;
 }
 
 .dropdown-item:hover {
-    background-color: #f8f9fa;
-    color: var(--primary-hover);
+    background: var(--primary-hover);
+    color: #fff;
 }
 
 .dropdown-item i {
@@ -161,53 +185,57 @@ body {
 /* Sidebar */
 .sidebar {
     width: 260px;
-    background: var(--bs-white);
-    box-shadow: var(--bs-box-shadow-sm);
-    transition: all 0.3s ease;
+    background: #fff;
+    box-shadow: var(--shadow-md);
+    border-right: 1px solid var(--border-color);
+    transition: width 0.3s, left 0.3s;
     z-index: 1010;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .menu-list {
-    padding: 16px 8px;
+    padding: var(--spacing-md) var(--spacing-xs);
 }
 
 .menu-item {
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: var(--bs-gray-700);
+    color: var(--text-secondary);
     text-decoration: none;
-    transition: all 0.2s;
+    transition: background 0.2s, color 0.2s;
     gap: 0.75rem;
-    border-radius: var(--bs-border-radius);
+    border-radius: var(--border-radius-md);
     margin-bottom: 0.25rem;
     white-space: nowrap;
+    font-weight: 500;
 }
 
 .menu-item:hover {
-    background-color: var(--bs-gray-100);
+    background: none;
     color: var(--primary-hover);
+    /* Removido efeito de destaque visual */
 }
 
 .menu-item.active {
-    background-color: var(--primary-hover);
-    color: var(--bs-white);
+    background: var(--primary-color);
+    color: #fff;
 }
 
 .menu-item i {
     font-size: 1.25rem;
     width: 1.5rem;
     text-align: center;
-    transition: margin 0.3s ease;
+    transition: none;
+    /* Removido hover dos ícones */
 }
 
 .menu-text {
-    font-size: 0.875rem;
+    font-size: 1rem;
     font-weight: 500;
     opacity: 1;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s;
 }
 
 /* Sidebar Collapsed */
@@ -237,25 +265,40 @@ body {
 /* Main Content */
 .main-content {
     flex: 1;
-    transition: margin-left 0.3s ease;
+    transition: margin-left 0.3s;
+    background: transparent;
 }
 
 /* Cards e Elementos do Dashboard */
-.card {
+.card,
+.stats-card {
     background: #fff;
-    border-radius: 8px;
-    border: none;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-lg);
+    transition: box-shadow 0.2s;
+}
+
+.card:hover,
+.stats-card:hover {
+    /* Removido salto e cor no hover */
+    box-shadow: var(--shadow-sm);
+    border-color: var(--border-color);
+    color: inherit;
+    transform: none;
 }
 
 .card-header {
     background: none;
-    border-bottom: 1px solid #f0f0f0;
-    padding: 16px;
+    border-bottom: 1px solid var(--border-color);
+    padding: var(--spacing-md);
+    font-weight: 600;
+    color: var(--primary-color);
 }
 
 .card-body {
-    padding: 16px;
+    padding: var(--spacing-md);
 }
 
 /* Alert Banner */
@@ -283,11 +326,14 @@ body {
         transform: translateX(-100%);
         position: fixed;
         width: 260px !important;
+        left: 0;
+        top: 64px;
+        z-index: 1010;
     }
 
     .main-content {
         margin-left: 0 !important;
-        padding: 16px;
+        padding: var(--spacing-md);
     }
 
     .sidebar-open .sidebar {
@@ -295,7 +341,7 @@ body {
     }
 
     .header {
-        padding: 0 16px;
+        padding: 0 var(--spacing-md);
     }
 
     .sidebar-overlay {
@@ -308,7 +354,7 @@ body {
         background: rgba(0, 0, 0, 0.5);
         z-index: 1005;
         backdrop-filter: blur(2px);
-        transition: opacity 0.3s ease;
+        transition: opacity 0.3s;
     }
 
     .sidebar-overlay.active {
@@ -322,7 +368,7 @@ body {
 
 @media (max-width: 575.98px) {
     .header {
-        padding: 0 12px;
+        padding: 0 var(--spacing-xs);
     }
 
     .header-logo {
@@ -345,10 +391,66 @@ body {
 /* Footer */
 .footer {
     margin-top: auto;
-    padding: 24px;
+    padding: var(--spacing-lg);
     background: #fff;
-    border-top: 1px solid #e9ecef;
+    border-top: 1px solid var(--border-color);
     text-align: center;
-    color: #6c757d;
-    font-size: 14px;
+    color: var(--text-muted);
+    font-size: 15px;
+}
+
+/* Padronização de hover e visual do menu, sidebar e cards */
+.menu-item,
+.dropdown-item {
+    transition: background 0.2s, color 0.2s;
+}
+
+.menu-item:hover,
+.menu-item:focus,
+.menu-item.active,
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: none !important;
+    color: var(--primary-color) !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.menu-item i,
+.dropdown-item i {
+    color: inherit !important;
+    transition: none !important;
+}
+
+.card,
+.stats-card,
+.ticket-card,
+.list-group-item {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    border-radius: var(--border-radius-md) !important;
+    transition: none !important;
+}
+
+.card:hover,
+.stats-card:hover,
+.ticket-card:hover,
+.list-group-item:hover {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    color: inherit !important;
+    transform: none !important;
+}
+
+/* Remove hover dos ícones do menu e header */
+.header-brand i:hover,
+.menu-item i:hover,
+.dropdown-item i:hover {
+    color: inherit !important;
+    background: none !important;
+    box-shadow: none !important;
+    transition: none !important;
+    filter: none !important;
 }

@@ -1,4 +1,5 @@
-@import url('../theme/variables.css');
+@import url('../../css/theme/variables.css');
+@import url('../../css/components/hover.css');
 
 .body-login {
     background-color: var(--background-color);
@@ -184,15 +185,26 @@
     color: var(--primary-hover);
 }
 
-.bi-ticket-perforated {
-    font-size: 4rem;
-    color: var(--primary-color);
-    margin-bottom: var(--spacing-lg);
-    transition: color var(--transition-speed);
+.card,
+.stats-card,
+.ticket-card,
+.list-group-item {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    border-radius: var(--border-radius-md) !important;
+    transition: none !important;
 }
 
-.bi-ticket-perforated:hover {
-    color: var(--primary-hover);
+.card:hover,
+.stats-card:hover,
+.ticket-card:hover,
+.list-group-item:hover {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    color: inherit !important;
+    transform: none !important;
 }
 
 @media (max-width: 991.98px) {

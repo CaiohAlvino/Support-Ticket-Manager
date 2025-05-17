@@ -40,3 +40,15 @@
     --gradient-primary: linear-gradient(135deg, #708238 0%, #556B2F 100%);
     --gradient-background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
 }
+
+/* Corrige azul padrão do Bootstrap e outros elementos para o tema */
+:root {
+    --bs-primary: var(--primary-color);
+    --bs-primary-rgb: 112, 130, 56;
+    --bs-link-color: var(--primary-color);
+    --bs-link-hover-color: var(--primary-hover);
+    --bs-btn-bg: var(--primary-color);
+    --bs-btn-hover-bg: var(--primary-hover);
+    --bs-btn-border-color: var(--primary-color);
+    --bs-btn-hover-border-color: var(--primary-hover);
+}

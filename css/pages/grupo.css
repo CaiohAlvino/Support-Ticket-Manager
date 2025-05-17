@@ -1,6 +1,6 @@
 /* Estilo exclusivo para páginas de cadastro e edição de grupo */
-@import url('../../theme/variables.css');
-@import url('../../components/hover.css');
+@import url('../../css/theme/variables.css');
+@import url('../../css/components/hover.css');
 
 .form-header {
     color: var(--primary-color);
@@ -90,6 +90,26 @@ label.form-label {
     }
 }
 
+/* Garante que todos os cards das páginas usem o padrão visual do sistema */
+.card {
+    background: #fff;
+    border-radius: var(--border-radius-md);
+    border: 1px solid var(--border-color);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--spacing-lg);
+    transition: box-shadow 0.2s;
+    padding: var(--spacing-lg);
+}
+.card-header {
+    background: none;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: 600;
+    color: var(--primary-color);
+    padding: var(--spacing-md);
+}
+.card-body {
+    padding: var(--spacing-md);
+}
 
 .grupo-header {
     color: var(--primary-color);
@@ -170,4 +190,26 @@ label.form-label {
     .grupo-table th, .grupo-table td {
         font-size: 0.85rem;
     }
+}
+
+/* Padronização dos cards e remoção de hover/azul */
+.card,
+.stats-card,
+.ticket-card,
+.list-group-item {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    border-radius: var(--border-radius-md) !important;
+    transition: none !important;
+}
+.card:hover,
+.stats-card:hover,
+.ticket-card:hover,
+.list-group-item:hover {
+    box-shadow: var(--shadow-sm) !important;
+    border: 1px solid var(--border-color) !important;
+    background: #fff !important;
+    color: inherit !important;
+    transform: none !important;
 }
