@@ -4,7 +4,7 @@
  *  Classe Validacao
  *  Fornece métodos para validação de diferentes tipos de dados
  */
-class Validador
+class Validacao
 {
 
     // -------------------------- → CPF ← -------------------------- //

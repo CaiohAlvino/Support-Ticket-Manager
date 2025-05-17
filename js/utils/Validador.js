@@ -1,4 +1,9 @@
-// Classe base para todos os validadores
+/**
+ *  Validador base para os outros validadores
+ *  @inicializar - Inicializações de mensagems em tempo reais
+ *  @validar - Validação dos valores  
+ *  @param valor - Valor a ser validado 
+ */
 class Validador {
     constructor() {
         this.inicializar();
@@ -14,6 +19,11 @@ class Validador {
     }
 }
 
+// -------------------------- → FeedbackVisual ← -------------------------- //
+/**
+ *  
+ *  @mostrarErro inicializar - Inicializações de mensagems em tempo reais
+ */
 class FeedbackVisual {
     /**
      *  Mostra uma mensagem de erro para um campo
@@ -311,28 +321,46 @@ class FeedbackVisual {
     /**
      *  Limpa o feedback de todos os campos do formulário
      *  @param {String} formSelector - Seletor do formulário
+     *  @param {Boolean} tirarAvisos - Valida se é necessário tirar os avisos de alerta
      */
-    static limparTodosFeedbacks(formSelector) {
+    static limparTodosFeedbacks(formSelector, tirarAvisos = false) {
         $(`${formSelector} .is-invalid`).removeClass("is-invalid");
         $(`${formSelector} .is-valid`).removeClass("is-valid");
-        $(`${formSelector} .has-warning`).removeClass("has-warning");
         $(`${formSelector} .invalid-feedback`).remove();
         $(`${formSelector} .error-message`).remove();
-        $(`${formSelector} .mensagem-alerta`).remove();
+        if (tirarAvisos) {
+            $(`${formSelector} .has-warning`).removeClass("has-warning");
+            $(`${formSelector} .mensagem-alerta`).remove();
+        }
 
         // Tratamento especial para Select2
         $(`${formSelector} .select2`).each(function () {
-            $(this).next(".select2-container").removeClass("is-invalid is-valid has-warning");
+            if (tirarAvisos) {
+                $(this).next(".select2-container").removeClass("is-invalid is-valid has-warning");
+            } else {
+                $(this).next(".select2-container").removeClass("is-invalid is-valid");
+            }
         });
 
         // Verificar e remover mensagens após input-groups
         $(`${formSelector} .input-group`).each(function () {
             $(this).removeClass("is-invalid");
-            $(this).siblings(".invalid-feedback, .error-message, .mensagem-alerta").remove();
+            if (tirarAvisos) {
+                $(this).siblings(".invalid-feedback, .error-message, .mensagem-alerta").remove();
+            } else {
+                $(this).siblings(".invalid-feedback, .error-message").remove();
+            }
         });
     }
 }
 
+
+
+/**
+ *  Validações de Documentos
+ *  CPF, CNPJ, CEP e Número Endereço
+ */
+// -------------------------- → Validador CPF ← -------------------------- //
 class ValidadorCPF extends Validador {
     inicializar() {
         $(".input-validar-cpf").on("input blur", (event) => {
@@ -415,98 +443,288 @@ class ValidadorCPF extends Validador {
     }
 }
 
-class ValidadorValor extends Validador {
+// -------------------------- → Validador CNPJ ← -------------------------- //
+class ValidadorCNPJ extends Validador {
     inicializar() {
-        $(".input-validar-valor").on("input blur", (event) => {
+        $(".input-validar-cnpj").on("input blur", (event) => {
+            const campo = event.target;
+            const cnpj = $(campo).val().trim();
+
+            if (cnpj === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o CNPJ.");
+                } else {
+                    FeedbackVisual.limparFeedback(campo);
+                }
+                return;
+            }
+
+            if (!this.validar(cnpj)) {
+                FeedbackVisual.mostrarErro(campo, "CNPJ inválido. Por favor, verifique.");
+            } else {
+                FeedbackVisual.mostrarSucesso(campo);
+            }
+        });
+    }
+
+    validar(cnpj) {
+        if (!cnpj) {
+            return false;
+        }
+
+        if (cnpj === "") {
+            return false;
+        }
+
+        cnpj = cnpj.replace(/[^\d]+/g, "");
+
+        if (cnpj === "" || cnpj.length !== 14) { return false; }
+
+        if (/^(\d)\1+$/.test(cnpj)) {
+            return false;
+        }
+
+        let tamanho = cnpj.length - 2;
+        let numeros = cnpj.substring(0, tamanho);
+        let digitos = cnpj.substring(tamanho);
+        let soma = 0;
+        let pos = tamanho - 7;
+
+        for (let i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) pos = 9;
+        }
+
+        let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado !== parseInt(digitos.charAt(0))) {
+            return false;
+        }
+
+        tamanho = tamanho + 1;
+        numeros = cnpj.substring(0, tamanho);
+        soma = 0;
+        pos = tamanho - 7;
+
+        for (let i = tamanho; i >= 1; i--) {
+            soma += numeros.charAt(tamanho - i) * pos--;
+            if (pos < 2) pos = 9;
+        }
+
+        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        if (resultado !== parseInt(digitos.charAt(1))) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+// -------------------------- → Validador CEP ← -------------------------- //
+class ValidadorCEP extends Validador {
+    inicializar() {
+        $(".input-validar-cep").on("input blur", (event) => {
+            const campo = event.target;
+            const cep = $(campo).val().trim().replace(/\D/g, "");
+
+            if (cep === "") {
+                FeedbackVisual.limparFeedback(campo);
+                return;
+            }
+
+            if (this.validar(cep)) {
+                this.consultarCEP(cep, campo);
+            } else {
+                FeedbackVisual.mostrarErro(campo, "CEP inválido.");
+            }
+        });
+    }
+
+    /**
+     *  Valida um CEP
+     *  @param {String} cep - O CEP a ser validado
+     *  @returns {Boolean} - Verdadeiro se o CEP for válido
+     */
+    validar(cep) {
+        cep = cep.replace(/\D/g, "");
+        return cep.length === 8;
+    }
+
+    /**
+     *  Consulta um CEP na API ViaCEP
+     *  @param {String} cep - O CEP a ser consultado
+     *  @param {Element} campo - O campo que contém o CEP
+     */
+    consultarCEP(cep, campo) {
+        // Selecionar os campos relacionados que devem ser desabilitados durante a consulta
+        const camposRelacionados = [
+            ".campo-logradouro",
+            ".campo-bairro",
+            ".campo-cidade",
+            ".campo-estado",
+            ".campo-numero"
+        ];
+
+        // Iniciar o feedback de carregamento
+        const carregamento = FeedbackVisual.mostrarCarregamento(campo, camposRelacionados, "Consultando CEP...");
+
+        $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function (data) {
+            if (!data.erro) {
+                // Preencher os campos relacionados
+                $(".campo-logradouro").val(data.logradouro);
+                $(".campo-bairro").val(data.bairro);
+                $(".campo-cidade").val(data.localidade);
+
+                // Tratar o campo de estado corretamente
+                const $estadoSelect = $(".campo-estado");
+
+                // Mapa direto de UF para nome do estado
+                const estados = {
+                    'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapá', 'AM': 'Amazonas', 'BA': 'Bahia',
+                    'CE': 'Ceará', 'DF': 'Distrito Federal', 'ES': 'Espírito Santo', 'GO': 'Goiás',
+                    'MA': 'Maranhão', 'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul', 'MG': 'Minas Gerais',
+                    'PA': 'Pará', 'PB': 'Paraíba', 'PR': 'Paraná', 'PE': 'Pernambuco', 'PI': 'Piauí',
+                    'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte', 'RS': 'Rio Grande do Sul',
+                    'RO': 'Rondônia', 'RR': 'Roraima', 'SC': 'Santa Catarina', 'SP': 'São Paulo',
+                    'SE': 'Sergipe', 'TO': 'Tocantins'
+                };
+
+                $estadoSelect.val(estados[data.uf]);
+                if ($estadoSelect.hasClass("select2")) {
+                    $estadoSelect.trigger('change.select2');
+                }
+
+                // Garantir que todos os campos estejam habilitados para edição
+                $(campo).prop('disabled', false);
+                camposRelacionados.forEach(seletor => {
+                    $(seletor).prop('disabled', false);
+                });
+
+                // Focar no campo número
+                $(".campo-numero").focus();
+
+                // Finalizar carregamento com sucesso
+                carregamento.concluir(true, "CEP localizado com sucesso!");
+            } else {
+                // Garantir que o campo de CEP esteja habilitado mesmo em caso de erro
+                $(campo).prop('disabled', false);
+
+                // Finalizar carregamento com erro
+                carregamento.concluir(false, "CEP não encontrado.");
+            }
+        }).fail(function () {
+            // Garantir que o campo de CEP esteja habilitado mesmo em caso de erro
+            $(campo).prop('disabled', false);
+
+            // Finalizar carregamento com erro de conexão
+            carregamento.concluir(false, "Erro ao consultar CEP. Verifique sua conexão.");
+        });
+    }
+}
+
+// -------------------------- → Validador Número Endereço ← -------------------------- //
+class ValidadorNumeroEndereco extends Validador {
+    inicializar() {
+        $(".input-validar-numero-endereco").on("input blur", (event) => {
             const campo = event.target;
             const valor = $(campo).val().trim();
 
             if (valor === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informar o Valor.");
-                } else {
-                    FeedbackVisual.limparFeedback(campo);
-                }
+                FeedbackVisual.limparFeedback(campo);
+                return;
+            }
+
+            if (!this.validar(valor)) {
+                FeedbackVisual.mostrarErro(campo, "O número deve começar com dígitos.");
             } else {
                 FeedbackVisual.limparFeedback(campo);
             }
         });
     }
 
+    /**
+     *  Valida um número de endereço
+     *  @param {String} valor - O valor a ser validado
+     *  @returns {Boolean} - Verdadeiro se o valor for válido
+     */
     validar(valor) {
         if (!valor) {
             return false;
         }
 
-        return valor.trim() !== "";
+        if (valor === "") {
+            return false;
+        }
+
+        return /^\d+.*$/.test(valor);
     }
 }
 
-class ValidadorHorario extends Validador {
-    inicializar() {
-        $(".input-validar-horario").on("input blur", (event) => {
-            const campo = event.target;
-            const horario = $(campo).val().trim();
 
-            if (horario === "") {
+
+/**
+ *  Validações de Nome e Valores
+ *  Nome, Data Nascimento, Data, Horário e Valor
+ */
+// -------------------------- → Validador Nome ← -------------------------- //
+class ValidadorNome extends Validador {
+    inicializar() {
+        $(".input-validar-nome").on("input blur", (event) => {
+            const campo = event.target;
+            const nome = $(campo).val().trim();
+            // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
+            // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'-]+$/;
+
+            if (nome === "") {
                 if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informar o Horário.")
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
                 }
+            } else if (nome.length > 255) {
+                FeedbackVisual.mostrarErro(campo, "Deve conter menor que 255 caracteres.");
+            } else if (nome.length < 3) {
+                FeedbackVisual.mostrarErro(campo, "Deve conter pelo menos 3 caracteres.");
             } else {
                 FeedbackVisual.limparFeedback(campo);
             }
         });
     }
 
-    validar(horario) {
-        if (!horario) {
+    /**
+     *  Valida um nome
+     *  @param {String} nome - O nome a ser validado
+     *  @returns {Boolean} - Verdadeiro se o nome for válido
+     */
+    validar(nome) {
+        if (!nome) {
             return false;
         }
 
-        return horario.trim() !== "";
-    }
-}
-
-class ValidadorData extends Validador {
-    inicializar() {
-        $(".input-validar-data").on("input blur", (event) => {
-            const campo = event.target;
-            const data = $(campo).val().trim();
-
-            // Limpa qualquer feedback anterior
-            FeedbackVisual.limparFeedback(campo);
-
-            // Verifica se é campo obrigatório e está vazio
-            if (data === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informe a Data.");
-                }
-                return;
-            }
-
-            // Verifica se é data antiga (apenas se existir data)
-            if ($(campo).hasClass("validar-data-antiga")) {
-                const hoje = moment().startOf('day');
-                const dataDigitada = moment(data);
-
-                if (dataDigitada.isValid() && dataDigitada.isBefore(hoje)) {
-                    FeedbackVisual.mostrarAviso(campo, "A data informada é anterior à data atual.");
-                }
-            }
-        });
-    }
-
-    validar(data) {
-        if (!data || data.trim() === "") {
+        if (nome === "") {
             return false;
         }
 
-        return moment(data).isValid();
+        nome = nome.trim();
+
+        if (nome.length < 3) {
+            return false;
+        }
+
+        if (nome.length > 255) {
+            return false;
+        }
+
+        // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
+        // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'-]+$/;
+        //if (!regexNome.test(nome)) {
+        //return false;
+        //}
+
+        return true;
     }
 }
 
+// -------------------------- → Validador Data Nascimento ← -------------------------- //
 class ValidadorDataNascimento extends Validador {
     inicializar() {
         $(".input-validar-data-nascimento").on("input blur", (event) => {
@@ -565,99 +783,108 @@ class ValidadorDataNascimento extends Validador {
     }
 }
 
-class ValidadorCEP extends Validador {
+// -------------------------- → Validador Data ← -------------------------- //
+class ValidadorData extends Validador {
     inicializar() {
-        $(".input-validar-cep").on("input blur", (event) => {
+        $(".input-validar-data").on("input blur", (event) => {
             const campo = event.target;
-            const cep = $(campo).val().trim().replace(/\D/g, "");
+            const data = $(campo).val().trim();
 
-            if (cep === "") {
-                FeedbackVisual.limparFeedback(campo);
+            // Limpa qualquer feedback anterior
+            FeedbackVisual.limparFeedback(campo);
+
+            // Verifica se é campo obrigatório e está vazio
+            if (data === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informe a Data.");
+                }
                 return;
             }
 
-            if (this.validar(cep)) {
-                this.consultarCEP(cep, campo);
-            } else {
-                FeedbackVisual.mostrarErro(campo, "CEP inválido.");
-            }
-        });
-    }
+            // Verifica se é data antiga (apenas se existir data)
+            if ($(campo).hasClass("validar-data-antiga")) {
+                const hoje = moment().startOf('day');
+                const dataDigitada = moment(data);
 
-    /**
-     *  Valida um CEP
-     *  @param {String} cep - O CEP a ser validado
-     *  @returns {Boolean} - Verdadeiro se o CEP for válido
-     */
-    validar(cep) {
-        cep = cep.replace(/\D/g, "");
-        return cep.length === 8;
-    }
-
-    /**
-     *  Consulta um CEP na API ViaCEP
-     *  @param {String} cep - O CEP a ser consultado
-     *  @param {Element} campo - O campo que contém o CEP
-     */
-    consultarCEP(cep, campo) {
-        // Selecionar os campos relacionados que devem ser desabilitados durante a consulta
-        const camposRelacionados = [
-            ".campo-logradouro",
-            ".campo-bairro",
-            ".campo-cidade",
-            ".campo-estado",
-            ".campo-numero"
-        ];
-
-        // Iniciar o feedback de carregamento
-        const carregamento = FeedbackVisual.mostrarCarregamento(campo, camposRelacionados, "Consultando CEP...");
-
-        $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function (data) {
-            if (!data.erro) {
-                // Preencher os campos relacionados
-                $(".campo-logradouro").val(data.logradouro);
-                $(".campo-bairro").val(data.bairro);
-                $(".campo-cidade").val(data.localidade);
-
-                // Tratar o campo de estado corretamente
-                const $estadoSelect = $(".campo-estado");
-
-                // ViaCEP retorna a sigla (UF), que é o valor do option no select
-                $estadoSelect.val(data.uf);
-
-                // Se for um select2, precisamos atualizar a UI
-                if ($estadoSelect.hasClass("select2")) {
-                    $estadoSelect.trigger('change.select2');
+                if (dataDigitada.isValid() && dataDigitada.isBefore(hoje)) {
+                    FeedbackVisual.mostrarAviso(campo, "A data informada é anterior à data atual.");
                 }
-
-                // Garantir que todos os campos estejam habilitados para edição
-                $(campo).prop('disabled', false);
-                camposRelacionados.forEach(seletor => {
-                    $(seletor).prop('disabled', false);
-                });
-
-                // Focar no campo número
-                $(".campo-numero").focus();
-
-                // Finalizar carregamento com sucesso
-                carregamento.concluir(true, "CEP localizado com sucesso!");
-            } else {
-                // Garantir que o campo de CEP esteja habilitado mesmo em caso de erro
-                $(campo).prop('disabled', false);
-
-                // Finalizar carregamento com erro
-                carregamento.concluir(false, "CEP não encontrado.");
             }
-        }).fail(function () {
-            // Garantir que o campo de CEP esteja habilitado mesmo em caso de erro
-            $(campo).prop('disabled', false);
-
-            // Finalizar carregamento com erro de conexão
-            carregamento.concluir(false, "Erro ao consultar CEP. Verifique sua conexão.");
         });
+    }
+
+    validar(data) {
+        if (!data || data.trim() === "") {
+            return false;
+        }
+
+        return moment(data).isValid();
     }
 }
 
+// -------------------------- → Validador Horário ← -------------------------- //
+class ValidadorHorario extends Validador {
+    inicializar() {
+        $(".input-validar-horario").on("input blur", (event) => {
+            const campo = event.target;
+            const horario = $(campo).val().trim();
+
+            if (horario === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informar o Horário.")
+                } else {
+                    FeedbackVisual.limparFeedback(campo);
+                }
+            } else {
+                FeedbackVisual.limparFeedback(campo);
+            }
+        });
+    }
+
+    validar(horario) {
+        if (!horario) {
+            return false;
+        }
+
+        return horario.trim() !== "";
+    }
+}
+
+// -------------------------- → Validador Valor ← -------------------------- //
+class ValidadorValor extends Validador {
+    inicializar() {
+        $(".input-validar-valor").on("input blur", (event) => {
+            const campo = event.target;
+            const valor = $(campo).val().trim();
+
+            if (valor === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informar o Valor.");
+                } else {
+                    FeedbackVisual.limparFeedback(campo);
+                }
+            } else {
+                FeedbackVisual.limparFeedback(campo);
+            }
+        });
+    }
+
+    validar(valor) {
+        if (!valor) {
+            return false;
+        }
+
+        return valor.trim() !== "";
+    }
+}
+
+
+
+/**
+ *  Validações de Número de Celular e WhatsApp
+ *  Celular e WhatsApp
+ */
+// -------------------------- → Validador WhatsApp ← -------------------------- //
 class ValidadorWhatsapp extends Validador {
     constructor() {
         super();
@@ -779,64 +1006,13 @@ class ValidadorWhatsapp extends Validador {
     }
 }
 
-class ValidadorNome extends Validador {
-    inicializar() {
-        $(".input-validar-nome").on("input blur", (event) => {
-            const campo = event.target;
-            const nome = $(campo).val().trim();
-            // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
-            // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'-]+$/;
 
-            if (nome === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome.");
-                } else {
-                    FeedbackVisual.limparFeedback(campo);
-                }
-            } else if (nome.length > 255) {
-                FeedbackVisual.mostrarErro(campo, "Deve conter menor que 255 caracteres.");
-            } else if (nome.length < 3) {
-                FeedbackVisual.mostrarErro(campo, "Deve conter pelo menos 3 caracteres.");
-            } else {
-                FeedbackVisual.limparFeedback(campo);
-            }
-        });
-    }
 
-    /**
-     *  Valida um nome
-     *  @param {String} nome - O nome a ser validado
-     *  @returns {Boolean} - Verdadeiro se o nome for válido
-     */
-    validar(nome) {
-        if (!nome) {
-            return false;
-        }
-
-        if (nome === "") {
-            return false;
-        }
-
-        nome = nome.trim();
-
-        if (nome.length < 3) {
-            return false;
-        }
-
-        if (nome.length > 255) {
-            return false;
-        }
-
-        // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
-        // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'-]+$/;
-        //if (!regexNome.test(nome)) {
-        //return false;
-        //}
-
-        return true;
-    }
-}
-
+/**
+ *  Validações de Campos de Login
+ *  E-mail e Senha
+ */
+// -------------------------- → Validador Email ← -------------------------- //
 class ValidadorEmail extends Validador {
     inicializar() {
         $(".input-validar-email").on("input blur", (event) => {
@@ -876,6 +1052,7 @@ class ValidadorEmail extends Validador {
     }
 }
 
+// -------------------------- → Validador Senha ← -------------------------- //
 class ValidadorSenha extends Validador {
     inicializar() {
         $(".input-validar-senha").on("input blur", (event) => {
@@ -935,118 +1112,13 @@ class ValidadorSenha extends Validador {
     }
 }
 
-class ValidadorNumeroEndereco extends Validador {
-    inicializar() {
-        $(".input-validar-numero-endereco").on("input blur", (event) => {
-            const campo = event.target;
-            const valor = $(campo).val().trim();
 
-            if (valor === "") {
-                FeedbackVisual.limparFeedback(campo);
-                return;
-            }
 
-            if (!this.validar(valor)) {
-                FeedbackVisual.mostrarErro(campo, "O número deve começar com dígitos.");
-            } else {
-                FeedbackVisual.limparFeedback(campo);
-            }
-        });
-    }
-
-    /**
-     *  Valida um número de endereço
-     *  @param {String} valor - O valor a ser validado
-     *  @returns {Boolean} - Verdadeiro se o valor for válido
-     */
-    validar(valor) {
-        if (!valor) {
-            return false;
-        }
-
-        if (valor === "") {
-            return false;
-        }
-
-        return /^\d+.*$/.test(valor);
-    }
-}
-
-class ValidadorCNPJ extends Validador {
-    inicializar() {
-        $(".input-validar-cnpj").on("input blur", (event) => {
-            const campo = event.target;
-            const cnpj = $(campo).val().trim();
-
-            if (cnpj === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o CNPJ.");
-                } else {
-                    FeedbackVisual.limparFeedback(campo);
-                }
-                return;
-            }
-
-            if (!this.validar(cnpj)) {
-                FeedbackVisual.mostrarErro(campo, "CNPJ inválido. Por favor, verifique.");
-            } else {
-                FeedbackVisual.mostrarSucesso(campo);
-            }
-        });
-    }
-
-    validar(cnpj) {
-        if (!cnpj) {
-            return false;
-        }
-
-        if (cnpj === "") {
-            return false;
-        }
-
-        cnpj = cnpj.replace(/[^\d]+/g, "");
-
-        if (cnpj === "" || cnpj.length !== 14) { return false; }
-
-        if (/^(\d)\1+$/.test(cnpj)) {
-            return false;
-        }
-
-        let tamanho = cnpj.length - 2;
-        let numeros = cnpj.substring(0, tamanho);
-        let digitos = cnpj.substring(tamanho);
-        let soma = 0;
-        let pos = tamanho - 7;
-
-        for (let i = tamanho; i >= 1; i--) {
-            soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2) pos = 9;
-        }
-
-        let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado !== parseInt(digitos.charAt(0))) {
-            return false;
-        }
-
-        tamanho = tamanho + 1;
-        numeros = cnpj.substring(0, tamanho);
-        soma = 0;
-        pos = tamanho - 7;
-
-        for (let i = tamanho; i >= 1; i--) {
-            soma += numeros.charAt(tamanho - i) * pos--;
-            if (pos < 2) pos = 9;
-        }
-
-        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
-        if (resultado !== parseInt(digitos.charAt(1))) {
-            return false;
-        }
-
-        return true;
-    }
-}
-
+/**
+ *  Validações das Informações de Empresas
+ *  Razão Social, Nome Fantasia, Nome Empresa e Responsável
+ */
+// -------------------------- → Validador Razão Social ← -------------------------- //
 class ValidadorRazaoSocial extends Validador {
     inicializar() {
         $(".input-validar-razao-social").on("input blur", (event) => {
@@ -1098,6 +1170,161 @@ class ValidadorRazaoSocial extends Validador {
     }
 }
 
+// -------------------------- → Validador Nome Fantasia ← -------------------------- //
+class ValidadorNomeFantasia extends Validador {
+    inicializar() {
+        $(".input-validar-nome-fantasia").on("input blur", (event) => {
+            const campo = event.target;
+            const nomeFantasia = $(campo).val().trim();
+            // const regexNomeFantasia = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
+
+            if (nomeFantasia === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome Fantasia.");
+                } else {
+                    FeedbackVisual.limparFeedback(campo);
+                }
+            } else if (nomeFantasia.length > 255) {
+                FeedbackVisual.mostrarErro(campo, "Nome Fantasia deve ser menor que 255 caracteres.");
+            } else if (nomeFantasia.length < 3) {
+                FeedbackVisual.mostrarErro(campo, "Nome Fantasia deve ter pelo menos 3 caracteres.");
+            } else {
+                FeedbackVisual.limparFeedback(campo);
+            }
+        });
+    }
+
+    validar(nomeFantasia) {
+        if (!nomeFantasia) {
+            return false;
+        }
+
+        if (nomeFantasia === "") {
+            return false;
+        }
+
+        nomeFantasia = nomeFantasia.trim();
+
+        if (nomeFantasia.length < 3) {
+            return false;
+        }
+
+        if (nomeFantasia.length > 255) {
+            return false;
+        }
+
+        // const regexNomeFantasia = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
+        // if (!regexNomeFantasia.test(nomeFantasia)) {
+        //     return false;
+        // }
+
+        return true;
+    }
+}
+
+// -------------------------- → Validador Nome Empresa ← -------------------------- //
+class ValidadorNomeEmpresa extends Validador {
+    inicializar() {
+        $(".input-validar-nome-empresa").on("input blur", (event) => {
+            const campo = event.target;
+            const nomeEmpresa = $(campo).val().trim();
+            // const regexNomeEmpresa = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
+
+            if (nomeEmpresa === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome da Empresa.");
+                } else {
+                    FeedbackVisual.limparFeedback(campo);
+                }
+            } else if (nomeEmpresa.length > 255) {
+                FeedbackVisual.mostrarErro(campo, "Nome da Empresa deve ser menor que 255 caracteres.");
+            } else if (nomeEmpresa.length < 3) {
+                FeedbackVisual.mostrarErro(campo, "Nome da Empresa deve ter pelo menos 3 caracteres.");
+            } else {
+                FeedbackVisual.limparFeedback(campo);
+            }
+        });
+    }
+
+    validar(nomeEmpresa) {
+        if (!nomeEmpresa) {
+            return false;
+        }
+
+        nomeEmpresa = nomeEmpresa.trim();
+
+        if (nomeEmpresa.length < 3) {
+            return false;
+        }
+
+        if (nomeEmpresa.length > 255) {
+            return false;
+        }
+
+        // const regexNomeEmpresa = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
+        // if (!regexNomeEmpresa.test(nomeEmpresa)) {
+        //     return false;
+        // }
+
+        return true;
+    }
+}
+
+// -------------------------- → Validador Responsável ← -------------------------- //
+class ValidadorResponsavel extends Validador {
+    inicializar() {
+        $(".input-validar-responsavel").on("input blur", (event) => {
+            const campo = event.target;
+            const responsavel = $(campo).val().trim();
+            // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
+
+            if (responsavel === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome do responsável.");
+                } else {
+                    FeedbackVisual.limparFeedback(campo);
+                }
+            } else if (responsavel.length > 255) {
+                FeedbackVisual.mostrarErro(campo, "Nome do responsável deve ser menor que 255 caracteres.");
+            } else if (responsavel.length < 3) {
+                FeedbackVisual.mostrarErro(campo, "Nome do responsável deve ter pelo menos 3 caracteres.");
+            } else {
+                FeedbackVisual.limparFeedback(campo);
+            }
+        });
+    }
+
+    validar(responsavel) {
+        if (typeof window.validadorNome !== 'undefined' && typeof window.validadorNome.validar === 'function') {
+            return window.validadorNome.validar(responsavel);
+        }
+
+        if (!responsavel) {
+            return false;
+        }
+
+        responsavel = responsavel.trim();
+
+        if (responsavel.length < 3) {
+            return false;
+        }
+
+        if (responsavel.length > 255) {
+            return false;
+        }
+
+        // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
+        return true;
+    }
+}
+
+
+
+/**
+ *  Validações de Campos Diversos
+ *  Select Vazio, Select Selecionado, Radio, TextArea, CheckBox e Input
+ */
+// -------------------------- → Validador Select Vazio ← -------------------------- //
 class ValidadorSelect extends Validador {
     inicializar() {
         $(".input-validar-select").each((index, elemento) => {
@@ -1181,6 +1408,88 @@ class ValidadorSelect extends Validador {
     }
 }
 
+// -------------------------- → Validador Select Selecionado ← -------------------------- //
+class ValidadorSelectSelecionado extends Validador {
+    inicializar() {
+        $(".input-validar-select-selecionado").each((index, elemento) => {
+            const $select = $(elemento);
+            let primeiraInteracao = true;
+
+            // Para compatibilidade com Select2
+            if ($select.hasClass("select2")) {
+                // Eventos de seleção
+                $select.on("select2:select", () => {
+                    this.verificarSelectSelecionado($select);
+                });
+
+                // Ao abrir o dropdown - não validar neste momento
+                $select.on("select2:opening", () => {
+                    primeiraInteracao = false;
+                });
+
+                // Validar quando o dropdown for fechado E não for a primeira interação
+                $select.on("select2:close", () => {
+                    if (!primeiraInteracao) {
+                        setTimeout(() => this.verificarSelectSelecionado($select), 100);
+                    }
+                });
+
+                // Limpar mensagem de erro ao abrir o dropdown
+                $select.on("select2:opening", () => {
+                    FeedbackVisual.limparFeedback($select[0]);
+                });
+            } else {
+                // Para selects normais
+                $select.on("change", () => {
+                    const valor = $select.val();
+                    if (!valor || valor === "") {
+                        FeedbackVisual.limparFeedback($select[0]);
+                    } else {
+                        this.verificarSelectSelecionado($select);
+                    }
+                });
+
+                $select.on("focus", () => {
+                    primeiraInteracao = false;
+                });
+
+                $select.on("blur", () => {
+                    if (!primeiraInteracao) {
+                        this.verificarSelectSelecionado($select);
+                    }
+                });
+            }
+        });
+    }
+
+    verificarSelectSelecionado($select) {
+        const valor = $select.val();
+        const campo = $select[0];
+
+        // Se estiver aberto, não validar
+        if ($select.hasClass("select2") && $select.data('select2') && $select.data('select2').isOpen()) {
+            return;
+        }
+
+        if (valor && valor !== "" && valor !== "NULL") {
+            if ($select.hasClass("notificacao-obrigatoria")) {
+                FeedbackVisual.mostrarErro(campo, "Adicione o item antes de continuar.");
+            } else {
+                FeedbackVisual.mostrarErro(campo, "Adicione o item antes de continuar.");
+            }
+        } else {
+            FeedbackVisual.limparFeedback(campo);
+        }
+    }
+
+    validar(select) {
+        if (!select) return true;
+        if (select === "CADASTRE") return false;
+        return select.toString().trim() === "";
+    }
+}
+
+// -------------------------- → Validador Radio ← -------------------------- //
 class ValidadorRadio extends Validador {
     inicializar() {
         $(".input-validar-radio").each((index, radioGroup) => {
@@ -1208,151 +1517,7 @@ class ValidadorRadio extends Validador {
     }
 }
 
-class ValidadorNomeFantasia extends Validador {
-    inicializar() {
-        $(".input-validar-nome-fantasia").on("input blur", (event) => {
-            const campo = event.target;
-            const nomeFantasia = $(campo).val().trim();
-            // const regexNomeFantasia = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
-
-            if (nomeFantasia === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome Fantasia.");
-                } else {
-                    FeedbackVisual.limparFeedback(campo);
-                }
-            } else if (nomeFantasia.length > 255) {
-                FeedbackVisual.mostrarErro(campo, "Nome Fantasia deve ser menor que 255 caracteres.");
-            } else if (nomeFantasia.length < 3) {
-                FeedbackVisual.mostrarErro(campo, "Nome Fantasia deve ter pelo menos 3 caracteres.");
-            } else {
-                FeedbackVisual.limparFeedback(campo);
-            }
-        });
-    }
-
-    validar(nomeFantasia) {
-        if (!nomeFantasia) {
-            return false;
-        }
-
-        if (nomeFantasia === "") {
-            return false;
-        }
-
-        nomeFantasia = nomeFantasia.trim();
-
-        if (nomeFantasia.length < 3) {
-            return false;
-        }
-
-        if (nomeFantasia.length > 255) {
-            return false;
-        }
-
-        // const regexNomeFantasia = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
-        // if (!regexNomeFantasia.test(nomeFantasia)) {
-        //     return false;
-        // }
-
-        return true;
-    }
-}
-
-class ValidadorNomeEmpresa extends Validador {
-    inicializar() {
-        $(".input-validar-nome-empresa").on("input blur", (event) => {
-            const campo = event.target;
-            const nomeEmpresa = $(campo).val().trim();
-            // const regexNomeEmpresa = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
-
-            if (nomeEmpresa === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome da Empresa.");
-                } else {
-                    FeedbackVisual.limparFeedback(campo);
-                }
-            } else if (nomeEmpresa.length > 255) {
-                FeedbackVisual.mostrarErro(campo, "Nome da Empresa deve ser menor que 255 caracteres.");
-            } else if (nomeEmpresa.length < 3) {
-                FeedbackVisual.mostrarErro(campo, "Nome da Empresa deve ter pelo menos 3 caracteres.");
-            } else {
-                FeedbackVisual.limparFeedback(campo);
-            }
-        });
-    }
-
-    validar(nomeEmpresa) {
-        if (!nomeEmpresa) {
-            return false;
-        }
-
-        nomeEmpresa = nomeEmpresa.trim();
-
-        if (nomeEmpresa.length < 3) {
-            return false;
-        }
-
-        if (nomeEmpresa.length > 255) {
-            return false;
-        }
-
-        // const regexNomeEmpresa = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
-        // if (!regexNomeEmpresa.test(nomeEmpresa)) {
-        //     return false;
-        // }
-
-        return true;
-    }
-}
-
-class ValidadorResponsavel extends Validador {
-    inicializar() {
-        $(".input-validar-responsavel").on("input blur", (event) => {
-            const campo = event.target;
-            const responsavel = $(campo).val().trim();
-            // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
-
-            if (responsavel === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome do responsável.");
-                } else {
-                    FeedbackVisual.limparFeedback(campo);
-                }
-            } else if (responsavel.length > 255) {
-                FeedbackVisual.mostrarErro(campo, "Nome do responsável deve ser menor que 255 caracteres.");
-            } else if (responsavel.length < 3) {
-                FeedbackVisual.mostrarErro(campo, "Nome do responsável deve ter pelo menos 3 caracteres.");
-            } else {
-                FeedbackVisual.limparFeedback(campo);
-            }
-        });
-    }
-
-    validar(responsavel) {
-        if (typeof window.validadorNome !== 'undefined' && typeof window.validadorNome.validar === 'function') {
-            return window.validadorNome.validar(responsavel);
-        }
-
-        if (!responsavel) {
-            return false;
-        }
-
-        responsavel = responsavel.trim();
-
-        if (responsavel.length < 3) {
-            return false;
-        }
-
-        if (responsavel.length > 255) {
-            return false;
-        }
-
-        // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
-        return true;
-    }
-}
-
+// -------------------------- → Validador TextArea ← -------------------------- //
 class ValidadorTextArea extends Validador {
     inicializar() {
         $(".input-validar-textarea").on("input blur", (event) => {
@@ -1388,6 +1553,7 @@ class ValidadorTextArea extends Validador {
     }
 }
 
+// -------------------------- → Validador Checkbox ← -------------------------- //
 class ValidadorCheckbox extends Validador {
     inicializar() {
         // Monitorar alterações nos grupos de checkbox quando necessário
@@ -1479,40 +1645,91 @@ class ValidadorCheckbox extends Validador {
     }
 }
 
+// -------------------------- → Validador Input ← -------------------------- //
+class ValidadorInput extends Validador {
+    inicializar() {
+        $(".input-validar-input").on("input blur", (event) => {
+            const campo = event.target;
+            const palavra = $(campo).val().trim();
+
+            if (palavra === "") {
+                if ($(campo).hasClass("campo-obrigatorio")) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informe alguma informação.");
+                } else {
+                    FeedbackVisual.limparFeedback(campo);
+                }
+            } else if (palavra.length > 255) {
+                FeedbackVisual.mostrarErro(campo, "O campo deve conter menor que 255 caracteres.");
+            } else if (palavra.length < 3) {
+                FeedbackVisual.mostrarErro(campo, "O campo deve conter pelo menos 3 caracteres.");
+            } else {
+                FeedbackVisual.limparFeedback(campo);
+            }
+        });
+    }
+
+    validar(palavra) {
+        if (!palavra) {
+            return false;
+        }
+
+        palavra = palavra.trim();
+
+        if (palavra.length > 255) {
+            return false;
+        }
+
+        if (palavra.length < 3) {
+            return false;
+        }
+
+        return true;
+    }
+}
+
+
+
+/**
+ *  Criação dos Validadores
+ *  Cria os validadores
+ */
+// -------------------------- → Cria Validadores ← -------------------------- //
 $(function () {
 
     function criarValidadores() {
-        // Documentos
+        // Validações de documentos
         window.validadorCPF = new ValidadorCPF();
         window.validadorCNPJ = new ValidadorCNPJ();
         window.validadorCEP = new ValidadorCEP();
         window.validadorNumeroEndereco = new ValidadorNumeroEndereco();
 
-        // Nome, Data, Horários e Valores
+        // Validações de Nome e Valores
         window.validadorNome = new ValidadorNome();
         window.validadorDataNascimento = new ValidadorDataNascimento();
         window.validadorData = new ValidadorData();
         window.validadorHorario = new ValidadorHorario();
         window.validadorValor = new ValidadorValor();
 
-        // Número WhatsApp
+        // Validações de Número de Celular e WhatsApp
         window.validadorWhatsapp = new ValidadorWhatsapp();
 
-        // Email e senha
+        // Validações de Campos de Login
         window.validadorEmail = new ValidadorEmail();
         window.validadorSenha = new ValidadorSenha();
 
-        // Informações empresa
+        // Validações das Informações de empresas
         window.validadorRazaoSocial = new ValidadorRazaoSocial();
         window.validadorNomeFantasia = new ValidadorNomeFantasia();
         window.validadorNomeEmpresa = new ValidadorNomeEmpresa();
         window.validadorResponsavel = new ValidadorResponsavel();
 
-        // Select, Radio e TextArea
+        // Validações de Campos Diversos
         window.validadorSelect = new ValidadorSelect();
+        window.validadorSelectSelecionado = new ValidadorSelectSelecionado();
         window.validadorRadio = new ValidadorRadio();
         window.validadorTextArea = new ValidadorTextArea();
         window.validadorCheckbox = new ValidadorCheckbox();
+        window.validadorInput = new ValidadorInput();
     }
 
     criarValidadores();
