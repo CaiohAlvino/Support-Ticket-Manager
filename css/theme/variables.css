@@ -1,25 +1,24 @@
 :root {
     /* Cores principais */
     --primary-color: #708238;
-    --primary-hover: #93C572;
-    /* Pistachio Green */
-    --secondary-color: #6B7280;
-    --success-color: #556B2F;
-    --background-color: #F3F4F6;
+    --primary-hover: #8A9A47;
+    --secondary-color: #64748B;
+    --success-color: #10B981;
+    --background-color: #F8FAFC;
     --form-background: #ffffff;
 
     /* Cores de texto */
-    --text-primary: #1F2937;
-    --text-secondary: #4B5563;
-    --text-muted: #9CA3AF;
+    --text-primary: #1E293B;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
 
     /* Cores de borda */
-    --border-color: #E5E7EB;
+    --border-color: #E2E8F0;
 
     /* Sombras */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
     /* Espaçamento */
     --spacing-xs: 0.25rem;
@@ -37,8 +36,8 @@
     --transition-speed: 0.2s;
 
     /* Gradientes */
-    --gradient-primary: linear-gradient(135deg, #708238 0%, #556B2F 100%);
-    --gradient-background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+    --gradient-primary: linear-gradient(135deg, #708238 0%, #8A9A47 100%);
+    --gradient-background: linear-gradient(135deg, #F8FAFC 0%, #F1F5F9 100%);
 }
 
 /* Corrige azul padrão do Bootstrap e outros elementos para o tema */
