@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="../../css/components/excluir.css">
     <link rel="stylesheet" href="../../css/components/hover.css">
     <link rel="stylesheet" href="../../css/components/layout.css">
+    <link rel="stylesheet" href="../../css/components/sessao.css">
 
     <link rel="stylesheet" href="../../css/pages/cliente.css">
     <link rel="stylesheet" href="../../css/pages/dashboard.css">

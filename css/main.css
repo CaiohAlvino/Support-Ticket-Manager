@@ -44,27 +44,10 @@ a {
   transition: color var(--transition-speed);
 }
 
-a:hover,
-a:focus {
-  color: var(--primary-hover);
-  text-decoration: underline;
-}
-
 hr {
   border: none;
   border-top: 1px solid var(--border-color);
   margin: var(--spacing-md) 0;
-}
-
-/* Remove hover dos ícones Bootstrap */
-.bi:hover,
-[class^="bi-"]:hover,
-[class*=" bi-"]:hover {
-  color: inherit !important;
-  background: none !important;
-  box-shadow: none !important;
-  transition: none !important;
-  filter: none !important;
 }
 
 /* Utilitários */
@@ -100,15 +83,6 @@ button,
   cursor: pointer;
   transition: background var(--transition-speed), box-shadow var(--transition-speed);
   box-shadow: var(--shadow-sm);
-}
-
-button:hover,
-.btn:hover,
-button:focus,
-.btn:focus {
-  background: var(--primary-hover);
-  box-shadow: var(--shadow-md);
-  outline: none;
 }
 
 /* Inputs */

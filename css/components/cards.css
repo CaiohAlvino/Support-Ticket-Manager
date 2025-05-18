@@ -10,11 +10,13 @@
     transition: box-shadow 0.2s;
     border: 1px solid var(--border-color);
 }
+
 .stats-card:hover {
     box-shadow: var(--shadow-sm);
     border-color: var(--border-color);
     transform: none;
 }
+
 .stats-icon {
     width: 56px;
     height: 56px;
@@ -22,16 +24,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: var(--gradient-primary);
     box-shadow: var(--shadow-sm);
 }
+
 .stats-icon i {
     font-size: 2rem;
-    color: var(--primary-color);
+    color: #fff
 }
+
 .stats-info {
     flex: 1;
 }
+
 .stats-number {
     font-size: 2rem;
     font-weight: 700;
@@ -39,6 +43,7 @@
     line-height: 1.2;
     margin: 0;
 }
+
 .stats-label {
     font-size: 1rem;
     color: var(--text-muted);
@@ -51,7 +56,7 @@
 }
 
 .stats-card.total .stats-icon {
-    background-color: var(--bs-primary);
+    background-color: #fff;
 }
 
 .stats-card.ongoing {
@@ -59,7 +64,7 @@
 }
 
 .stats-card.ongoing .stats-icon {
-    background-color: var(--bs-warning);
+    background-color: #fff;
 }
 
 .stats-card.resolved {
@@ -67,7 +72,7 @@
 }
 
 .stats-card.resolved .stats-icon {
-    background-color: var(--bs-success);
+    background-color: #fff;
 }
 
 .stats-card.critical {
@@ -75,7 +80,7 @@
 }
 
 .stats-card.critical .stats-icon {
-    background-color: var(--bs-danger);
+    background-color: #fff;
 }
 
 /* Tabela de Tickets */
@@ -248,6 +253,7 @@
     transition: box-shadow 0.2s;
     padding: var(--spacing-lg);
 }
+
 .card-header {
     background: none;
     border-bottom: 1px solid var(--border-color);
@@ -255,6 +261,7 @@
     color: var(--primary-color);
     padding: var(--spacing-md);
 }
+
 .card-body {
     padding: var(--spacing-md);
 }
@@ -269,6 +276,7 @@
     border: 1px solid var(--border-color) !important;
     transition: none !important;
 }
+
 .stats-card:hover,
 .card:hover,
 .ticket-card:hover {
@@ -277,10 +285,4 @@
     background: #fff !important;
     color: inherit !important;
     transform: none !important;
-}
-.stats-icon i,
-.card i,
-.ticket-card i {
-    color: var(--primary-color) !important;
-    transition: none !important;
 }

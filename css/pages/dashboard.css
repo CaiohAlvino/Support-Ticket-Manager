@@ -281,6 +281,7 @@ canvas {
     border-radius: var(--border-radius-md) !important;
     transition: none !important;
 }
+
 .card:hover,
 .stats-card:hover,
 .ticket-card:hover,
@@ -291,12 +292,7 @@ canvas {
     color: inherit !important;
     transform: none !important;
 }
-.stats-icon,
-.card i,
-.ticket-card i {
-    color: var(--primary-color) !important;
-    transition: none !important;
-}
+
 .list-group-item:hover .badge {
     background-color: var(--primary-color) !important;
     color: #fff !important;
