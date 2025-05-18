@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="libs/bootstrap/style.css">
     <link rel="stylesheet" href="libs/bootstrap/icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/interface/login.css">
+    <link rel="stylesheet" href="css/pages/login.css">
 </head>
 
 <body class="body-login">

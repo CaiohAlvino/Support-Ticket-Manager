@@ -68,10 +68,17 @@ $validacao = new Validador($db->getConnection());
                 <button class="dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown"
                     aria-expanded="false">
                     <i class="bi bi-person-circle"></i>
-                    <span class="user-name ms-2">Usuário</span>
-                    <!-- <i class="bi bi-chevron-down ms-1"></i> -->
+                    <?php
+                    // Exibe o nome do usuário logado, se existir na sessão
+                    session_start();
+                    if (isset($_SESSION['usuario_nome'])) {
+                        echo '<span class="user-name ms-2">' . htmlspecialchars($_SESSION['usuario_nome']) . '</span>';
+                    } else {
+                        echo '<span class="user-name ms-2">Usuário</span>';
+                    }
+                    ?>
                 </button>
-                <ul class="dropdown-menu dropdown-menu-end">
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                     <li>
                         <a class="dropdown-item" href="../usuario/perfil.php">
                             <i class="bi bi-person"></i>
@@ -88,10 +95,10 @@ $validacao = new Validador($db->getConnection());
                         <hr class="dropdown-divider">
                     </li>
                     <li>
-                        <button class="dropdown-item text-danger" id="botao-sair" data-action="login/sair.php">
+                        <a class="dropdown-item text-danger" href="../login/sair.php">
                             <i class="bi bi-box-arrow-right"></i>
                             <span>Sair</span>
-                        </button>
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -141,4 +148,3 @@ $validacao = new Validador($db->getConnection());
 
     <!-- Main Content -->
     <main class="main-content" id="mainContent">
-        <div class="container-fluid">

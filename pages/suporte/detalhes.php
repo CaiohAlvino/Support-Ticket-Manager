@@ -11,7 +11,7 @@ $suporte_registro = $suporte->pegarPorId($id);
 $mensagem_registro = $mensagem->pegarPorSuporteId($id);
 ?>
 
-<div class="suporte-mensagem-detalhe container-fluid mt-2">
+<div class="suporte-mensagem-detalhe mt-2">
 
     <?php if (!$suporte_registro && !$mensagem_registro): ?>
 

@@ -7,7 +7,7 @@ $aba = isset($_GET["aba"]) ? $_GET["aba"] : "dados";
 $registro = $cliente->pegarPorId($id);
 ?>
 
-<div class="cliente-edicao container-fluid mt-2">
+<div class="cliente-edicao mt-2">
 
     <?php if (!$registro): ?>
         <div class="error-container text-center py-5">
