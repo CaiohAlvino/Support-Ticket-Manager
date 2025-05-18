@@ -1,3 +1,5 @@
+@import url("../../css/components/centraliza.css");
+
 /* Estilos personalizados para o dashboard */
 
 /* Container principal */
@@ -270,35 +272,6 @@ canvas {
     }
 }
 
-/* Remove hover de cards, list-group, stats-icon e padroniza visual */
-.card,
-.stats-card,
-.ticket-card,
-.list-group-item {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    border-radius: var(--border-radius-md) !important;
-    transition: none !important;
-}
-
-.card:hover,
-.stats-card:hover,
-.ticket-card:hover,
-.list-group-item:hover {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    color: inherit !important;
-    transform: none !important;
-}
-
-.list-group-item:hover .badge {
-    background-color: var(--primary-color) !important;
-    color: #fff !important;
-    transform: none !important;
-}
-
 /* Dashboard */
 .dashboard {
     padding: var(--spacing-lg);
@@ -335,4 +308,23 @@ canvas {
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-speed);
+}
+
+input.form-control,
+select.form-control,
+textarea.form-control {
+    background: none !important;
+    color: inherit !important;
+}
+
+input.form-control:focus,
+select.form-control:focus,
+textarea.form-control:focus {
+    background: none !important;
+    color: inherit !important;
+}
+
+input.form-control::placeholder,
+textarea.form-control::placeholder {
+    color: inherit !important;
 }

@@ -1,5 +1,5 @@
-/* Modernização do visual principal */
 @import url("theme/variables.css");
+@import url("components/centraliza.css");
 
 * {
   margin: 0;
@@ -22,19 +22,41 @@ body {
   transition: background 0.3s;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   color: var(--text-primary);
   font-weight: 600;
   margin-bottom: var(--spacing-sm);
   line-height: 1.2;
 }
 
-h1 { font-size: 2.25rem; }
-h2 { font-size: 1.875rem; }
-h3 { font-size: 1.5rem; }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.125rem; }
-h6 { font-size: 1rem; }
+h1 {
+  font-size: 2.25rem;
+}
+
+h2 {
+  font-size: 1.875rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+}
+
+h4 {
+  font-size: 1.25rem;
+}
+
+h5 {
+  font-size: 1.125rem;
+}
+
+h6 {
+  font-size: 1rem;
+}
 
 p {
   color: var(--text-secondary);
@@ -43,13 +65,16 @@ p {
 
 a {
   color: var(--primary-color);
-  text-decoration: none;
-  transition: all var(--transition-speed);
   font-weight: 500;
+  text-decoration: none;
+  transition: color var(--transition-speed);
 }
 
-a:hover {
+a:hover,
+a:focus {
   color: var(--primary-hover);
+  text-decoration: underline;
+  outline: none;
 }
 
 hr {
@@ -59,18 +84,46 @@ hr {
 }
 
 /* Utilitários */
-.text-center { text-align: center; }
-.text-right { text-align: right; }
-.text-left { text-align: left; }
+.text-center {
+  text-align: center;
+}
 
-.mt-4 { margin-top: var(--spacing-lg); }
-.mb-4 { margin-bottom: var(--spacing-lg); }
-.my-3 { margin: var(--spacing-md) 0; }
-.mx-auto { margin-left: auto; margin-right: auto; }
+.text-right {
+  text-align: right;
+}
 
-.p-4 { padding: var(--spacing-lg); }
-.py-3 { padding: var(--spacing-md) 0; }
-.px-4 { padding: 0 var(--spacing-lg); }
+.text-left {
+  text-align: left;
+}
+
+.mt-4 {
+  margin-top: var(--spacing-lg);
+}
+
+.mb-4 {
+  margin-bottom: var(--spacing-lg);
+}
+
+.my-3 {
+  margin: var(--spacing-md) 0;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.p-4 {
+  padding: var(--spacing-lg);
+}
+
+.py-3 {
+  padding: var(--spacing-md) 0;
+}
+
+.px-4 {
+  padding: 0 var(--spacing-lg);
+}
 
 .img-fluid {
   max-width: 100%;
@@ -82,55 +135,66 @@ hr {
 button,
 .btn {
   font-family: inherit;
-  font-size: 0.875rem;
-  font-weight: 500;
-  padding: 0.625rem 1.25rem;
-  border-radius: var(--border-radius-md);
-  border: none;
+  font-size: 1rem;
   background: var(--primary-color);
   color: #fff;
-  cursor: pointer;
-  transition: all var(--transition-speed);
-  box-shadow: var(--shadow-sm);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  border: none;
 }
 
 button:hover,
 .btn:hover {
   background: var(--primary-hover);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+}
+
+button:focus,
+.btn:focus {
+  outline: 2px solid var(--primary-hover);
+  outline-offset: 2px;
 }
 
 button:active,
 .btn:active {
-  transform: translateY(0);
+  background: var(--primary-hover);
 }
 
-/* Inputs */
+/* Inputs Centralizado */
 input,
 select,
 textarea {
   font-family: inherit;
-  font-size: 0.875rem;
-  padding: 0.625rem 0.875rem;
-  border-radius: var(--border-radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--form-background);
-  color: var(--text-primary);
-  transition: all var(--transition-speed);
-  width: 100%;
+  font-size: 1rem;
+  border: 1.5px solid var(--border-color);
+  outline: none;
+  background: none;
+  color: inherit;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(112, 130, 56, 0.1);
+  background: none;
   outline: none;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled {
+  background: none;
+  color: inherit;
+  outline: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: inherit;
+}
+
+input:invalid,
+select:invalid,
+textarea:invalid {
+  border-color: #e74c3c !important;
+  background: none !important;
 }
 
 /* Input Groups */
@@ -140,46 +204,46 @@ textarea:focus {
   width: 100%;
   border-radius: var(--border-radius-md);
   box-shadow: var(--shadow-sm);
-  background: var(--form-background);
   border: 1px solid var(--border-color);
   margin-bottom: var(--spacing-md);
   overflow: hidden;
 }
 
-.input-group > .form-control,
-.input-group > .form-select,
-.input-group > .input-group-text {
+.input-group>.form-control,
+.input-group>.form-select,
+.input-group>.input-group-text {
   border: none;
-  background: transparent;
+  background: none;
   box-shadow: none;
 }
 
-.input-group > .input-group-text {
+.input-group>.input-group-text {
   color: var(--text-secondary);
   font-weight: 500;
-  background: var(--background-color);
+  background: none;
   padding: 0.625rem 1rem;
 }
 
 /* Select2 Custom */
 .select2-container--default .select2-selection--single {
   border-radius: var(--border-radius-md);
-  border: 1px solid var(--border-color);
-  background: var(--form-background);
+  border: 1.5px solid var(--border-color);
+  background: none;
   height: 2.5rem;
   display: flex;
   align-items: center;
-  color: var(--text-primary);
-  box-shadow: var(--shadow-sm);
+  color: inherit;
+  box-shadow: none;
+  transition: border var(--transition-speed), box-shadow var(--transition-speed);
 }
 
 .select2-container--default .select2-selection--single:focus {
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(112, 130, 56, 0.1);
+  box-shadow: none;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-  color: var(--text-primary);
+  color: inherit;
   line-height: 2.5rem;
   padding-left: 0.875rem;
 }
@@ -191,19 +255,55 @@ textarea:focus {
 
 .select2-dropdown {
   border-radius: var(--border-radius-md);
-  border: 1px solid var(--border-color);
+  border: 1.5px solid var(--border-color);
   box-shadow: var(--shadow-md);
-  background: var(--form-background);
+  background: none;
 }
 
 .select2-results__option {
   padding: 0.5rem 0.875rem;
-  color: var(--text-primary);
+  color: inherit;
 }
 
 .select2-results__option--highlighted {
   background: var(--primary-color);
   color: #fff;
+}
+
+/* Checkbox e Radio customizados */
+input[type="checkbox"],
+input[type="radio"] {
+  accent-color: var(--primary-color);
+  width: 1.1em;
+  height: 1.1em;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  border-radius: 4px;
+  box-shadow: none;
+  border: 1.5px solid var(--border-color);
+  transition: border var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(112, 130, 56, 0.13);
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+  border-color: var(--primary-color);
+  background: var(--primary-color);
+}
+
+/* Label para inputs */
+label {
+  color: var(--text-secondary);
+  font-weight: 500;
+  margin-bottom: 0.25rem;
+  display: inline-block;
+  font-size: 1rem;
+  letter-spacing: 0.01em;
 }
 
 /* Animações */
@@ -212,6 +312,7 @@ textarea:focus {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -247,15 +348,37 @@ textarea:focus {
     font-size: 0.9375rem;
   }
 
-  h1 { font-size: 2rem; }
-  h2 { font-size: 1.75rem; }
-  h3 { font-size: 1.375rem; }
-  h4 { font-size: 1.125rem; }
-  h5 { font-size: 1rem; }
-  h6 { font-size: 0.9375rem; }
+  h1 {
+    font-size: 2rem;
+  }
 
-  .p-4 { padding: var(--spacing-md); }
-  .px-4 { padding: 0 var(--spacing-md); }
+  h2 {
+    font-size: 1.75rem;
+  }
+
+  h3 {
+    font-size: 1.375rem;
+  }
+
+  h4 {
+    font-size: 1.125rem;
+  }
+
+  h5 {
+    font-size: 1rem;
+  }
+
+  h6 {
+    font-size: 0.9375rem;
+  }
+
+  .p-4 {
+    padding: var(--spacing-md);
+  }
+
+  .px-4 {
+    padding: 0 var(--spacing-md);
+  }
 }
 
 /* Cards */
@@ -278,12 +401,29 @@ textarea:focus {
   gap: var(--spacing-md);
 }
 
-.grid-2 { grid-template-columns: repeat(2, 1fr); }
-.grid-3 { grid-template-columns: repeat(3, 1fr); }
-.grid-4 { grid-template-columns: repeat(4, 1fr); }
+.grid-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
 
 @media (max-width: 768px) {
-  .grid-2, .grid-3, .grid-4 {
+
+  .grid-2,
+  .grid-3,
+  .grid-4 {
     grid-template-columns: 1fr;
   }
+}
+
+/* Textarea auto-resize UX */
+textarea {
+  min-height: 90px;
+  resize: vertical;
 }

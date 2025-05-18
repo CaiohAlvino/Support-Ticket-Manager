@@ -1,6 +1,7 @@
 /* Estilo exclusivo para a página de clientes */
 @import url('../../css/theme/variables.css');
 @import url('../../css/components/hover.css');
+@import url("../../css/components/centraliza.css");
 
 .cliente-header {
     color: var(--primary-color);
@@ -99,6 +100,7 @@
     transition: box-shadow 0.2s;
     padding: var(--spacing-lg);
 }
+
 .card-header {
     background: none;
     border-bottom: 1px solid var(--border-color);
@@ -106,6 +108,7 @@
     color: var(--primary-color);
     padding: var(--spacing-md);
 }
+
 .card-body {
     padding: var(--spacing-md);
 }
@@ -155,25 +158,6 @@
     transform: translateY(-1px) scale(1.03);
 }
 
-input.form-control,
-select.form-control,
-textarea.form-control {
-    border-radius: var(--border-radius-md);
-    border: 1.5px solid var(--border-color);
-    padding: 0.8rem 1.1rem;
-    font-size: 1.05rem;
-    background: #f9fafb;
-    transition: border 0.2s, box-shadow 0.2s;
-}
-
-input.form-control:focus,
-select.form-control:focus,
-textarea.form-control:focus {
-    border-color: var(--primary-hover);
-    box-shadow: 0 0 0 3px rgba(147, 197, 114, 0.13);
-    background: #fff;
-}
-
 label.form-label {
     color: var(--text-primary);
     font-weight: 600;
@@ -205,26 +189,4 @@ label.form-label {
     .form-header {
         font-size: 1.2rem;
     }
-}
-
-/* Padronização dos cards e remoção de hover/azul */
-.card,
-.stats-card,
-.ticket-card,
-.list-group-item {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    border-radius: var(--border-radius-md) !important;
-    transition: none !important;
-}
-.card:hover,
-.stats-card:hover,
-.ticket-card:hover,
-.list-group-item:hover {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    color: inherit !important;
-    transform: none !important;
 }

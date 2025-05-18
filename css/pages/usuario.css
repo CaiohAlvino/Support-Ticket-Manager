@@ -1,6 +1,7 @@
 /* Estilo exclusivo para a página de usuários */
 @import url('../../css/theme/variables.css');
 @import url('../../css/components/hover.css');
+@import url("../../css/components/centraliza.css");
 
 .usuario-header {
     color: var(--primary-color);
@@ -8,7 +9,7 @@
     font-weight: 800;
     margin-bottom: var(--spacing-xl);
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 8px rgba(147,197,114,0.08);
+    text-shadow: 0 2px 8px rgba(147, 197, 114, 0.08);
 }
 
 .usuario-table {
@@ -49,6 +50,7 @@
     border: none;
     transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
+
 .usuario-btn-add:hover {
     background: var(--primary-hover);
     color: #fff;
@@ -76,6 +78,7 @@
     transition: box-shadow 0.2s;
     padding: var(--spacing-lg);
 }
+
 .card-header {
     background: none;
     border-bottom: 1px solid var(--border-color);
@@ -83,45 +86,33 @@
     color: var(--primary-color);
     padding: var(--spacing-md);
 }
+
 .card-body {
     padding: var(--spacing-md);
 }
 
-/* Padronização dos cards e remoção de hover/azul */
-.card,
-.stats-card,
-.ticket-card,
-.list-group-item {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    border-radius: var(--border-radius-md) !important;
-    transition: none !important;
-}
-.card:hover,
-.stats-card:hover,
-.ticket-card:hover,
-.list-group-item:hover {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    color: inherit !important;
-    transform: none !important;
-}
+/* Remover duplicações de .card, .stats-card, .ticket-card, .list-group-item e utilitários de centralização, pois agora estão em centraliza.css */
+
+/* Removido bloco duplicado de input.form-control, select.form-control, textarea.form-control e seus placeholders, pois agora está em centraliza.css */
 
 @media (max-width: 991.98px) {
     .usuario-header {
         font-size: 1.5rem;
     }
-    .usuario-table th, .usuario-table td {
+
+    .usuario-table th,
+    .usuario-table td {
         font-size: 0.95rem;
     }
 }
+
 @media (max-width: 575.98px) {
     .usuario-header {
         font-size: 1.2rem;
     }
-    .usuario-table th, .usuario-table td {
+
+    .usuario-table th,
+    .usuario-table td {
         font-size: 0.85rem;
     }
 }

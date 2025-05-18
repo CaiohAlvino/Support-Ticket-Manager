@@ -1,6 +1,7 @@
 /* Estilo exclusivo para páginas de cadastro e edição de grupo */
 @import url('../../css/theme/variables.css');
 @import url('../../css/components/hover.css');
+@import url("../../css/components/centraliza.css");
 
 .form-header {
     color: var(--primary-color);
@@ -8,7 +9,7 @@
     font-weight: 800;
     margin-bottom: var(--spacing-xl);
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 8px rgba(147,197,114,0.08);
+    text-shadow: 0 2px 8px rgba(147, 197, 114, 0.08);
 }
 
 .form-card {
@@ -39,6 +40,7 @@
     border: none;
     transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
+
 .form-btn:hover {
     background: var(--primary-hover);
     color: #fff;
@@ -46,19 +48,7 @@
     transform: translateY(-1px) scale(1.03);
 }
 
-input.form-control, select.form-control, textarea.form-control {
-    border-radius: var(--border-radius-md);
-    border: 1.5px solid var(--border-color);
-    padding: 0.8rem 1.1rem;
-    font-size: 1.05rem;
-    background: #f9fafb;
-    transition: border 0.2s, box-shadow 0.2s;
-}
-input.form-control:focus, select.form-control:focus, textarea.form-control:focus {
-    border-color: var(--primary-hover);
-    box-shadow: 0 0 0 3px rgba(147,197,114,0.13);
-    background: #fff;
-}
+/* Removido bloco duplicado de input.form-control, select.form-control, textarea.form-control e seus placeholders, pois agora está em centraliza.css */
 
 label.form-label {
     color: var(--text-primary);
@@ -77,29 +67,23 @@ label.form-label {
     .form-card {
         padding: var(--spacing-lg);
     }
+
     .form-header {
         font-size: 1.5rem;
     }
 }
+
 @media (max-width: 575.98px) {
     .form-card {
         padding: var(--spacing-md);
     }
+
     .form-header {
         font-size: 1.2rem;
     }
 }
 
 /* Garante que todos os cards das páginas usem o padrão visual do sistema */
-.card {
-    background: #fff;
-    border-radius: var(--border-radius-md);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow-sm);
-    margin-bottom: var(--spacing-lg);
-    transition: box-shadow 0.2s;
-    padding: var(--spacing-lg);
-}
 .card-header {
     background: none;
     border-bottom: 1px solid var(--border-color);
@@ -107,6 +91,7 @@ label.form-label {
     color: var(--primary-color);
     padding: var(--spacing-md);
 }
+
 .card-body {
     padding: var(--spacing-md);
 }
@@ -117,7 +102,7 @@ label.form-label {
     font-weight: 800;
     margin-bottom: var(--spacing-xl);
     letter-spacing: 0.5px;
-    text-shadow: 0 2px 8px rgba(147,197,114,0.08);
+    text-shadow: 0 2px 8px rgba(147, 197, 114, 0.08);
 }
 
 .grupo-table {
@@ -158,6 +143,7 @@ label.form-label {
     border: none;
     transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
 }
+
 .grupo-btn-add:hover {
     background: var(--primary-hover);
     color: #fff;
@@ -179,37 +165,20 @@ label.form-label {
     .grupo-header {
         font-size: 1.5rem;
     }
-    .grupo-table th, .grupo-table td {
+
+    .grupo-table th,
+    .grupo-table td {
         font-size: 0.95rem;
     }
 }
+
 @media (max-width: 575.98px) {
     .grupo-header {
         font-size: 1.2rem;
     }
-    .grupo-table th, .grupo-table td {
+
+    .grupo-table th,
+    .grupo-table td {
         font-size: 0.85rem;
     }
-}
-
-/* Padronização dos cards e remoção de hover/azul */
-.card,
-.stats-card,
-.ticket-card,
-.list-group-item {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    border-radius: var(--border-radius-md) !important;
-    transition: none !important;
-}
-.card:hover,
-.stats-card:hover,
-.ticket-card:hover,
-.list-group-item:hover {
-    box-shadow: var(--shadow-sm) !important;
-    border: 1px solid var(--border-color) !important;
-    background: #fff !important;
-    color: inherit !important;
-    transform: none !important;
 }
