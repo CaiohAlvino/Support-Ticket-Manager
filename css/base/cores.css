@@ -1,0 +1,120 @@
+/*
+  =============================
+  TOKENS DE DESIGN DO SISTEMA
+  =============================
+  Utilize estas variáveis para manter a consistência visual.
+  Exemplo de uso: color: var(--cor-principal);
+*/
+:root {
+    /* Cores base */
+    --cor-principal: #2a3a8c; /* Azul escuro moderno */
+    --cor-secundaria: #f5f7fa; /* Cinza claro sofisticado */
+    --cor-verde: #3ddc97;
+    --cor-vermelho: #ff5a5f;
+    --cor-branco: #fff;
+    --cor-preto: #181a20;
+    --cor-texto: #232946;
+    --cor-titulo: #181a20;
+    --cor-cinza: #b0b8c1;
+    --cor-borda: #e3e7ed;
+
+    /* Backgrounds */
+    --bg-cinza: #f5f7fa;
+    --bg-branco: #fff;
+    --bg-principal: linear-gradient(135deg, #2a3a8c 0%, #3ddc97 100%);
+    --bg-secundaria: #f5f7fa;
+
+    /* Efeitos e formas */
+    --box-shadow: 0 4px 24px rgba(42, 58, 140, 0.08);
+    --border-radius: 8px;
+    --dia-hoje-color: #ffd600;
+
+    /* Alertas e mensagens */
+    --cor-alerta-cadastrar-bg: #fff8e1;
+    --cor-alerta-cadastrar-texto: #8d6e63;
+    --cor-alerta-agenda: #fff3e0;
+    --cor-alerta-agenda-texto: #8d6e63;
+    --cor-alerta-nao-agenda-base: #ffebee;
+    --cor-alerta-nao-agenda-texto: #c62828;
+    --cor-mensagem-alerta-bg: #e3f2fd;
+    --cor-mensagem-alerta-texto: #1565c0;
+
+    /* Badges e módulos */
+    --badge-modulo-ativo-bg: #3ddc97;
+
+    /* Módulos do sistema */
+    --modulo-whatsapp: #25d366;
+    --modulo-financeiro: #2a3a8c;
+    --modulo-controle-estoque: #ffb300;
+    --modulo-relatorio: #7c3aed;
+    --modulo-formulario: #229dc5;
+
+    /* Botões - Adicionar/Confirmar */
+    --btn-adicionar-bg: #3ddc97;
+    --btn-adicionar-texto: var(--cor-branco);
+    --btn-confirmar-bg: #2a3a8c;
+    --btn-confirmar-texto: var(--cor-branco);
+    --btn-confirmar-pagamento-bg: transparent;
+    --btn-confirmar-pagamento-borda: #3ddc97;
+    --btn-confirmar-pagamento-texto: #3ddc97;
+
+    /* Botões - Navegação */
+    --btn-voltar-bg: transparent;
+    --btn-voltar-texto: var(--cor-principal);
+    --btn-voltar-borda: var(--cor-principal);
+    --btn-filtrar-bg: transparent;
+    --btn-filtrar-texto: var(--cor-principal);
+    --btn-filtrar-borda: var(--cor-principal);
+    --btn-detalhes-bg: transparent;
+    --btn-detalhes-texto: #2a3a8c;
+    --btn-detalhes-borda: #2a3a8c;
+    --btn-buscar-bg: var(--cor-principal);
+    --btn-buscar-texto: var(--cor-branco);
+
+    /* Botões - Ações */
+    --btn-editar-bg: transparent;
+    --btn-editar-texto: #2a3a8c;
+    --btn-editar-borda: #2a3a8c;
+    --btn-excluir-bg: transparent;
+    --btn-excluir-texto: #ff5a5f;
+    --btn-excluir-borda: #ff5a5f;
+    --btn-cancelar-bg: transparent;
+    --btn-cancelar-texto: #b0b8c1;
+    --btn-cancelar-borda: #b0b8c1;
+    --btn-filtro-bg: transparent;
+    --btn-filtro-texto: var(--cor-principal);
+    --btn-filtro-borda: var(--cor-principal);
+    --btn-whatsapp-bg: #25d366;
+    --btn-whatsapp-texto: var(--cor-branco);
+    --btn-acesso-bg: #2a3a8c;
+    --btn-acesso-texto: var(--cor-branco);
+    --btn-recibo-bg: transparent;
+    --btn-recibo-texto: var(--cor-principal);
+    --btn-recibo-borda: var(--cor-principal);
+    --btn-entrada-lote-bg: #39473e;
+    --btn-entrada-lote-texto: var(--cor-branco);
+    --btn-contratar-modulo-bg: var(--cor-verde);
+    --btn-contratar-modulo-texto: var(--cor-branco);
+    --btn-vincular-google-agenda-bg: transparent;
+    --btn-vincular-google-agenda-texto: #4285f4;
+    --btn-vincular-google-agenda-borda: #4285f4;
+    --btn-desvincular-google-agenda-bg: transparent;
+    --btn-desvincular-google-agenda-texto: #db4437;
+    --btn-desvincular-google-agenda-borda: #db4437;
+    --btn-bloqueio-agenda-bg: transparent;
+    --btn-bloqueio-agenda-texto: #444;
+    --btn-bloqueio-agenda-borda: #444;
+    --btn-limpar-filtro-bg: #ff5a5f;
+    --btn-limpar-filtro-texto: #fff;
+    --btn-logs-bg: transparent;
+    --btn-logs-texto: var(--cor-principal);
+    --btn-logs-borda: var(--cor-principal);
+
+    /* Botões - Pagamentos */
+    --btn-cancelar-pagamento-bg: transparent;
+    --btn-cancelar-pagamento-texto: #ff5a5f;
+    --btn-cancelar-pagamento-borda: #ff5a5f;
+    --btn-recebimento-bg: transparent;
+    --btn-recebimento-texto: var(--cor-verde);
+    --btn-recebimento-borda: var(--cor-verde);
+}

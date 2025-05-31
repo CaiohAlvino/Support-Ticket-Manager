@@ -1,151 +1,161 @@
 class NotyE {
-
-  static config({ type }) {
-    Noty.overrideDefaults({
-      type: type,  // Tipo de notificação (success, error, warning e info)
-      theme: 'mint',  // Tema (personalisado ou os ja existentes)
-      layout: "topRight",  // possição da notificação
-      timeout: 1000,
-      progressBar: true,  // Exibir barra de progresso
-      closeWith: ['click'],  // Define como a notificação pode ser fechada
-      maxVisible: 5,  // Número máximo de notificações visíveis
-      visibilityControl: true, // Pausa o timeout quando a aba não está visível
-      queueDelay: 500,  // Atraso antes de mostrar a próxima notificação da fila (ms)
-      modal: false,  // Fundo modal (escurece o resto da página)
-    });
-  }
-
-  static exception({ response, replace = `index.php`, error = false, xhr, type, targetBlank = false, reload = false, isNull = false }) {
-    if (error) {
-      this.config({ type: type });
-
-      console.error("Erro AJAX:", xhr?.responseText, xhr);
-
-      return this.error({
-        response: {
-          status: "error",
-          message: response?.message || "Erro ao processar a solicitação, Por favor, tente novamente."
-        }
-      });
-    } else {
-      if (response?.status === "success") {
-        return this.processAjax({ response, replace, type, targetBlank, reload, isNull });
-      } else {
-        return this.error({ response, type });
-      }
+    static config({ type }) {
+        Noty.overrideDefaults({
+            type: type, // Tipo de notificação (success, error, warning e info)
+            theme: "mint", // Tema (personalisado ou os ja existentes)
+            layout: "topRight", // possição da notificação
+            timeout: 1000,
+            progressBar: true, // Exibir barra de progresso
+            closeWith: ["click"], // Define como a notificação pode ser fechada
+            maxVisible: 5, // Número máximo de notificações visíveis
+            visibilityControl: true, // Pausa o timeout quando a aba não está visível
+            queueDelay: 500, // Atraso antes de mostrar a próxima notificação da fila (ms)
+            modal: false, // Fundo modal (escurece o resto da página)
+        });
     }
-  }
 
-  static processAjax({ response, replace = `index.php`, type, targetBlank, reload, isNull }) {
-    try {
-      this.config({ type: type || "success" });
+    static exception({
+        response,
+        replace = `index.php`,
+        error = false,
+        xhr,
+        type,
+        targetBlank = false,
+        reload = false,
+        isNull = false,
+    }) {
+        if (error) {
+            this.config({ type: type });
 
-      new Noty({
-        type: type ? type : response.status,
-        text: response.message || "Operação realizada com sucesso!",
-        callbacks: {
-          onShow: function () {
-            if (!isNull) {
-              $(".botao-noty-ativo")
-                .prop("disabled", true)
-                .html('<i class="bi bi-hourglass-split me-2"></i> Processando...');
+            console.error("Erro AJAX:", xhr?.responseText, xhr);
 
-              $(".botao-noty-voltar").addClass("disabled");
-            }
-          },
-          afterClose: function () {
-            if (isNull) {
-              null; // Faz nada
-            } else if (targetBlank) {
-              window.open(replace, "_self");
-            } else if (reload) {
-              location.reload();
+            return this.error({
+                response: {
+                    status: "error",
+                    message:
+                        response?.message ||
+                        "Erro ao processar a solicitação, Por favor, tente novamente.",
+                },
+            });
+        } else {
+            if (response?.status === "success") {
+                return this.processAjax({ response, replace, type, targetBlank, reload, isNull });
             } else {
-              location.replace(replace);
+                return this.error({ response, type });
             }
-          }
         }
-      }).show();
-    } catch (error) {
-      console.error("Erro ao processar notificação:", error);
-      return this.error({
-        response: {
-          message: "Erro interno ao processar. Caso necessite contate o suporte."
+    }
+
+    static processAjax({ response, replace = `index.php`, type, targetBlank, reload, isNull }) {
+        try {
+            this.config({ type: type || "success" });
+
+            new Noty({
+                type: type ? type : response.status,
+                text: response.message || "Operação realizada com sucesso!",
+                callbacks: {
+                    onShow: function () {
+                        if (!isNull) {
+                            $(".botao-noty-ativo")
+                                .prop("disabled", true)
+                                .html('<i class="bi bi-hourglass-split me-2"></i> Processando...');
+
+                            $(".botao-noty-voltar").addClass("disabled");
+                        }
+                    },
+                    afterClose: function () {
+                        if (isNull) {
+                            null; // Faz nada
+                        } else if (targetBlank) {
+                            window.open(replace, "_self");
+                        } else if (reload) {
+                            location.reload();
+                        } else {
+                            location.replace(replace);
+                        }
+                    },
+                },
+            }).show();
+        } catch (error) {
+            console.error("Erro ao processar notificação:", error);
+            return this.error({
+                response: {
+                    message: "Erro interno ao processar. Caso necessite contate o suporte.",
+                },
+            });
         }
-      });
     }
-  }
 
-  static success({ response, type, options = {} }) {
-    try {
-      this.config({ type: type ? type : response.status || "success" })
+    static success({ response, type, options = {} }) {
+        try {
+            this.config({ type: type ? type : response.status || "success" });
 
-      new Noty({
-        text: response.message || "Operação realizada com sucesso!",
-        ...options
-      }).show();
-    } catch (error) {
-      console.error("Erro ao processar notificação:", error)
-      return this.error({
-        response: {
-          message: "Erro interno ao processar. Caso necessite contate o suporte."
+            new Noty({
+                text: response.message || "Operação realizada com sucesso!",
+                ...options,
+            }).show();
+        } catch (error) {
+            console.error("Erro ao processar notificação:", error);
+            return this.error({
+                response: {
+                    message: "Erro interno ao processar. Caso necessite contate o suporte.",
+                },
+            });
         }
-      });
     }
-  }
 
-  static error({ response, type, options = {} }) {
-    try {
-      this.config({ type: type ? type : response.status || "error" });
+    static error({ response, type, options = {} }) {
+        try {
+            this.config({ type: type ? type : response.status || "error" });
 
-      new Noty({
-        text: response.message || "Erro ao realizar operação!",
-        timeout: 3500,
-        ...options
-      }).show();
-    } catch (error) {
-      console.error("Erro ao processar notificação:", error);
-      console.error("Erro interno ao processar. Caso necessite contate o suporte.");
-    }
-  }
-
-  static warning({ response, type, options = {} }) {
-    try {
-      this.config({ type: type ? type : response.status || "warning" });
-
-      new Noty({
-        text: response.message || "Atenção com essa operação!",
-        timeout: 3000,
-        ...options
-      }).show();
-    } catch (error) {
-      console.error("Erro ao processar notificação:", error);
-      return this.error({
-        response: {
-          message: "Erro interno ao processar. Caso necessite contate o suporte."
+            new Noty({
+                text: response.message || "Erro ao realizar operação!",
+                timeout: 3500,
+                ...options,
+            }).show();
+        } catch (error) {
+            console.error("Erro ao processar notificação:", error);
+            console.error("Erro interno ao processar. Caso necessite contate o suporte.");
         }
-      });
     }
-  }
 
-  static info({ response, type, options = {} }) {
-    try {
-      this.config({ type: type ? type : response.status || "info" });
+    static warning({ response, type, options = {} }) {
+        try {
+            this.config({ type: type ? type : response.status || "warning" });
 
-      new Noty({
-        text: response.message || "Informação da operação!",
-        timeout: 5000,
-        ...options
-      }).show();
-    } catch (error) {
-      console.error("Erro ao processar notificação:", error);
-      return this.error({
-        response: {
-          message: "Erro interno ao processar. Caso necessite contate o suporte."
+            new Noty({
+                text: response.message || "Atenção com essa operação!",
+                timeout: 3000,
+                ...options,
+            }).show();
+        } catch (error) {
+            console.error("Erro ao processar notificação:", error);
+            return this.error({
+                response: {
+                    message: "Erro interno ao processar. Caso necessite contate o suporte.",
+                },
+            });
         }
-      });
     }
-  }
+
+    static info({ response, type, options = {} }) {
+        try {
+            this.config({ type: type ? type : response.status || "info" });
+
+            new Noty({
+                text: response.message || "Informação da operação!",
+                timeout: 5000,
+                ...options,
+            }).show();
+        } catch (error) {
+            console.error("Erro ao processar notificação:", error);
+            return this.error({
+                response: {
+                    message: "Erro interno ao processar. Caso necessite contate o suporte.",
+                },
+            });
+        }
+    }
 }
 /**
 $(document).ready(function () {

@@ -1,0 +1,117 @@
+/*
+  =============================
+  STATUS E BADGES MODERNOS
+  =============================
+  Badges com gradiente, sombra leve, texto em caixa alta e padding maior.
+*/
+.badge {
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 16px;
+    min-width: 80px;
+    font-size: 12px;
+    display: inline-block;
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 8px rgba(42, 58, 140, 0.07);
+    background: linear-gradient(90deg, var(--cor-cinza) 0%, var(--cor-principal) 100%);
+    color: var(--cor-branco);
+    border: none;
+}
+
+.status-a-atender {
+    background: linear-gradient(90deg, #ffd600 0%, var(--status-a-atender-bg) 100%);
+    color: var(--status-a-atender-text);
+}
+
+.status-atendido {
+    background: linear-gradient(90deg, #3ddc97 0%, var(--status-atendido-bg) 100%);
+    color: var(--status-atendido-text);
+}
+
+.status-faltou {
+    background: linear-gradient(90deg, #ff5a5f 0%, var(--status-faltou-bg) 100%);
+    color: var(--status-faltou-text);
+}
+
+.status-cliente-fixo {
+    background-color: var(--status-cliente-fixo-bg);
+    color: var(--status-cliente-fixo-text);
+}
+
+.status-atende {
+    background-color: var(--status-atende-bg);
+    color: var(--status-atende-text);
+}
+
+.status-nao-atende {
+    background-color: var(--status-nao-atende-bg);
+    color: var(--status-nao-atende-text);
+}
+
+.status-pago {
+    background: linear-gradient(90deg, #3ddc97 0%, var(--status-pago-bg) 100%);
+    color: var(--status-pago-text);
+    line-height: 13px;
+}
+
+.status-nao-pago {
+    background: linear-gradient(90deg, #ff5a5f 0%, var(--status-nao-pago-bg) 100%);
+    color: var(--status-nao-pago-text);
+}
+
+.status-cobrado {
+    background-color: var(--status-cobrado-bg);
+    color: var(--status-cobrado-text);
+}
+
+.status-nao-cobrado {
+    background-color: var(--status-nao-cobrado-bg);
+    color: var(--status-nao-cobrado-text);
+}
+
+.status-ativo {
+    background-color: var(--status-ativo-bg);
+    color: var(--status-ativo-text);
+}
+
+.status-inativo {
+    background-color: var(--status-inativo-bg);
+    color: var(--status-inativo-text);
+}
+
+.status-ausente {
+    background-color: var(--status-ausente-bg);
+    color: var(--status-ausente-text);
+}
+
+.status-obrigatorio {
+    background-color: var(--status-obrigatorio-bg);
+    color: var(--status-obrigatorio-text);
+}
+
+.status-nao-obrigatorio {
+    background-color: var(--status-nao-obrigatorio-bg);
+    color: var(--status-nao-obrigatorio-text);
+}
+
+.status-lote-vencido {
+    background-color: var(--status-lote-vencido-bg);
+    color: var(--status-lote-vencido-text);
+}
+
+.status-usuario {
+    background-color: var(--status-usuario-bg);
+    color: var(--status-usuario-text);
+}
+
+.status-visualizador {
+    background-color: var(--status-visualizador-bg);
+    color: var(--status-visualizador-text);
+}
+
+.status-classificacao-cliente {
+    background-color: var(--status-classificacao-cliente-bg);
+    color: var(--status-classificacao-cliente-text);
+}
