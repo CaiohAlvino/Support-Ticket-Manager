@@ -51,7 +51,7 @@ foreach ($registros as $registro) {
 
 <!-- Cards de Estatísticas -->
 <div class="row g-4 mb-4">
-    <div class="col-12 col-sm-6 col-xl-3">
+    <div class="col-12 col-sm-6 col-xl-4">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center">
@@ -64,7 +64,7 @@ foreach ($registros as $registro) {
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-xl-3">
+    <div class="col-12 col-sm-6 col-xl-4">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center">
@@ -78,7 +78,7 @@ foreach ($registros as $registro) {
             </div>
         </div>
     </div>
-    <div class="col-12 col-sm-6 col-xl-3">
+    <div class="col-12 col-sm-6 col-xl-4">
         <div class="card border-0 shadow-sm h-100">
             <div class="card-body">
                 <div class="d-flex align-items-center">
@@ -87,20 +87,6 @@ foreach ($registros as $registro) {
                     <div class="ms-3">
                         <h6 class="mb-1">Resolvidos</h6>
                         <h4 class="mb-0"><?php echo count(array_filter($registros, fn($r) => $r->status === "FECHADO")) ?></h4>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-12 col-sm-6 col-xl-3">
-        <div class="card border-0 shadow-sm h-100">
-            <div class="card-body">
-                <div class="d-flex align-items-center">
-                    <div class="stats-icon bg-danger rounded-3"><i
-                            class="bi bi-exclamation-triangle text-white fs-4"></i></div>
-                    <div class="ms-3">
-                        <h6 class="mb-1">Críticos</h6>
-                        <h4 class="mb-0"><?php echo count(array_filter($registros, fn($r) => $r->status === "CRITICO")) ?></h4>
                     </div>
                 </div>
             </div>
@@ -115,7 +101,7 @@ foreach ($registros as $registro) {
         <div class="card border-0 shadow-sm">
             <div class="card-header">
                 <div class="d-flex justify-content-between align-items-center">
-                    <h5 class="card-title mb-0">Tickets Recentes</h5>
+                    <h5 class="card-title mb-0">Tickets em Aberto</h5>
                     <div class="d-flex gap-2">
                         <div class="input-group"><input type="text" class="form-control"
                                 placeholder="Buscar tickets..."><button class="btn btn-outline-secondary"
@@ -139,7 +125,7 @@ foreach ($registros as $registro) {
                         </thead>
                         <tbody>
                             <?php foreach ($registros as $registro): ?>
-                                <?php if (is_object($registro)): ?>
+                                <?php if (is_object($registro) && $registro->status === "ABERTO"): ?>
                                     <tr>
                                         <td class="">#<?php echo htmlspecialchars($registro->id) ?></td>
                                         <td>
@@ -152,12 +138,10 @@ foreach ($registros as $registro) {
                                         <td><?php echo htmlspecialchars($registro->assunto) ?></td>
                                         <td><span class="badge bg-<?php echo htmlspecialchars($registro->status) ?>"><?php echo htmlspecialchars($registro->status) ?></span></td>
                                         <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
-                                        <td class="text-end pe-4"><button class="btn btn-sm btn-outline-primary">
+                                        <td class="text-end pe-4">
+                                            <a href="../suporte/detalhes.php?id=<?php echo htmlspecialchars($registro->id) ?>" class="btn btn-sm btn-outline-primary">
                                                 <i class="bi bi-eye">Ver</i>
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary">
-                                                <i class="bi bi-pencil">Editar</i>
-                                            </button>
+                                            </a>
                                         </td>
                                     </tr>
                                 <?php endif; ?>
@@ -174,7 +158,7 @@ foreach ($registros as $registro) {
     <div class="col-lg-8">
         <div class="card distribution-card">
             <div class="card-header">
-                <h5 class="card-title">Distribuição de Tickets</h5>
+                <h5 class="card-title">Distribuição de Tickets (GERAL)</h5>
             </div>
             <div class="card-body">
                 <div class="chart-row justify-content-center align-items-center" style="height:340px;display:flex;">

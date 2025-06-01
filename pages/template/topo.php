@@ -49,7 +49,12 @@ $suporteMensagem = new SuporteMensagem($db->getConnection());
                         ?>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="../usuario/perfil.php"><i class="bi bi-person me-2"></i>Meu Perfil</a></li>
+                        <!-- <li>
+                            <a class="dropdown-item" href="../usuario/perfil.php">
+                                <i class="bi bi-person me-2"></i>
+                                Meu Perfil
+                            </a>
+                        </li>
                         <li>
                             <a class="dropdown-item" href="../configuracoes/index.php">
                                 <i class="bi bi-gear me-2"></i>
@@ -58,7 +63,7 @@ $suporteMensagem = new SuporteMensagem($db->getConnection());
                         </li>
                         <li>
                             <hr class="dropdown-divider">
-                        </li>
+                        </li> -->
                         <li>
                             <a class="dropdown-item text-danger" href="../../controller/login/sair.php" id="logoutButton">
                                 <i class="bi bi-box-arrow-right me-2"></i>

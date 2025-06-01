@@ -68,9 +68,9 @@ $paginacao = $indexRegistros["paginacao"];
                 <thead>
                     <tr>
                         <th>Situação</th>
-                        <th>Status</th>
                         <th>Cliente</th>
                         <th>Assunto</th>
+                        <th>Status</th>
                         <th>Ultima alteração</th>
                         <th>Ações</th>
                     </tr>
@@ -120,7 +120,7 @@ $inicio = ((($pagina - $limite) > 1) ? $pagina - $limite : 1);
 $fim = ((($pagina + $limite) < $paginacao['total_paginas']) ? $pagina + $limite : $paginacao['total_paginas']);
 ?>
 
-<div class="border border-2 border-warning-subtle rounded p-3 bg-warning-subtle">
+<!-- <div class="border border-2 border-warning-subtle rounded p-3 bg-warning-subtle">
     <div class="row">
         <div class="col-xl-1 col-lg-1 col-md-8 col-sm-12 col-12 p-0 text-center">
             <i class="bi bi-patch-exclamation text-warning fs-1"></i>
@@ -150,7 +150,7 @@ $fim = ((($pagina + $limite) < $paginacao['total_paginas']) ? $pagina + $limite 
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <nav aria-label="Page navigation">
     <ul class="pagination justify-content-center mt-3">

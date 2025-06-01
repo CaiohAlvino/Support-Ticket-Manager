@@ -55,7 +55,12 @@ class Suporte
                 " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id`" .
                 " LEFT JOIN `cliente` ON `cliente`.id = `suporte`.`cliente_id`";
 
-            $query = "SELECT `suporte`.*, `empresa`.`nome` AS empresa_nome, `usuario`.`nome` AS usuario_nome, `cliente`.`nome_fantasia` AS cliente_nome FROM `suporte`";
+            $query = "SELECT `suporte`.*,
+                    `empresa`.`nome` AS empresa_nome,
+                    `usuario`.`nome` AS usuario_nome,
+                    `cliente`.`nome_fantasia` AS cliente_nome
+                    FROM `suporte`";
+
             $queryCount = "SELECT COUNT(`suporte`.`id`) FROM `suporte`";
             $query .= $joins;
             $queryCount .= $joins;
@@ -130,7 +135,18 @@ class Suporte
             if (!$id) {
                 return null;
             }
-            $query = "SELECT `suporte`.*, `usuario`.`nome` AS nome_usuario, `usuario`.`email` AS email_usuario, `admin`.`nome` AS nome_admin, `empresa`.`razao_social` AS nome_empresa FROM `suporte` LEFT JOIN `usuario` on `usuario`.id = `suporte`.`usuario_id` LEFT JOIN `admin` on `admin`.id = `suporte`.`admin_id` LEFT JOIN `empresa` on `empresa`.id = `suporte`.`empresa_id` WHERE `suporte`.`id` = :id LIMIT 1";
+            $query = "SELECT `suporte`.* FROM `suporte` WHERE `suporte`.`id` = :id LIMIT 1";
+            // $query = "SELECT `suporte`.*,
+            // `cliente`.`nome` AS cliente_nome,
+            // `cliente`.`email` AS cliente_email,
+            // `usuario`.`nome` AS usuario_nome,
+            // `empresa`.`razao_social` AS empresa_nome
+            // FROM `suporte`
+            // LEFT JOIN `cliente` on `cliente`.id = `suporte`.`cliente_id`
+            // LEFT JOIN `usuario` on `usuario`.id = `suporte`.`usuario_id`
+            // LEFT JOIN `empresa` on `empresa`.id = `suporte`.`empresa_id`
+            // WHERE `suporte`.`id` = :id LIMIT 1";
+
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(":id", (int)$id, PDO::PARAM_INT);
             $stmt->execute();
