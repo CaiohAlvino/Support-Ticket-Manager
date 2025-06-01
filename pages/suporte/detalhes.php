@@ -39,13 +39,13 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
         </div>
         <div class="sessao">
             <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="subtitulo mb-0">Assunto: <?php echo $suporte_registro->assunto ?></h2>
+                <h2 class="subtitulo mb-0">Assunto: <?php echo isset($suporte_registro->assunto) ? htmlspecialchars($suporte_registro->assunto) : '-' ?></h2>
                 <p class="fw-bold my-1">
-                    <?php if ($suporte_registro->status == "ABERTO"): ?>
+                    <?php if (isset($suporte_registro->status) && $suporte_registro->status == "ABERTO"): ?>
                         <span class="badge text-bg-success">ABERTO</span>
-                    <?php elseif ($suporte_registro->status == "AGUARDANDO_SUPORTE"): ?>
+                    <?php elseif (isset($suporte_registro->status) && $suporte_registro->status == "AGUARDANDO_SUPORTE"): ?>
                         <span class="badge text-bg-warning">AGUARDANDO SUPORTE</span>
-                    <?php elseif ($suporte_registro->status == "RESPONDIDO"): ?>
+                    <?php elseif (isset($suporte_registro->status) && $suporte_registro->status == "RESPONDIDO"): ?>
                         <span class="badge text-bg-info">RESPONDIDO</span>
                     <?php else: ?>
                         <span class="badge text-bg-danger">FECHADO</span>
@@ -55,24 +55,24 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
             <div class="row">
                 <div class="col-md-4 col-sm-6">
                     <p class="my-1">
-                        <?php if ($suporte_registro->status == "FECHADO"): ?>
+                        <?php if (isset($suporte_registro->status) && $suporte_registro->status == "FECHADO"): ?>
                             <span class="text-muted d-block">Fechado:</span>
-                            <span class="fw-medium"><?php echo date("d/m/Y (H:i)", strtotime($suporte_registro->alterado)); ?></span>
+                            <span class="fw-medium"><?php echo !empty($suporte_registro->alterado) ? date("d/m/Y (H:i)", strtotime($suporte_registro->alterado)) : '-' ?></span>
                         <?php else: ?>
                             <span class="text-muted d-block">Criado:</span>
-                            <span class="fw-medium"><?php echo date("d/m/Y (H:i)", strtotime($suporte_registro->cadastrado)); ?></span>
+                            <span class="fw-medium"><?php echo !empty($suporte_registro->cadastrado) ? date("d/m/Y (H:i)", strtotime($suporte_registro->cadastrado)) : '-' ?></span>
                         <?php endif ?>
                     </p>
                 </div>
                 <div class="col-md-4 col-sm-6">
                     <span class="text-muted d-block">ID do Ticket:</span>
-                    <span class="fw-medium">#<?php echo $suporte_registro->id; ?></span>
+                    <span class="fw-medium">#<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '-' ?></span>
                 </div>
 
                 <div class="col-md-12 mt-3">
                     <span class="meta-label text-muted d-block mb-2">Mensagem:</span>
                     <?php if (isset($mensagem_registro[0])): ?>
-                        <?php echo $mensagem_registro[0]->mensagem ?>
+                        <?php echo htmlspecialchars($mensagem_registro[0]->mensagem) ?>
                     <?php else: ?>
                         <span class="text-muted">Nenhuma mensagem cadastrada.</span>
                     <?php endif; ?>
@@ -96,7 +96,7 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
                                     $clienteObj = new Cliente($db->getConnection());
                                     $cliente = $clienteObj->pegarPorId($suporte_registro->cliente_id);
                                 }
-                                echo $cliente && isset($cliente->nome_fantasia) ? $cliente->nome_fantasia : 'Cliente';
+                                echo $cliente && isset($cliente->nome_fantasia) ? htmlspecialchars($cliente->nome_fantasia) : 'Cliente';
                                 ?>
                             </span>
                         <?php else: ?>
@@ -111,7 +111,7 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
                                     $stmt->execute();
                                     $admin = $stmt->fetch(PDO::FETCH_OBJ);
                                 }
-                                echo $admin && isset($admin->nome) ? $admin->nome : 'Suporte';
+                                echo $admin && isset($admin->nome) ? htmlspecialchars($admin->nome) : 'Suporte';
                                 ?>
                             </span>
                         <?php endif; ?>
@@ -124,8 +124,8 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
             <?php endforeach ?>
             <div class="text-end mt-3" <?php echo $suporte_registro->status == "FECHADO" ? '' : 'style="display:none;"'; ?>>
                 <form id="suporte-reabrir" data-action="suporte-mensagem/cadastrar.php">
-                    <input type="hidden" name="id" value="<?php echo $suporte_registro->id; ?>">
-                    <input type="hidden" name="admin_id" value="<?php echo $suporte_registro->admin_id; ?>">
+                    <input type="hidden" name="id" value="<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '' ?>">
+                    <input type="hidden" name="admin_id" value="<?php echo isset($suporte_registro->admin_id) ? htmlspecialchars($suporte_registro->admin_id) : '' ?>">
                     <input type="hidden" name="mensagem">
                     <button class="btn btn-confirmar reabrir botao-noty-ativo" type="submit">
                         <i class="bi-envelope-open me-2"></i>
@@ -136,8 +136,8 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
         </div>
         <div class="sessao" <?php echo $suporte_registro->status != "FECHADO" ? '' : 'style="display:none;"'; ?>>
             <form id="suporte-mensagem-detalhe" data-action="suporte-mensagem/cadastrar.php">
-                <input type="hidden" name="id" value="<?php echo $suporte_registro->id; ?>">
-                <input type="hidden" name="admin_id" value="<?php echo $suporte_registro->admin_id; ?>">
+                <input type="hidden" name="id" value="<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '' ?>">
+                <input type="hidden" name="admin_id" value="<?php echo isset($suporte_registro->admin_id) ? htmlspecialchars($suporte_registro->admin_id) : '' ?>">
                 <h6>Responder ao Ticket</h6>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">

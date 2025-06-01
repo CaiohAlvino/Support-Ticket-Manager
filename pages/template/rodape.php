@@ -6,6 +6,7 @@
 <script src="../../libs/noty/script.js"></script>
 <script src="../../libs/moment/script.js"></script>
 <script src="../../libs/axios/script.js"></script>
+<script src="../../libs/chart/script.js"></script>
 <!-- Utils JS -->
 <script src="../../js/utils/Noty.js"></script>
 <script src="../../js/utils/Select2.js"></script>

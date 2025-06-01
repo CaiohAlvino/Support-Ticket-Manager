@@ -2,14 +2,11 @@
 
 <?php
 $suporte_id = isset($_GET["suporte_id"]) ? $_GET["suporte_id"] : NULL;
-$empresa_id = isset($_GET["empresa_id"]) ? $_GET["empresa_id"] : NULL;
 $status = (isset($_GET["status"]) && $_GET["status"] !== "NULL") ? $_GET["status"] : NULL;
 $assunto = isset($_GET["assunto"]) ? $_GET["assunto"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
 
 $indexRegistros = $suporte->index([
-    "suporte_id" => $suporte_id,
-    "empresa_id" => $empresa_id,
     "status" => $status,
     "assunto" => $assunto,
     "pagina" => $pagina,
@@ -71,7 +68,8 @@ $paginacao = $indexRegistros["paginacao"];
                 <thead>
                     <tr>
                         <th>Situação</th>
-                        <th>Usuário</th>
+                        <th>Status</th>
+                        <th>Cliente</th>
                         <th>Assunto</th>
                         <th>Ultima alteração</th>
                         <th>Ações</th>
@@ -81,6 +79,15 @@ $paginacao = $indexRegistros["paginacao"];
                     <?php foreach ($registros as $registro): ?>
                         <?php if (is_object($registro)): ?>
                             <tr class="<?php echo ($suporte_id == $registro->id) ? 'table-active' : ''; ?>">
+                                <td>
+                                    <?php if ($registro->situacao == 1): ?>
+                                        <span class="badge text-bg-success">ativo</span>
+                                    <?php else: ?>
+                                        <span class="badge text-bg-secondary">inativo</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo $registro->cliente_nome; ?></td>
+                                <td><?php echo $registro->assunto; ?></td>
                                 <td>
                                     <?php if ($registro->status == "ABERTO"): ?>
                                         <span class="badge text-bg-success">ABERTO</span>
@@ -92,8 +99,6 @@ $paginacao = $indexRegistros["paginacao"];
                                         <span class="badge text-bg-danger">FECHADO</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo $registro->usuario_nome; ?></td>
-                                <td><?php echo $registro->assunto; ?></td>
                                 <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
                                 <td>
                                     <a href="detalhes.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar"> <i class="bi-eye-fill me-2"></i>Ver</a>

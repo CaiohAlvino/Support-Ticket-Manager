@@ -12,15 +12,16 @@ class Suporte
      * Lista tickets de suporte com filtros e paginação.
      * Corrigido: uso de prepared statements e SQL seguro.
      */
-    public function index($parametros = array())
+    public function index($parametros = array(), $usuario_id = NULL)
     {
         try {
-            $usuario_id = isset($_SESSION["usuario_id"]) ? (int)$_SESSION["usuario_id"] : null;
             $suporte_id = isset($parametros["suporte_id"]) ? (int)$parametros["suporte_id"] : null;
             $status     = isset($parametros["status"]) ? $parametros["status"] : null;
             $assunto    = isset($parametros["assunto"]) ? $parametros["assunto"] : null;
             $pagina     = isset($parametros["pagina"]) ? (int)$parametros["pagina"] : 1;
             $limite     = isset($parametros["limite"]) ? (int)$parametros["limite"] : 10;
+            $dias       = isset($parametros["dias"]) ? (int)$parametros["dias"] : null;
+            $quantidade = isset($parametros["quantidade"]) ? (int)$parametros["quantidade"] : null;
 
             $where = array();
             $params = array();
@@ -41,13 +42,21 @@ class Suporte
                 $where[] = "`suporte`.`assunto` = :assunto";
                 $params[":assunto"] = $assunto;
             }
+            if (isset($parametros["empresa_id"]) && $parametros["empresa_id"]) {
+                $where[] = "`suporte`.`empresa_id` = :empresa_id";
+                $params[":empresa_id"] = (int)$parametros["empresa_id"];
+            }
+            if ($dias) {
+                $where[] = "`suporte`.`cadastrado` >= DATE_SUB(NOW(), INTERVAL :dias DAY)";
+                $params[":dias"] = $dias;
+            }
+
+            $joins = " LEFT JOIN `empresa` ON `empresa`.id = `suporte`.`empresa_id`" .
+                " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id`" .
+                " LEFT JOIN `cliente` ON `cliente`.id = `suporte`.`cliente_id`";
 
             $query = "SELECT `suporte`.*, `empresa`.`nome` AS empresa_nome, `usuario`.`nome` AS usuario_nome, `cliente`.`nome_fantasia` AS cliente_nome FROM `suporte`";
             $queryCount = "SELECT COUNT(`suporte`.`id`) FROM `suporte`";
-
-            $joins = " LEFT JOIN `empresa` ON `empresa`.id = `suporte`.`empresa_id" .
-                " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id" .
-                " LEFT JOIN `cliente` ON `cliente`.id = `suporte`.`cliente_id";
             $query .= $joins;
             $queryCount .= $joins;
 
@@ -57,7 +66,12 @@ class Suporte
                 $queryCount .= $whereSql;
             }
 
-            $query .= " ORDER BY `suporte`.`cadastrado` DESC LIMIT :limite OFFSET :offset";
+            $query .= " ORDER BY `suporte`.`cadastrado` DESC";
+            if ($quantidade) {
+                $query .= " LIMIT :quantidade";
+            } else {
+                $query .= " LIMIT :limite OFFSET :offset";
+            }
 
             $stmt = $this->db->prepare($query);
             $stmtCount = $this->db->prepare($queryCount);
@@ -67,9 +81,13 @@ class Suporte
                 $stmt->bindValue($key, $value, $type);
                 $stmtCount->bindValue($key, $value, $type);
             }
-            $offset = ($pagina - 1) * $limite;
-            $stmt->bindValue(":limite", $limite, PDO::PARAM_INT);
-            $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+            if ($quantidade) {
+                $stmt->bindValue(":quantidade", $quantidade, PDO::PARAM_INT);
+            } else {
+                $offset = ($pagina - 1) * $limite;
+                $stmt->bindValue(":limite", $limite, PDO::PARAM_INT);
+                $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
+            }
 
             $stmt->execute();
             $stmtCount->execute();

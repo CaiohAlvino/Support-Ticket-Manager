@@ -1,5 +1,48 @@
 <?php include '../template/topo.php'; ?>
 
+<?php
+$suporte_id = isset($_GET["suporte_id"]) ? $_GET["suporte_id"] : NULL;
+$status = (isset($_GET["status"]) && $_GET["status"] !== "NULL") ? $_GET["status"] : NULL;
+$assunto = isset($_GET["assunto"]) ? $_GET["assunto"] : NULL;
+$pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
+
+$indexRegistros = $suporte->index([
+    "dias" => 2,
+    "quantidade" => 10,
+    "status" => $status,
+    "assunto" => $assunto,
+    "pagina" => $pagina,
+    "limite" => 15
+]);
+
+$registros = $indexRegistros["resultados"];
+
+$paginacao = $indexRegistros["paginacao"];
+
+// Contagem de tickets por status para o gráfico
+$statusCounts = [
+    'ABERTO' => 0,
+    'AGUARDANDO_SUPORTE' => 0,
+    'FECHADO' => 0,
+    'CRITICO' => 0
+];
+foreach ($registros as $registro) {
+    if (is_object($registro) && isset($statusCounts[$registro->status])) {
+        $statusCounts[$registro->status]++;
+    }
+}
+
+// Contagem de tickets por usuário para o gráfico
+$userTicketCounts = [];
+foreach ($registros as $registro) {
+    if (is_object($registro) && isset($registro->usuario_nome)) {
+        $nome = $registro->usuario_nome;
+        if (!isset($userTicketCounts[$nome])) $userTicketCounts[$nome] = 0;
+        $userTicketCounts[$nome]++;
+    }
+}
+?>
+
 <!-- Cabeçalho do Dashboard -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0">Dashboard</h1><button class="btn btn-primary" data-bs-toggle="modal"
@@ -15,7 +58,7 @@
                     <div class="stats-icon bg-primary rounded-3"><i class="bi bi-ticket text-white fs-4"></i></div>
                     <div class="ms-3">
                         <h6 class="mb-1">Total de Tickets</h6>
-                        <h4 class="mb-0">150</h4>
+                        <h4 class="mb-0"><?php echo count($registros) ?></h4>
                     </div>
                 </div>
             </div>
@@ -29,7 +72,7 @@
                             class="bi bi-hourglass-split text-white fs-4"></i></div>
                     <div class="ms-3">
                         <h6 class="mb-1">Em Andamento</h6>
-                        <h4 class="mb-0">45</h4>
+                        <h4 class="mb-0"><?php echo count(array_filter($registros, fn($r) => $r->status === "AGUARDANDO_SUPORTE")) ?></h4>
                     </div>
                 </div>
             </div>
@@ -43,7 +86,7 @@
                     </div>
                     <div class="ms-3">
                         <h6 class="mb-1">Resolvidos</h6>
-                        <h4 class="mb-0">95</h4>
+                        <h4 class="mb-0"><?php echo count(array_filter($registros, fn($r) => $r->status === "FECHADO")) ?></h4>
                     </div>
                 </div>
             </div>
@@ -57,7 +100,7 @@
                             class="bi bi-exclamation-triangle text-white fs-4"></i></div>
                     <div class="ms-3">
                         <h6 class="mb-1">Críticos</h6>
-                        <h4 class="mb-0">10</h4>
+                        <h4 class="mb-0"><?php echo count(array_filter($registros, fn($r) => $r->status === "CRITICO")) ?></h4>
                     </div>
                 </div>
             </div>
@@ -87,26 +130,38 @@
                         <thead class="bg-light">
                             <tr>
                                 <th class="border-0">#ID</th>
+                                <th class="border-0">Situação</th>
                                 <th class="border-0">Assunto</th>
-                                <th class="border-0">Prioridade</th>
                                 <th class="border-0">Status</th>
                                 <th class="border-0">Data</th>
                                 <th class="border-0 text-end pe-4">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="">#1234</td>
-                                <td>Problema com login</td>
-                                <td><span class="badge bg-danger">Alta</span></td>
-                                <td><span class="badge bg-warning">Em Andamento</span></td>
-                                <td>10/03/2024</td>
-                                <td class="text-end pe-4"><button class="btn btn-sm btn-outline-primary"><i
-                                            class="bi bi-eye"></i></button><button
-                                        class="btn btn-sm btn-outline-secondary"><i
-                                            class="bi bi-pencil"></i></button></td>
-                            </tr>
-                            <!-- Mais linhas de exemplo aqui -->
+                            <?php foreach ($registros as $registro): ?>
+                                <?php if (is_object($registro)): ?>
+                                    <tr>
+                                        <td class="">#<?php echo htmlspecialchars($registro->id) ?></td>
+                                        <td>
+                                            <?php if ($registro->situacao == 1): ?>
+                                                <span class="badge text-bg-success">ativo</span>
+                                            <?php else: ?>
+                                                <span class="badge text-bg-secondary">inativo</span>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td><?php echo htmlspecialchars($registro->assunto) ?></td>
+                                        <td><span class="badge bg-<?php echo htmlspecialchars($registro->status) ?>"><?php echo htmlspecialchars($registro->status) ?></span></td>
+                                        <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
+                                        <td class="text-end pe-4"><button class="btn btn-sm btn-outline-primary">
+                                                <i class="bi bi-eye">Ver</i>
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary">
+                                                <i class="bi bi-pencil">Editar</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
                         </tbody>
                     </table>
                 </div>
@@ -122,9 +177,13 @@
                 <h5 class="card-title">Distribuição de Tickets</h5>
             </div>
             <div class="card-body">
-                <div class="chart-row">
-                    <div class="chart-col"><canvas id="ticketStatusChart"></canvas></div>
-                    <div class="chart-col"><canvas id="ticketCategoryChart"></canvas></div>
+                <div class="chart-row justify-content-center align-items-center" style="height:340px;display:flex;">
+                    <div class="chart-col d-flex justify-content-center align-items-center w-100" style="height:100%;">
+                        <canvas id="ticketStatusChart" style="max-width:340px;max-height:340px;width:100%;height:100%;"></canvas>
+                    </div>
+                    <div class="chart-col d-flex justify-content-center align-items-center w-100" style="height:100%;">
+                        <canvas id="ticketCategoryChart" style="max-width:340px;max-height:340px;width:100%;height:100%;"></canvas>
+                    </div>
                 </div>
             </div>
         </div>
@@ -186,4 +245,13 @@
     </div>
 </div>
 
+<script>
+    // Passando dados do PHP para o JS
+    window.ticketStatusData = <?php echo json_encode($statusCounts); ?>;
+    window.userTicketData = {
+        labels: <?php echo json_encode(array_keys($userTicketCounts)); ?>,
+        data: <?php echo json_encode(array_values($userTicketCounts)); ?>
+    };
+</script>
+<script src="/js/dashboard.js"></script>
 <?php include '../template/rodape.php'; ?>
