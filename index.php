@@ -9,6 +9,7 @@
     <!-- Bootstrap e ícones -->
     <link rel="stylesheet" href="libs/bootstrap/style.css">
     <link rel="stylesheet" href="libs/bootstrap/icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="libs/noty/style.css">
     <!-- CSS principal centralizado -->
     <link rel="stylesheet" href="css/main.css">
     <!-- Estilo específico da página de login -->
@@ -27,7 +28,7 @@
                 <div class="text-center">
                     <h2 class="login-title">Acesso ao Sistema</h2>
                 </div>
-                <form id="login" data-action="login/logar.php">
+                <form id="login" data-action="controller/login/logar.php">
                     <input type="hidden" name="empresa_id">
                     <input type="hidden" name="email">
                     <div class="mb-4">
@@ -51,7 +52,9 @@
     <!-- Scripts -->
     <script src="./libs/jquery/script.js"></script>
     <script src="./libs/bootstrap/script.js"></script>
-    <script src="./js/pages/login.js"></script>
+    <script src="./libs/noty/script.js"></script>
+    <script src="./js/utils/Noty.js"></script>
+    <script src="./js/login.js"></script>
 </body>
 
 </html>

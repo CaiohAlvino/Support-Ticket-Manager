@@ -38,4 +38,10 @@ class Database
     {
         return $this->pdo;
     }
+
+    // Adicionado para expor o método prepare do PDO
+    public function prepare($sql)
+    {
+        return $this->pdo->prepare($sql);
+    }
 }

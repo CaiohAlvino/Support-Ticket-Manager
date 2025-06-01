@@ -8,108 +8,80 @@ class Suporte
         $this->db = $db;
     }
 
+    /**
+     * Lista tickets de suporte com filtros e paginação.
+     * Corrigido: uso de prepared statements e SQL seguro.
+     */
     public function index($parametros = array())
     {
         try {
-            // if (session_status() === PHP_SESSION_NONE) {
-            //     session_start();
-            // }
-            $empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
-
-            // if (!$empresa_id) {
-            //     return array(
-            //         "resultados" => [],
-            //         "paginacao" => array(
-            //             "pagina" => 1,
-            //             "limite" => 10,
-            //             "total" => 0,
-            //             "total_paginas" => 1
-            //         )
-            //     );
-            // }
-
-            $suporte_id = isset($parametros["suporte_id"]) ? $parametros["suporte_id"] : NULL;
-            $status = isset($parametros["status"]) ? $parametros["status"] : NULL;
-            $assunto = isset($parametros["assunto"]) ? $parametros["assunto"] : NULL;
-            $pagina = isset($parametros["pagina"]) ? $parametros["pagina"] : 1;
-            $limite = isset($parametros["limite"]) ? $parametros["limite"] : 10;
+            $usuario_id = isset($_SESSION["usuario_id"]) ? (int)$_SESSION["usuario_id"] : null;
+            $suporte_id = isset($parametros["suporte_id"]) ? (int)$parametros["suporte_id"] : null;
+            $status     = isset($parametros["status"]) ? $parametros["status"] : null;
+            $assunto    = isset($parametros["assunto"]) ? $parametros["assunto"] : null;
+            $pagina     = isset($parametros["pagina"]) ? (int)$parametros["pagina"] : 1;
+            $limite     = isset($parametros["limite"]) ? (int)$parametros["limite"] : 10;
 
             $where = array();
+            $params = array();
 
-            $where[] = "`suporte`.`empresa_id` = {$empresa_id}";
-
-            $query = "SELECT 
-                        `suporte`.*,
-                        `empresa`.`nome_fantasia` AS empresa_nome,
-                        `empresa`.`responsavel` AS empresa_responsavel,
-                        `usuario`.`nome` AS usuario_nome";
-
-            $queryCount = "SELECT COUNT(`suporte`.`id`)";
-
-            $query .= " FROM `suporte`";
-            $queryCount .= " FROM `suporte`";
-
-            $query .= " LEFT JOIN `empresa` ON `empresa`.id = `suporte`.`empresa_id`";
-            $query .= " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id`";
-
-            $queryCount .= " LEFT JOIN `empresa` ON `empresa`.id = `suporte`.`empresa_id`";
-            $queryCount .= " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id`";
-
+            if ($usuario_id) {
+                $where[] = "`suporte`.`usuario_id` = :usuario_id";
+                $params[":usuario_id"] = $usuario_id;
+            }
             if ($suporte_id) {
                 $where[] = "`suporte`.`id` = :suporte_id";
+                $params[":suporte_id"] = $suporte_id;
             }
-
             if ($status) {
                 $where[] = "`suporte`.`status` = :status";
+                $params[":status"] = $status;
             }
-
             if ($assunto) {
                 $where[] = "`suporte`.`assunto` = :assunto";
+                $params[":assunto"] = $assunto;
             }
+
+            $query = "SELECT `suporte`.*, `empresa`.`nome` AS empresa_nome, `usuario`.`nome` AS usuario_nome, `cliente`.`nome_fantasia` AS cliente_nome FROM `suporte`";
+            $queryCount = "SELECT COUNT(`suporte`.`id`) FROM `suporte`";
+
+            $joins = " LEFT JOIN `empresa` ON `empresa`.id = `suporte`.`empresa_id" .
+                " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id" .
+                " LEFT JOIN `cliente` ON `cliente`.id = `suporte`.`cliente_id";
+            $query .= $joins;
+            $queryCount .= $joins;
 
             if ($where) {
-                $query .= " WHERE " . implode(" AND ", $where);
-                $queryCount .= " WHERE " . implode(" AND ", $where);
+                $whereSql = " WHERE " . implode(" AND ", $where);
+                $query .= $whereSql;
+                $queryCount .= $whereSql;
             }
 
-            $query .= " ORDER BY `suporte`.`cadastrado` DESC";
-
-            $query .= " LIMIT :limite OFFSET :offset";
+            $query .= " ORDER BY `suporte`.`cadastrado` DESC LIMIT :limite OFFSET :offset";
 
             $stmt = $this->db->prepare($query);
             $stmtCount = $this->db->prepare($queryCount);
 
-            if ($suporte_id) {
-                $stmt->bindParam(":suporte_id", $suporte_id, PDO::PARAM_INT);
-                $stmtCount->bindParam(":suporte_id", $suporte_id, PDO::PARAM_INT);
+            foreach ($params as $key => $value) {
+                $type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+                $stmt->bindValue($key, $value, $type);
+                $stmtCount->bindValue($key, $value, $type);
             }
-
-            if ($status) {
-                $stmt->bindParam(":status", $status, PDO::PARAM_STR);
-                $stmtCount->bindParam(":status", $status, PDO::PARAM_STR);
-            }
-
-            if ($assunto) {
-                $stmt->bindParam(":assunto", $assunto, PDO::PARAM_STR);
-                $stmtCount->bindParam(":assunto", $assunto, PDO::PARAM_STR);
-            }
-
             $offset = ($pagina - 1) * $limite;
-
-            $stmt->bindParam(":limite", $limite, PDO::PARAM_INT);
-            $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+            $stmt->bindValue(":limite", $limite, PDO::PARAM_INT);
+            $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
 
             $stmt->execute();
             $stmtCount->execute();
 
             $resultados = $stmt->fetchAll(PDO::FETCH_OBJ);
-            $total = $stmtCount->fetchColumn();
+            $total = (int)$stmtCount->fetchColumn();
 
             $paginacao = array(
                 "pagina" => $pagina,
                 "limite" => $limite,
                 "total" => $total,
-                "total_paginas" => ceil($total / $limite)
+                "total_paginas" => max(1, (int)ceil($total / $limite))
             );
 
             return array(
@@ -118,11 +90,11 @@ class Suporte
             );
         } catch (\Throwable $th) {
             return array(
-                "erro" => $th->getMessage() . " -> " . $th->getLine(),
+                "erro" => "Erro ao buscar tickets: " . $th->getMessage(),
                 "resultados" => [],
                 "paginacao" => array(
                     "pagina" => 1,
-                    "limite" => 100,
+                    "limite" => 10,
                     "total" => 0,
                     "total_paginas" => 1
                 )
@@ -130,71 +102,47 @@ class Suporte
         }
     }
 
-    public function pegarPorId($id = NULL)
+    /**
+     * Busca um ticket de suporte por ID.
+     * Corrigido: uso de prepared statement.
+     */
+    public function pegarPorId($id = null)
     {
         try {
             if (!$id) {
-                return NULL;
+                return null;
             }
-
-            $query = "SELECT
-                        `suporte`.*,
-                        `usuario`.`nome` AS nome_usuario,
-                        `usuario`.`email` AS email_usuario,
-                        `admin`.`nome` AS nome_admin,
-                        `empresa`.`razao_social` AS nome_empresa";
-
-            $query .= " FROM `suporte`";
-
-            $query .= " LEFT JOIN `usuario` on `usuario`.id = `suporte`.`usuario_id`";
-            $query .= " LEFT JOIN `admin` on `admin`.id = `suporte`.`admin_id`";
-            $query .= " LEFT JOIN `empresa` on `empresa`.id = `suporte`.`empresa_id`";
-
-            $query .= " WHERE `suporte`.`id` = :id LIMIT 1";
-
+            $query = "SELECT `suporte`.*, `usuario`.`nome` AS nome_usuario, `usuario`.`email` AS email_usuario, `admin`.`nome` AS nome_admin, `empresa`.`razao_social` AS nome_empresa FROM `suporte` LEFT JOIN `usuario` on `usuario`.id = `suporte`.`usuario_id` LEFT JOIN `admin` on `admin`.id = `suporte`.`admin_id` LEFT JOIN `empresa` on `empresa`.id = `suporte`.`empresa_id` WHERE `suporte`.`id` = :id LIMIT 1";
             $stmt = $this->db->prepare($query);
-
-            $stmt->bindParam(":id", $id, PDO::PARAM_INT);
+            $stmt->bindValue(":id", (int)$id, PDO::PARAM_INT);
             $stmt->execute();
-
             $registro = $stmt->fetch(PDO::FETCH_OBJ);
-
             return $registro;
         } catch (\Throwable $th) {
-            return NULL;
+            return null;
         }
     }
 
+    /**
+     * Lista todos os tickets de uma empresa, com filtro de ativo.
+     * Corrigido: uso de prepared statement e SQL seguro.
+     */
     public function pegarTodos($filtros = array())
     {
         try {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-            $empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
-
+            $empresa_id = isset($_SESSION["empresa_id"]) ? (int)$_SESSION["empresa_id"] : null;
             if (!$empresa_id) {
                 return [];
             }
-
-            $ativo = isset($filtros["ativo"]) ? $filtros["ativo"] : NULL;
-
-            $query = "SELECT `suporte`.*";
-
-            $query .= " FROM `suporte`";
-
-            $query .= " WHERE `suporte`.`empresa_id` = {$empresa_id}";
-
-            if ($ativo == "ATIVO") {
+            $ativo = isset($filtros["ativo"]) ? $filtros["ativo"] : null;
+            $query = "SELECT `suporte`.* FROM `suporte` WHERE `suporte`.`empresa_id` = :empresa_id";
+            if ($ativo === "ATIVO") {
                 $query .= " AND `suporte`.`ativo` = 1";
             }
-
             $stmt = $this->db->prepare($query);
-
+            $stmt->bindValue(":empresa_id", $empresa_id, PDO::PARAM_INT);
             $stmt->execute();
-
             $registros = $stmt->fetchAll(PDO::FETCH_OBJ);
-
             return $registros;
         } catch (\Throwable $th) {
             return [];

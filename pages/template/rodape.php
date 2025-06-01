@@ -14,14 +14,11 @@
 <!-- Custom Scripts -->
 <script src="../../js/mask.js"></script>
 <script src="../../js/sidebar.js"></script>
-<!-- Script específico da página -->
-<?php
-$current_dir = basename(dirname($_SERVER['PHP_SELF']));
-$script_path = "../../js/pages/{$current_dir}.js";
-if (file_exists($script_path)) {
-    echo "<script src=\"{$script_path}\"></script>";
-}
-?>
+<script src="../../js/login.js"></script>
+<script src="../../js/cliente.js"></script>
+<script src="../../js/dashboard.js"></script>
+<script src="../../js/suporte.js"></script>
+
 </body>
 
 </html>

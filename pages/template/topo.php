@@ -60,7 +60,7 @@ $suporteMensagem = new SuporteMensagem($db->getConnection());
                             <hr class="dropdown-divider">
                         </li>
                         <li>
-                            <a class="dropdown-item text-danger" href="../login/sair.php">
+                            <a class="dropdown-item text-danger" href="../../controller/login/sair.php" id="logoutButton">
                                 <i class="bi bi-box-arrow-right me-2"></i>
                                 Sair
                             </a>
@@ -74,8 +74,8 @@ $suporteMensagem = new SuporteMensagem($db->getConnection());
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-nav">
             <div class="sidebar-section mb-2">
-                <small class="text-muted text-uppercase ms-2">T
-                    ickets
+                <small class="text-muted text-uppercase ms-2">
+                    Tickets
                 </small>
                 <a href="../home/index.php" class="sidebar-link menu-item">
                     <i class="bi bi-grid-1x2-fill"></i>
@@ -120,3 +120,4 @@ $suporteMensagem = new SuporteMensagem($db->getConnection());
     </nav>
     <!-- Main Content -->
     <main class="main-content" id="mainContent">
+        <!-- Conteúdo principal aqui -->

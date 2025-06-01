@@ -79,25 +79,27 @@ $paginacao = $indexRegistros["paginacao"];
                 </thead>
                 <tbody>
                     <?php foreach ($registros as $registro): ?>
-                        <tr class="<?php echo ($suporte_id == $registro->id) ? 'table-active' : ''; ?>">
-                            <td>
-                                <?php if ($registro->status == "ABERTO"): ?>
-                                    <span class="badge text-bg-success">ABERTO</span>
-                                <?php elseif ($registro->status == "AGUARDANDO_SUPORTE"): ?>
-                                    <span class="badge text-bg-warning">AGUARDANDO SUPORTE</span>
-                                <?php elseif ($registro->status == "RESPONDIDO"): ?>
-                                    <span class="badge text-bg-info">RESPONDIDO</span>
-                                <?php else: ?>
-                                    <span class="badge text-bg-danger">FECHADO</span>
-                                <?php endif; ?>
-                            </td>
-                            <td><?php echo $registro->usuario_nome; ?></td>
-                            <td><?php echo $registro->assunto; ?></td>
-                            <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
-                            <td>
-                                <a href="detalhes.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar"> <i class="bi-eye-fill me-2"></i>Ver</a>
-                            </td>
-                        </tr>
+                        <?php if (is_object($registro)): ?>
+                            <tr class="<?php echo ($suporte_id == $registro->id) ? 'table-active' : ''; ?>">
+                                <td>
+                                    <?php if ($registro->status == "ABERTO"): ?>
+                                        <span class="badge text-bg-success">ABERTO</span>
+                                    <?php elseif ($registro->status == "AGUARDANDO_SUPORTE"): ?>
+                                        <span class="badge text-bg-warning">AGUARDANDO SUPORTE</span>
+                                    <?php elseif ($registro->status == "RESPONDIDO"): ?>
+                                        <span class="badge text-bg-info">RESPONDIDO</span>
+                                    <?php else: ?>
+                                        <span class="badge text-bg-danger">FECHADO</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td><?php echo $registro->usuario_nome; ?></td>
+                                <td><?php echo $registro->assunto; ?></td>
+                                <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
+                                <td>
+                                    <a href="detalhes.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar"> <i class="bi-eye-fill me-2"></i>Ver</a>
+                                </td>
+                            </tr>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </tbody>
             </table>

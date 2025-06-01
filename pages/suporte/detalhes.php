@@ -1,10 +1,8 @@
 <?php include("../template/topo.php"); ?>
-
 <?php
 $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
 
 $suporte = new Suporte($db->getConnection());
-
 $mensagem = new SuporteMensagem($db->getConnection());
 
 $suporte_registro = $suporte->pegarPorId($id);
@@ -13,8 +11,7 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
 
 <div class="suporte-mensagem-detalhe mt-2">
 
-    <?php if (!$suporte_registro && !$mensagem_registro): ?>
-
+    <?php if (!$suporte_registro): ?>
         <div class="error-container text-center py-5">
             <div class="error-icon mb-4">
                 <i class="bi-exclamation-circle display-1 text-danger"></i>
@@ -26,9 +23,7 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
                 Voltar para a lista de Suporte
             </a>
         </div>
-
     <?php else: ?>
-
         <div class="sessao">
             <div class="row">
                 <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
@@ -76,23 +71,50 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
 
                 <div class="col-md-12 mt-3">
                     <span class="meta-label text-muted d-block mb-2">Mensagem:</span>
-                    <?php echo $mensagem_registro["0"]->mensagem ?>
+                    <?php if (isset($mensagem_registro[0])): ?>
+                        <?php echo $mensagem_registro[0]->mensagem ?>
+                    <?php else: ?>
+                        <span class="text-muted">Nenhuma mensagem cadastrada.</span>
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
         <div class="sessao">
             <h2 class="subtitulo mb-0">Histórico de Interação</h2>
             <?php
-            $historico_mensagens = array_slice($mensagem_registro, 1);
+            $historico_mensagens = (is_array($mensagem_registro) && count($mensagem_registro) > 1) ? array_slice($mensagem_registro, 1) : [];
             foreach ($historico_mensagens as $mensagens):
             ?>
                 <div class=" p-3 border border-1 rounded mt-2">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <?php if ($mensagens->proprietario == "USUARIO"): ?>
-                            <span class="usuario-nome-cliente fw-bold"><?php echo $suporte_registro->nome_usuario ?></span>
+                            <span class="usuario-nome-cliente fw-bold">
+                                <?php
+                                // Buscar nome do cliente
+                                static $cliente = null;
+                                if ($cliente === null && isset($suporte_registro->cliente_id)) {
+                                    $clienteObj = new Cliente($db->getConnection());
+                                    $cliente = $clienteObj->pegarPorId($suporte_registro->cliente_id);
+                                }
+                                echo $cliente && isset($cliente->nome_fantasia) ? $cliente->nome_fantasia : 'Cliente';
+                                ?>
+                            </span>
                         <?php else: ?>
-                            <span class="usuario-nome-suporte fw-bold"><?php echo $suporte_registro->nome_admin ?></span>
-                        <?php endif ?>
+                            <span class="usuario-nome-suporte fw-bold">
+                                <?php
+                                // Buscar nome do admin (usuário do sistema)
+                                static $admin = null;
+                                if ($admin === null && isset($suporte_registro->usuario_id)) {
+                                    $pdo = $db->getConnection();
+                                    $stmt = $pdo->prepare("SELECT nome FROM usuario WHERE id = :id LIMIT 1");
+                                    $stmt->bindParam(":id", $suporte_registro->usuario_id, PDO::PARAM_INT);
+                                    $stmt->execute();
+                                    $admin = $stmt->fetch(PDO::FETCH_OBJ);
+                                }
+                                echo $admin && isset($admin->nome) ? $admin->nome : 'Suporte';
+                                ?>
+                            </span>
+                        <?php endif; ?>
                         <span class="text-muted small"><?php echo date('d/m/Y H:i:s', strtotime($mensagens->cadastrado)); ?></span>
                     </div>
                     <div class="">
@@ -135,9 +157,7 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
                 </div>
             </form>
         </div>
-
     <?php endif ?>
-
     <div class="modal fade" id="confirmarFecharTicket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
