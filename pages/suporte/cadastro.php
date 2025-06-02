@@ -19,7 +19,7 @@
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mb-3">
                 <label for="empresa_id">Empresa <span class="campo-obrigatorio text-danger">*</span></label>
-                <select class="form-select input-validar-select campo-obrigatorio" id="empresa_id" name="empresa_id">
+                <select class="form-select select2 input-validar-select campo-obrigatorio" id="empresa_id" name="empresa_id">
                     <option value="">Selecione uma empresa</option>
                     <?php
                     $empresas = $empresa->listarEmpresas();
@@ -31,7 +31,7 @@
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mb-3">
                 <label for="servico_id">Servico <span class="campo-obrigatorio text-danger">*</span></label>
-                <select class="form-select input-validar-select campo-obrigatorio" id="servico_id" name="servico_id">
+                <select class="form-select select2 input-validar-select campo-obrigatorio" id="servico_id" name="servico_id">
                     <option value="">Selecione um serviço</option>
                     <?php
                     $servicos = $servico->listarServicos();
@@ -44,7 +44,7 @@
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mb-3">
                 <label for="cliente_id">Cliente <span class="campo-obrigatorio text-danger">*</span></label>
-                <select class="form-select input-validar-select campo-obrigatorio" id="cliente_id" name="cliente_id">
+                <select class="form-select select2 input-validar-select campo-obrigatorio" id="cliente_id" name="cliente_id">
                     <option value="">Selecione um Cliente</option>
                     <?php
                     $clientes = $cliente->pegarTodos();

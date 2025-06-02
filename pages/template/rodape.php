@@ -1,6 +1,7 @@
 </main>
 <!-- Scripts principais -->
 <script src="../../libs/jquery/script.js"></script>
+<script src="../../libs/jquery-mask/script.js"></script>
 <script src="../../libs/bootstrap/script.js"></script>
 <script src="../../libs/select2/script.js"></script>
 <script src="../../libs/noty/script.js"></script>

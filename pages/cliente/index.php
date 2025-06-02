@@ -67,6 +67,8 @@ $paginacao = $indexRegistros["paginacao"];
                 <thead>
                     <tr>
                         <th>Situação</th>
+                        <th>Tipo Empresa</th>
+                        <th>Nome Responsavel</th>
                         <th>Nome Fantasia</th>
                         <th>Razão Social</th>
                         <th>Documento</th>
@@ -83,9 +85,18 @@ $paginacao = $indexRegistros["paginacao"];
                                     <span class="badge status-insituacao">Inativo</span>
                                 <?php endif; ?>
                             </td>
-                            <td><?php echo $registro->nome_fantasia; ?></td>
-                            <td><?php echo $registro->razao_social; ?></td>
-                            <td><?php echo $registro->documento; ?></td>
+                            <td>
+                                <?php if ($registro->tipo === "CNPJ"): ?>
+                                    <span class="badge status-situacao">PJ</span>
+                                <?php else: ?>
+                                    <span class="badge status-situacao">PF</span>
+                                <?php endif ?>
+
+                            </td>
+                            <td><?php echo $registro->responsavel_nome ?? "--"; ?></td>
+                            <td><?php echo $registro->nome_fantasia ?? "--"; ?></td>
+                            <td><?php echo $registro->razao_social ?? "--"; ?></td>
+                            <td><?php echo $registro->documento ? $registro->documento : $registro->responsavel_documento; ?></td>
                             <td>
                                 <a href="edicao.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar">
                                     <i class="bi-pencil-square"></i> Editar
