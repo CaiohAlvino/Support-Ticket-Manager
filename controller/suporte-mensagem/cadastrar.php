@@ -1,6 +1,5 @@
 <?php
 require("../../config/Database.php");
-require("../../config/Empresa.php");
 // require("../../config/JWT.php");
 
 $db = new Database();
@@ -17,18 +16,11 @@ $conexao = $db->getConnection();
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
-
-if (!$empresa_id) {
-    echo json_encode([
-        "status" => "error",
-        "message" => "Empresa não encontrada!"
-    ]);
-    exit;
-}
 
 $suporte_id = isset($_POST["id"]) ? $_POST["id"] : NULL;
-$admin_id = isset($_POST["admin_id"]) && !empty($_POST["admin_id"]) ? $_POST["admin_id"] : NULL;
+$usuario_id = isset($_POST["usuario_id"]) && !empty($_POST["usuario_id"]) ? $_POST["usuario_id"] : NULL;
+$cliente_id = isset($_POST["cliente_id"]) && !empty($_POST["cliente_id"]) ? $_POST["cliente_id"] : NULL;
+$empresa_id = isset($_POST["empresa_id"]) && !empty($_POST["empresa_id"]) ? $_POST["empresa_id"] : NULL;
 $mensagem = isset($_POST["mensagem"]) ? $_POST["mensagem"] : NULL;
 $status = isset($_POST["status"]) ? $_POST["status"] : "AGUARDANDO_SUPORTE";
 
@@ -66,19 +58,16 @@ try {
     }
 
     $suporte = $conexao->prepare("UPDATE `suporte` SET
-                                    `admin_id` = :admin_id,
-                                    `status` = CASE WHEN :status = 'AGUARDANDO_SUPORTE' AND :admin_id IS NULL THEN `status` ELSE :status
-                                    END WHERE
-                                        `id` = :id
-                                    AND
-                                        `empresa_id` = :empresa_id");
+        `usuario_id` = :usuario_id,
+        `status` = CASE WHEN :status = 'AGUARDANDO_SUPORTE' AND :usuario_id IS NULL THEN `status` ELSE :status END
+        WHERE
+            `id` = :id");
 
     $suporte->bindParam(":id", $suporte_id, PDO::PARAM_INT);
-    $suporte->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-    if ($admin_id === NULL) {
-        $suporte->bindValue(":admin_id", NULL, PDO::PARAM_NULL);
+    if ($usuario_id === NULL) {
+        $suporte->bindValue(":usuario_id", NULL, PDO::PARAM_NULL);
     } else {
-        $suporte->bindParam(":admin_id", $admin_id, PDO::PARAM_INT);
+        $suporte->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
     }
     $suporte->bindParam(":status", $status, PDO::PARAM_STR);
 

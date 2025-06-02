@@ -1,12 +1,12 @@
 <?php include("../template/topo.php"); ?>
 <?php
+
 $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
 
-$suporte = new Suporte($db->getConnection());
-$mensagem = new SuporteMensagem($db->getConnection());
-
 $suporte_registro = $suporte->pegarPorId($id);
-$mensagem_registro = $mensagem->pegarPorSuporteId($id);
+$mensagem_registro = $suporteMensagem->pegarPorSuporteId($id);
+$empresaSuporte = $empresa->pegarPorId($suporte_registro->empresa_id ?? null);
+$servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
 ?>
 
 <div class="suporte-mensagem-detalhe mt-2">
@@ -53,7 +53,7 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
                 </p>
             </div>
             <div class="row">
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-3 col-sm-6">
                     <p class="my-1">
                         <?php if (isset($suporte_registro->status) && $suporte_registro->status == "FECHADO"): ?>
                             <span class="text-muted d-block">Fechado:</span>
@@ -64,9 +64,19 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
                         <?php endif ?>
                     </p>
                 </div>
-                <div class="col-md-4 col-sm-6">
+                <div class="col-md-3 col-sm-6">
                     <span class="text-muted d-block">ID do Ticket:</span>
                     <span class="fw-medium">#<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '-' ?></span>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <span class="text-muted d-block">Empresa</span>
+                    <span class="fw-medium"><?php echo isset($empresaSuporte->nome) ? htmlspecialchars($empresaSuporte->nome) : '-' ?></span>
+                </div>
+
+                <div class="col-md-3 col-sm-6">
+                    <span class="text-muted d-block">Serviço</span>
+                    <span class="fw-medium"><?php echo isset($servicoSuporte->nome) ? htmlspecialchars($servicoSuporte->nome) : '-' ?></span>
                 </div>
 
                 <div class="col-md-12 mt-3">
@@ -125,7 +135,9 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
             <div class="text-end mt-3" <?php echo $suporte_registro->status == "FECHADO" ? '' : 'style="display:none;"'; ?>>
                 <form id="suporte-reabrir" data-action="suporte-mensagem/cadastrar.php">
                     <input type="hidden" name="id" value="<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '' ?>">
-                    <input type="hidden" name="admin_id" value="<?php echo isset($suporte_registro->admin_id) ? htmlspecialchars($suporte_registro->admin_id) : '' ?>">
+                    <input type="hidden" name="usuario_id" value="<?php echo isset($suporte_registro->usuario_id) ? htmlspecialchars($suporte_registro->usuario_id) : '' ?>">
+                    <input type="hidden" name="cliente_id" value="<?php echo isset($suporte_registro->cliente_id) ? htmlspecialchars($suporte_registro->cliente_id) : '' ?>">
+                    <input type="hidden" name="empresa_id" value="<?php echo isset($suporte_registro->empresa_id) ? htmlspecialchars($suporte_registro->empresa_id) : '' ?>">
                     <input type="hidden" name="mensagem">
                     <button class="btn btn-confirmar reabrir botao-noty-ativo" type="submit">
                         <i class="bi-envelope-open me-2"></i>
@@ -137,7 +149,9 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
         <div class="sessao" <?php echo $suporte_registro->status != "FECHADO" ? '' : 'style="display:none;"'; ?>>
             <form id="suporte-mensagem-detalhe" data-action="suporte-mensagem/cadastrar.php">
                 <input type="hidden" name="id" value="<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '' ?>">
-                <input type="hidden" name="admin_id" value="<?php echo isset($suporte_registro->admin_id) ? htmlspecialchars($suporte_registro->admin_id) : '' ?>">
+                <input type="hidden" name="usuario_id" value="<?php echo isset($suporte_registro->usuario_id) ? htmlspecialchars($suporte_registro->usuario_id) : '' ?>">
+                <input type="hidden" name="cliente_id" value="<?php echo isset($suporte_registro->cliente_id) ? htmlspecialchars($suporte_registro->cliente_id) : '' ?>">
+                <input type="hidden" name="empresa_id" value="<?php echo isset($suporte_registro->empresa_id) ? htmlspecialchars($suporte_registro->empresa_id) : '' ?>">
                 <h6>Responder ao Ticket</h6>
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
@@ -159,7 +173,7 @@ $mensagem_registro = $mensagem->pegarPorSuporteId($id);
         </div>
     <?php endif ?>
     <div class="modal fade" id="confirmarFecharTicket" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5">Confirmação de Fechamento</h1>

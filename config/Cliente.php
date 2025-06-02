@@ -113,11 +113,6 @@ class Cliente
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
-            $empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
-
-            if (!$empresa_id) {
-                return [];
-            }
 
             $ativo = isset($filtros["ativo"]) ? $filtros["ativo"] : NULL;
 
@@ -128,8 +123,6 @@ class Cliente
             $query .= " `cliente`.`documento`";
 
             $query .= " FROM `cliente`";
-
-            $query .= " WHERE `cliente`.`empresa_id` = {$empresa_id}";
 
             if ($ativo == "ATIVO") {
                 $query .= " AND `cliente`.`ativo` = 1";

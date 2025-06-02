@@ -16,12 +16,51 @@
 <div class="sessao">
     <form id="suporte-cadastrar" data-action="suporte/cadastrar.php">
         <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
-                <label for="assunto">Assunto <span class="assunto-campo-obrigatorio text-danger">*</span></label>
+
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mb-3">
+                <label for="empresa_id">Empresa <span class="campo-obrigatorio text-danger">*</span></label>
+                <select class="form-select input-validar-select campo-obrigatorio" id="empresa_id" name="empresa_id">
+                    <option value="">Selecione uma empresa</option>
+                    <?php
+                    $empresas = $empresa->listarEmpresas();
+                    foreach ($empresas as $empresa) {
+                        echo "<option value='{$empresa->id}'>{$empresa->nome}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mb-3">
+                <label for="servico_id">Servico <span class="campo-obrigatorio text-danger">*</span></label>
+                <select class="form-select input-validar-select campo-obrigatorio" id="servico_id" name="servico_id">
+                    <option value="">Selecione um serviço</option>
+                    <?php
+                    $servicos = $servico->listarServicos();
+                    foreach ($servicos as $servico) {
+                        echo "<option value='{$servico->id}'>{$servico->nome}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mb-3">
+                <label for="cliente_id">Cliente <span class="campo-obrigatorio text-danger">*</span></label>
+                <select class="form-select input-validar-select campo-obrigatorio" id="cliente_id" name="cliente_id">
+                    <option value="">Selecione um Cliente</option>
+                    <?php
+                    $clientes = $cliente->pegarTodos();
+                    foreach ($clientes as $cliente) {
+                        echo "<option value='{$cliente->id}'>{$cliente->nome_fantasia}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-6 mb-3">
+                <label for="assunto">Assunto <span class="campo-obrigatorio text-danger">*</span></label>
                 <input type="text" class="form-control input-validar-nome campo-obrigatorio" id="assunto" name="assunto" maxlength="265">
             </div>
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
-                <label for="mensagem">Mensagem<span class="mensagem-campo-obrigatorio text-danger">*</span></label>
+                <label for="mensagem">Mensagem<span class="campo-obrigatorio text-danger">*</span></label>
                 <textarea class="form-control" name="mensagem" id="mensagem" maxlength="3000"></textarea>
             </div>
         </div>
@@ -34,7 +73,7 @@
         </div>
     </form>
 </div>
-<div class="border border-2 border-warning-subtle rounded p-3 bg-warning-subtle">
+<!-- <div class="border border-2 border-warning-subtle rounded p-3 bg-warning-subtle">
     <div class="row">
         <div class="col-xl-1 col-lg-1 col-md-8 col-sm-12 col-12 p-0 text-center">
             <i class="bi bi-patch-exclamation text-warning fs-1"></i>
@@ -64,6 +103,6 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <?php include("../template/rodape.php"); ?>

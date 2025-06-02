@@ -101,7 +101,10 @@ $paginacao = $indexRegistros["paginacao"];
                                 </td>
                                 <td><?php echo date("d/m/Y (H:i)", strtotime($registro->alterado)); ?></td>
                                 <td>
-                                    <a href="detalhes.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar"> <i class="bi-eye-fill me-2"></i>Ver</a>
+                                    <a href="detalhes.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar">
+                                        <i class="bi-eye-fill me-2"></i>
+                                        Ver
+                                    </a>
                                 </td>
                             </tr>
                         <?php endif; ?>

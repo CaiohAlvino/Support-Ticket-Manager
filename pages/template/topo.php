@@ -16,15 +16,24 @@
     <link rel="stylesheet" href="../../libs/noty/style.css">
 </head>
 <?php require("../../config/Database.php");
-require("../../config/Cliente.php");
 require("../../config/Validador.php");
+require("../../config/Estado.php");
+
+require("../../config/Cliente.php");
 require("../../config/Suporte.php");
 require("../../config/SuporteMensagem.php");
-require("../../config/Estado.php");
+require("../../config/Empresa.php");
+require("../../config/Servico.php");
+
 $db = new Database();
+$validador = new Validador();
+$estado = new Estado();
+
 $cliente = new Cliente($db->getConnection());
 $suporte = new Suporte($db->getConnection());
 $suporteMensagem = new SuporteMensagem($db->getConnection());
+$empresa = new Empresa($db->getConnection());
+$servico = new Servico($db->getConnection());
 ?>
 
 <body class="layout-fixed">

@@ -164,17 +164,12 @@ class Suporte
     public function pegarTodos($filtros = array())
     {
         try {
-            $empresa_id = isset($_SESSION["empresa_id"]) ? (int)$_SESSION["empresa_id"] : null;
-            if (!$empresa_id) {
-                return [];
-            }
             $ativo = isset($filtros["ativo"]) ? $filtros["ativo"] : null;
-            $query = "SELECT `suporte`.* FROM `suporte` WHERE `suporte`.`empresa_id` = :empresa_id";
+            $query = "SELECT `suporte`.* FROM `suporte`";
             if ($ativo === "ATIVO") {
                 $query .= " AND `suporte`.`ativo` = 1";
             }
             $stmt = $this->db->prepare($query);
-            $stmt->bindValue(":empresa_id", $empresa_id, PDO::PARAM_INT);
             $stmt->execute();
             $registros = $stmt->fetchAll(PDO::FETCH_OBJ);
             return $registros;

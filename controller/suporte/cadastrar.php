@@ -1,6 +1,5 @@
 <?php
 require("../../config/Database.php");
-require("../../config/Empresa.php");
 require("../../config/Suporte.php");
 // require("../../config/JWT.php");
 
@@ -19,17 +18,14 @@ $classeSuporte = new Suporte($conexao);
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$empresa_id = isset($_SESSION["empresa_id"]) ? $_SESSION["empresa_id"] : NULL;
-
-if (!$empresa_id) {
-    echo json_encode(["status" => "error", "message" => "Empresa não encontrada!"]);
-    exit;
-}
 
 $usuario = isset($_SESSION["usuario"]) ? $_SESSION["usuario"] : NULL;
 $usuario_id = isset($usuario->id) ? $usuario->id : NULL;
 
 $dadosSuporte = [
+    "empresa_id" => isset($_POST["empresa_id"]) ? $_POST["empresa_id"] : NULL,
+    "servico_id" => isset($_POST["servico_id"]) ? $_POST["servico_id"] : NULL,
+    "cliente_id" => isset($_POST["cliente_id"]) ? $_POST["cliente_id"] : NULL,
     "assunto" => isset($_POST["assunto"]) ? $_POST["assunto"] : NULL,
     "mensagem" => isset($_POST["mensagem"]) ? $_POST["mensagem"] : NULL,
 ];
@@ -42,17 +38,38 @@ if (strlen($dadosSuporte["mensagem"]) < 20) {
     exit;
 }
 
+if (!$dadosSuporte["empresa_id"]) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Empresa obrigatória!"
+    ]);
+    exit;
+}
+if (!$dadosSuporte["servico_id"]) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Serviço obrigatório!"
+    ]);
+    exit;
+}
+
 $suporte = $conexao->prepare("INSERT INTO `suporte` (
                         `empresa_id`,
+                        `servico_id`,
+                        `cliente_id`,
                         `usuario_id`,
                         `assunto`
                         ) VALUES (
                         :empresa_id,
+                        :servico_id,
+                        :cliente_id,
                         :usuario_id,
                         :assunto
                         )");
 
-$suporte->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
+$suporte->bindParam(":empresa_id", $dadosSuporte["empresa_id"], PDO::PARAM_INT);
+$suporte->bindParam(":servico_id", $dadosSuporte["servico_id"], PDO::PARAM_INT);
+$suporte->bindParam(":cliente_id", $dadosSuporte["cliente_id"], PDO::PARAM_INT);
 $suporte->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
 $suporte->bindParam(":assunto", $dadosSuporte["assunto"], PDO::PARAM_STR);
 
