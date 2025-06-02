@@ -5,8 +5,6 @@ $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
 
 $suporte_registro = $suporte->pegarPorId($id);
 $mensagem_registro = $suporteMensagem->pegarPorSuporteId($id);
-$empresaSuporte = $empresa->pegarPorId($suporte_registro->empresa_id ?? null);
-$servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
 ?>
 
 <div class="suporte-mensagem-detalhe mt-2">
@@ -71,12 +69,12 @@ $servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
 
                 <div class="col-md-3 col-sm-6">
                     <span class="text-muted d-block">Empresa</span>
-                    <span class="fw-medium"><?php echo isset($empresaSuporte->nome) ? htmlspecialchars($empresaSuporte->nome) : '-' ?></span>
+                    <span class="fw-medium"><?php echo isset($suporte_registro->empresa_nome) ? htmlspecialchars($suporte_registro->empresa_nome) : '-' ?></span>
                 </div>
 
                 <div class="col-md-3 col-sm-6">
                     <span class="text-muted d-block">Serviço</span>
-                    <span class="fw-medium"><?php echo isset($servicoSuporte->nome) ? htmlspecialchars($servicoSuporte->nome) : '-' ?></span>
+                    <span class="fw-medium"><?php echo isset($suporte_registro->servico_nome) ? htmlspecialchars($suporte_registro->servico_nome) : '-' ?></span>
                 </div>
 
                 <div class="col-md-12 mt-3">

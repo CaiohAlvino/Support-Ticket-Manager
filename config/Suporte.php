@@ -51,14 +51,16 @@ class Suporte
                 $params[":dias"] = $dias;
             }
 
-            $joins = " LEFT JOIN `empresa` ON `empresa`.id = `suporte`.`empresa_id`" .
-                " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id`" .
-                " LEFT JOIN `cliente` ON `cliente`.id = `suporte`.`cliente_id`";
+            $joins = " LEFT JOIN `empresa` ON `empresa`.`id` = `suporte`.`empresa_id`" .
+                " LEFT JOIN `usuario` ON `usuario`.`id` = `suporte`.`usuario_id`" .
+                " LEFT JOIN `cliente` ON `cliente`.`id` = `suporte`.`cliente_id`" .
+                " LEFT JOIN `servico` ON `servico`.`id` = `suporte`.`servico_id`";
 
             $query = "SELECT `suporte`.*,
                     `empresa`.`nome` AS empresa_nome,
                     `usuario`.`nome` AS usuario_nome,
-                    `cliente`.`nome_fantasia` AS cliente_nome
+                    `cliente`.`nome_fantasia` AS cliente_nome,
+                    `servico`.`nome` AS servico_nome
                     FROM `suporte`";
 
             $queryCount = "SELECT COUNT(`suporte`.`id`) FROM `suporte`";
@@ -127,7 +129,7 @@ class Suporte
 
     /**
      * Busca um ticket de suporte por ID.
-     * Corrigido: uso de prepared statement.
+     * Corrigido: uso de prepared statement com joins completos.
      */
     public function pegarPorId($id = null)
     {
@@ -135,17 +137,20 @@ class Suporte
             if (!$id) {
                 return null;
             }
-            $query = "SELECT `suporte`.* FROM `suporte` WHERE `suporte`.`id` = :id LIMIT 1";
-            // $query = "SELECT `suporte`.*,
-            // `cliente`.`nome` AS cliente_nome,
-            // `cliente`.`email` AS cliente_email,
-            // `usuario`.`nome` AS usuario_nome,
-            // `empresa`.`razao_social` AS empresa_nome
-            // FROM `suporte`
-            // LEFT JOIN `cliente` on `cliente`.id = `suporte`.`cliente_id`
-            // LEFT JOIN `usuario` on `usuario`.id = `suporte`.`usuario_id`
-            // LEFT JOIN `empresa` on `empresa`.id = `suporte`.`empresa_id`
-            // WHERE `suporte`.`id` = :id LIMIT 1";
+            $query = "SELECT `suporte`.*,
+                `cliente`.`nome_fantasia` AS cliente_nome_fantasia,
+                `cliente`.`razao_social` AS cliente_razao_social,
+                `cliente`.`responsavel_nome` AS cliente_responsavel_nome,
+                `cliente`.`responsavel_email` AS cliente_responsavel_email,
+                `servico`.`nome` AS servico_nome,
+                `usuario`.`nome` AS usuario_nome,
+                `empresa`.`nome` AS empresa_nome
+                FROM `suporte`
+                LEFT JOIN `cliente` ON `cliente`.`id` = `suporte`.`cliente_id`
+                LEFT JOIN `usuario` ON `usuario`.`id` = `suporte`.`usuario_id`
+                LEFT JOIN `empresa` ON `empresa`.`id` = `suporte`.`empresa_id`
+                LEFT JOIN `servico` ON `servico`.`id` = `suporte`.`servico_id`
+                WHERE `suporte`.`id` = :id LIMIT 1";
 
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(":id", (int)$id, PDO::PARAM_INT);
@@ -153,6 +158,7 @@ class Suporte
             $registro = $stmt->fetch(PDO::FETCH_OBJ);
             return $registro;
         } catch (\Throwable $th) {
+            error_log("Erro em pegarPorId: " . $th->getMessage());
             return null;
         }
     }
@@ -165,10 +171,23 @@ class Suporte
     {
         try {
             $ativo = isset($filtros["ativo"]) ? $filtros["ativo"] : null;
-            $query = "SELECT `suporte`.* FROM `suporte`";
+
+            $query = "SELECT `suporte`.*,
+                `cliente`.`nome` AS cliente_nome,
+                `cliente`.`email` AS cliente_email,
+                `usuario`.`nome` AS usuario_nome,
+                `empresa`.`razao_social` AS empresa_nome,
+                `servico`.`nome` AS servico_nome
+                FROM `suporte`
+                LEFT JOIN `cliente` ON `cliente`.`id` = `suporte`.`cliente_id`
+                LEFT JOIN `usuario` ON `usuario`.`id` = `suporte`.`usuario_id`
+                LEFT JOIN `empresa` ON `empresa`.`id` = `suporte`.`empresa_id`
+                LEFT JOIN `servico` ON `servico`.`id` = `suporte`.`servico_id`";
+
             if ($ativo === "ATIVO") {
-                $query .= " AND `suporte`.`ativo` = 1";
+                $query .= " WHERE `suporte`.`ativo` = 1";
             }
+
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             $registros = $stmt->fetchAll(PDO::FETCH_OBJ);

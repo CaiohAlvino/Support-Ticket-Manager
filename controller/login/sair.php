@@ -5,5 +5,5 @@ $_SESSION = array();
 // Destroi a sessão
 session_destroy();
 // Redireciona para a tela de login
-header("Location: /PESSOAL/Support-Ticket-Manager/index.php");
+header("Location: ../../index.php");
 exit;
