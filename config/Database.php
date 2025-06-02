@@ -36,7 +36,12 @@ class Database
 
     public function getConnection()
     {
-        return $this->pdo;
+        try {
+            return $this->pdo;
+        } catch (PDOException $e) {
+            $this->error = $e->getMessage();
+            die("Erro ao conectar ao banco de dados: {$this->error}");
+        }
     }
 
     // Adicionado para expor o método prepare do PDO
