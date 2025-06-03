@@ -7,9 +7,7 @@ $documento = isset($_GET["documento"]) ? $_GET["documento"] : NULL;
 $nome_fantasia = isset($_GET["nome_fantasia"]) ? $_GET["nome_fantasia"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
 
-$cliente = new Cliente($db->getConnection());
-
-$indexRegistros = $cliente->index([
+$indexRegistros = $classCliente->index([
     "cliente_id" => $cliente_id,
     "empresa_id" => $empresa_id,
     "documento" => $documento,

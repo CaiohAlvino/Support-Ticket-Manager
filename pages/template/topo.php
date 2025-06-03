@@ -29,11 +29,11 @@ $db = new Database();
 $validador = new Validador();
 $estado = new Estado();
 
-$cliente = new Cliente($db->getConnection());
-$suporte = new Suporte($db->getConnection());
-$suporteMensagem = new SuporteMensagem($db->getConnection());
-$empresa = new Empresa($db->getConnection());
-$servico = new Servico($db->getConnection());
+$classCliente = new Cliente($db->getConnection());
+$classSuporte = new Suporte($db->getConnection());
+$classSuporteMensagem = new SuporteMensagem($db->getConnection());
+$classEmpresa = new Empresa($db->getConnection());
+$classServico = new Servico($db->getConnection());
 ?>
 
 <body class="layout-fixed">
@@ -95,41 +95,45 @@ $servico = new Servico($db->getConnection());
                     <i class="bi bi-grid-1x2-fill"></i>
                     <span class="menu-text">Dashboard</span>
                 </a>
-                <a href="../suporte/index.php" class="sidebar-link menu-item">
-                    <i class="bi bi-list-ul"></i>
-                    <span class="menu-text">Todos os Tickets</span>
-                </a>
+                <?php if ($_SESSION["usuario_grupo"] != 2): ?>
+                    <a href="../suporte/index.php" class="sidebar-link menu-item">
+                        <i class="bi bi-list-ul"></i>
+                        <span class="menu-text">Todos os Tickets</span>
+                    </a>
+                <?php endif; ?>
                 <a href="../suporte/meus-tickets.php" class="sidebar-link menu-item">
                     <i class="bi bi-ticket-fill"></i>
                     <span class="menu-text">Meus Tickets</span>
                 </a>
             </div>
-            <div class="sidebar-section mb-2">
-                <small class="text-muted text-uppercase ms-2">Cadastros</small>
-                <a href="../empresa/index.php" class="sidebar-link menu-item">
-                    <i class="bi bi-building"></i>
-                    <span class="menu-text">Empresas</span>
-                </a>
-                <a href="../servico/index.php" class="sidebar-link menu-item">
-                    <i class="bi bi-award-fill"></i>
-                    <span class="menu-text">Serviço</span>
-                </a>
-                <a href="../cliente/index.php" class="sidebar-link menu-item">
-                    <i class="bi bi-people"></i>
-                    <span class="menu-text">Clientes</span>
-                </a>
-            </div>
-            <div class="sidebar-section">
-                <small class="text-muted text-uppercase ms-2">Configurações</small>
-                <a href="../usuario/index.php" class="sidebar-link menu-item">
-                    <i class="bi bi-person"></i>
-                    <span class="menu-text">Usuários</span>
-                </a>
-                <a href="../grupo/index.php" class="sidebar-link menu-item">
-                    <i class="bi bi-shield-lock"></i>
-                    <span class="menu-text">Grupo</span>
-                </a>
-            </div>
+            <?php if ($_SESSION["usuario_grupo"] != 2): ?>
+                <div class="sidebar-section mb-2">
+                    <small class="text-muted text-uppercase ms-2">Cadastros</small>
+                    <a href="../empresa/index.php" class="sidebar-link menu-item">
+                        <i class="bi bi-building"></i>
+                        <span class="menu-text">Empresas</span>
+                    </a>
+                    <a href="../servico/index.php" class="sidebar-link menu-item">
+                        <i class="bi bi-award-fill"></i>
+                        <span class="menu-text">Serviço</span>
+                    </a>
+                    <a href="../cliente/index.php" class="sidebar-link menu-item">
+                        <i class="bi bi-people"></i>
+                        <span class="menu-text">Clientes</span>
+                    </a>
+                </div>
+                <div class="sidebar-section">
+                    <small class="text-muted text-uppercase ms-2">Configurações</small>
+                    <a href="../usuario/index.php" class="sidebar-link menu-item">
+                        <i class="bi bi-person"></i>
+                        <span class="menu-text">Usuários</span>
+                    </a>
+                    <a href="../grupo/index.php" class="sidebar-link menu-item">
+                        <i class="bi bi-shield-lock"></i>
+                        <span class="menu-text">Grupo</span>
+                    </a>
+                </div>
+            <?php endif; ?>
         </div>
     </nav>
     <!-- Main Content -->

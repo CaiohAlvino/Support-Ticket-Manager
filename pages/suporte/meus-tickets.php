@@ -11,7 +11,7 @@ $indexRegistros = $classSuporte->index([
     "assunto" => $assunto,
     "pagina" => $pagina,
     "limite" => 15
-]);
+], $_SESSION["usuario_id"]);
 
 $registros = $indexRegistros["resultados"];
 
@@ -21,7 +21,7 @@ $paginacao = $indexRegistros["paginacao"];
 <header class="sessao">
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Suporte</h1>
+            <h1 class="titulo">Meus Tickets</h1>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-end my-1">
             <a href="cadastro.php" class="btn btn-adicionar">

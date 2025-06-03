@@ -4,7 +4,7 @@
 $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
 $aba = isset($_GET["aba"]) ? $_GET["aba"] : "dados";
 
-$registro = $cliente->pegarPorId($id);
+$registro = $classCliente->pegarPorId($id);
 ?>
 
 <div class="cliente-edicao mt-2">

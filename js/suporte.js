@@ -13,10 +13,7 @@ $(document).ready(function () {
         if (assunto === "") {
             FeedbackVisual.mostrarErro($("#assunto"), "Por favor, informe o Assunto.");
             isValid = false;
-        } else if (
-            typeof window.validadorNome !== "undefined" &&
-            !window.validadorNome.validar(assunto)
-        ) {
+        } else if (typeof window.validadorNome !== "undefined" && !window.validadorNome.validar(assunto)) {
             isValid = false;
         }
 
@@ -113,9 +110,7 @@ $(document).ready(function () {
 
         let mensagem = $("#mensagem").val().trim();
         if (mensagem === "") {
-            $("#mensagem").after(
-                "<span class='error-message text-danger'>A mensagem é obrigatória.</span>",
-            );
+            $("#mensagem").after("<span class='error-message text-danger'>A mensagem é obrigatória.</span>");
             return;
         }
 
@@ -123,7 +118,7 @@ $(document).ready(function () {
             url: `../../controller/${action}`,
             type: "POST",
             dataType: "json",
-            data: $(this).serialize() + "&status=AGUARDANDO_SUPORTE",
+            data: $(this).serialize(), // REMOVIDO: + "&status=AGUARDANDO_SUPORTE"
             success: function (response) {
                 NotyE.exception({ response, reload: true });
             },

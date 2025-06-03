@@ -6,6 +6,8 @@ $status = (isset($_GET["status"]) && $_GET["status"] !== "NULL") ? $_GET["status
 $assunto = isset($_GET["assunto"]) ? $_GET["assunto"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
 
+$usuario_id = $_SESSION["usuario_grupo"] == 2 ? $_SESSION["usuario_id"] : NULL;
+
 $indexRegistros = $suporte->index([
     "dias" => 2,
     "quantidade" => 10,
@@ -13,7 +15,7 @@ $indexRegistros = $suporte->index([
     "assunto" => $assunto,
     "pagina" => $pagina,
     "limite" => 15
-]);
+], $usuario_id);
 
 $registros = $indexRegistros["resultados"];
 $paginacao = $indexRegistros["paginacao"];
@@ -275,7 +277,7 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
                         <?php
                         $count = 0;
                         foreach ($servicoCounts as $servico => $quantidade):
-                            if ($count >= 5) break; // Limitar a 5 itens
+                            if ($count >= 3) break; // Limitar a 3 itens
                             $count++;
                         ?>
                             <div class="list-group-item d-flex justify-content-between align-items-center">

@@ -22,7 +22,7 @@ $usuario_id = isset($_POST["usuario_id"]) && !empty($_POST["usuario_id"]) ? $_PO
 $cliente_id = isset($_POST["cliente_id"]) && !empty($_POST["cliente_id"]) ? $_POST["cliente_id"] : NULL;
 $empresa_id = isset($_POST["empresa_id"]) && !empty($_POST["empresa_id"]) ? $_POST["empresa_id"] : NULL;
 $mensagem = isset($_POST["mensagem"]) ? $_POST["mensagem"] : NULL;
-$status = isset($_POST["status"]) ? $_POST["status"] : "AGUARDANDO_SUPORTE";
+$status = isset($_POST["status"]) ? $_POST["status"] : null;
 
 if (!$suporte_id) {
     echo json_encode([
@@ -36,6 +36,12 @@ try {
     $conexao->beginTransaction();
 
     if (!empty($mensagem)) {
+        $proprietario = ($_SESSION["usuario_grupo"] == 2) ? 'CLIENTE' : 'USUARIO';
+
+        if ($status === null) {
+            $status = ($_SESSION["usuario_grupo"] == 2) ? 'AGUARDANDO_SUPORTE' : 'RESPONDIDO';
+        }
+
         $suporte_mensagem = $conexao->prepare("INSERT INTO `suporte_mensagem` (
             `suporte_id`,
             `mensagem`,
@@ -43,25 +49,30 @@ try {
             ) VALUES (
             :suporte_id,
             :mensagem,
-            'USUARIO'
+            :proprietario
             )");
 
         $suporte_mensagem->bindParam(":suporte_id", $suporte_id, PDO::PARAM_INT);
         $suporte_mensagem->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
+        $suporte_mensagem->bindParam(":proprietario", $proprietario, PDO::PARAM_STR);
         $suporte_mensagem->execute();
 
         $atualizar_respondido = $conexao->prepare("UPDATE `suporte_mensagem` SET
-        `respondido` = 1 WHERE `suporte_id` = :suporte_id AND `proprietario` = 'ADMIN'");
+        `respondido` = 1 WHERE `suporte_id` = :suporte_id AND `proprietario` = 'USUARIO'");
 
         $atualizar_respondido->bindParam(":suporte_id", $suporte_id, PDO::PARAM_INT);
         $atualizar_respondido->execute();
+    } else {
+        if ($status === null) {
+            $status = "AGUARDANDO_SUPORTE";
+        }
     }
 
     $suporte = $conexao->prepare("UPDATE `suporte` SET
-        `usuario_id` = :usuario_id,
-        `status` = CASE WHEN :status = 'AGUARDANDO_SUPORTE' AND :usuario_id IS NULL THEN `status` ELSE :status END
-        WHERE
-            `id` = :id");
+                                    `usuario_id` = :usuario_id,
+                                    `status` = :status
+                                WHERE
+                                    `id` = :id");
 
     $suporte->bindParam(":id", $suporte_id, PDO::PARAM_INT);
     if ($usuario_id === NULL) {
