@@ -75,44 +75,46 @@ $paginacao = $indexRegistros["paginacao"];
                 </thead>
                 <tbody>
                     <?php foreach ($registros as $registro): ?>
-                        <tr class="<?php echo $registro->id == $focu_cliente_id ? 'table-active' : ''; ?>">
-                            <td>
-                                <?php if ($registro->situacao == 1): ?>
-                                    <span class="badge status-situacao">Ativo</span>
-                                <?php else: ?>
-                                    <span class="badge status-insituacao">Inativo</span>
-                                <?php endif; ?>
-                            </td>
-                            <td>
-                                <?php if ($registro->tipo === "CNPJ"): ?>
-                                    <span class="badge status-situacao">PJ</span>
-                                <?php else: ?>
-                                    <span class="badge status-situacao">PF</span>
-                                <?php endif ?>
+                        <?php if (is_object($registro)): ?>
+                            <tr class="<?php echo isset($focu_cliente_id) && $registro->id == $focu_cliente_id ? 'table-active' : ''; ?>">
+                                <td>
+                                    <?php if (isset($registro->situacao) && $registro->situacao == 1): ?>
+                                        <span class="badge status-situacao">Ativo</span>
+                                    <?php else: ?>
+                                        <span class="badge status-insituacao">Inativo</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td>
+                                    <?php if (isset($registro->tipo) && $registro->tipo === "CNPJ"): ?>
+                                        <span class="badge status-situacao">PJ</span>
+                                    <?php else: ?>
+                                        <span class="badge status-situacao">PF</span>
+                                    <?php endif ?>
 
-                            </td>
-                            <td><?php echo $registro->responsavel_nome ?? "--"; ?></td>
-                            <td><?php echo $registro->nome_fantasia ?? "--"; ?></td>
-                            <td><?php echo $registro->razao_social ?? "--"; ?></td>
-                            <td><?php echo $registro->documento ? $registro->documento : $registro->responsavel_documento; ?></td>
-                            <td>
-                                <a href="edicao.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar">
-                                    <i class="bi-pencil-square"></i> Editar
-                                </a>
+                                </td>
+                                <td><?php echo isset($registro->responsavel_nome) ? $registro->responsavel_nome : "--"; ?></td>
+                                <td><?php echo isset($registro->nome_fantasia) ? $registro->nome_fantasia : "--"; ?></td>
+                                <td><?php echo isset($registro->razao_social) ? $registro->razao_social : "--"; ?></td>
+                                <td><?php echo isset($registro->documento) && $registro->documento ? $registro->documento : (isset($registro->responsavel_documento) ? $registro->responsavel_documento : "--"); ?></td>
+                                <td>
+                                    <a href="edicao.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar">
+                                        <i class="bi-pencil-square"></i> Editar
+                                    </a>
 
-                                <button
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#excluir-<?php echo $registro->id; ?>"
-                                    type="button"
-                                    class="btn btn-sm btn-excluir">
-                                    <i class="bi bi-trash"></i> Excluir
-                                </button>
-                            </td>
-                        </tr>
+                                    <button
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#excluir-<?php echo $registro->id; ?>"
+                                        type="button"
+                                        class="btn btn-sm btn-excluir">
+                                        <i class="bi bi-trash"></i> Excluir
+                                    </button>
+                                </td>
+                            </tr>
 
-                        <?php $registroExcluir = $registro; ?>
-                        <?php $data_action_excluir = "cliente/excluir.php"; ?>
-                        <?php include("../components/excluir.php"); ?>
+                            <?php $registroExcluir = $registro; ?>
+                            <?php $data_action_excluir = "cliente/excluir.php"; ?>
+                            <?php include("../components/excluir.php"); ?>
+                        <?php endif; ?>
                     <?php endforeach; ?>
                 </tbody>
             </table>

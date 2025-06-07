@@ -25,7 +25,7 @@ $mensagem_registro = $classSuporteMensagem->pegarPorSuporteId($id);
         <div class="sessao">
             <div class="row">
                 <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
-                    <a href="index.php" class="btn btn-voltar botao-noty-voltar">
+                    <a href="#" onclick="history.back(); return false;" class="btn btn-voltar botao-noty-voltar">
                         <i class="bi-chevron-left me-2"></i>
                         Voltar
                     </a>

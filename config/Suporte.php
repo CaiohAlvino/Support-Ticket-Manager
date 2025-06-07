@@ -196,4 +196,22 @@ class Suporte
             return [];
         }
     }
+
+    public function listarSuportes()
+    {
+        try {
+            $query = "SELECT * FROM
+                            `suporte`
+                        WHERE
+                            `suporte`.`ativo` = 1
+                        ORDER BY
+                            `suporte`.`cadastrado` DESC";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\Throwable $th) {
+            return [];
+        }
+    }
 }

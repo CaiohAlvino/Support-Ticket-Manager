@@ -143,18 +143,18 @@ class Validador
      *  @param string|null $whatsapp - O número a ser validado
      *  @return bool - Verdadeiro se o número for válido
      */
-    public static function whatsappEValido($whatsapp = NULL)
-    {
-        // Quando for necessário realizar a validação mais pesada para os números
-        if (empty($whatsapp)) {
-            return TRUE; // WhatsApp não é obrigatório
-        }
+    // public static function whatsappEValido($whatsapp = NULL)
+    // {
+    //     // Quando for necessário realizar a validação mais pesada para os números
+    //     if (empty($whatsapp)) {
+    //         return TRUE; // WhatsApp não é obrigatório
+    //     }
 
-        $whatsapp = preg_replace("/[^0-9]/", "", $whatsapp);
+    //     $whatsapp = preg_replace("/[^0-9]/", "", $whatsapp);
 
-        // Para consistência com JS, que exige exatamente 11 dígitos para BR
-        //return strlen($whatsapp) === 11;
-    }
+    //     // Para consistência com JS, que exige exatamente 11 dígitos para BR
+    //     //return strlen($whatsapp) === 11;
+    // }
 
     // -------------------------- → EMAIL ← -------------------------- //
 
@@ -198,32 +198,9 @@ class Validador
      *  @param int|null $cliente_id - ID do cliente (para exclusão na verificação de edição)
      *  @return bool - Verdadeiro se já existe o CPF
      */
-    public static function existeClienteComCPF($conexao, $empresa_id, $cpf, $cliente_id = NULL)
-    {
-        if (empty($cpf)) {
-            return FALSE;
-        }
-
-        $sql = "SELECT * FROM `cliente` WHERE `empresa_id` = :empresa_id AND `cpf` = :cpf";
-
-        if ($cliente_id) {
-            $sql .= " AND `id` != :cliente_id";
-        }
-
-        $sql .= " LIMIT 1";
-
-        $query = $conexao->prepare($sql);
-        $query->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-        $query->bindParam(":cpf", $cpf, PDO::PARAM_STR);
-
-        if ($cliente_id) {
-            $query->bindParam(":cliente_id", $cliente_id, PDO::PARAM_INT);
-        }
-
-        $query->execute();
-
-        return $query->rowCount() > 0;
-    }
+    // public static function existeClienteComCPF($conexao, $empresa_id, $cpf, $cliente_id = NULL)
+    // {
+    // }
 
     // -------------------------- → EXISTE USUÁRIO COM CPF ← -------------------------- //
 
@@ -235,32 +212,9 @@ class Validador
      *  @param int|null $usuario_id - ID do usuario (para exclusão na verificação de edição)
      *  @return bool - Verdadeiro se já existe o CPF
      */
-    public static function existeUsuarioComCPF($conexao, $empresa_id, $cpf, $usuario_id = NULL)
-    {
-        if (empty($cpf)) {
-            return FALSE;
-        }
-
-        $sql = "SELECT * FROM `usuario` WHERE `empresa_id` = :empresa_id AND `cpf` = :cpf";
-
-        if ($usuario_id) {
-            $sql .= " AND `id` != :usuario_id";
-        }
-
-        $sql .= " LIMIT 1";
-
-        $query = $conexao->prepare($sql);
-        $query->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-        $query->bindParam(":cpf", $cpf, PDO::PARAM_STR);
-
-        if ($usuario_id) {
-            $query->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
-        }
-
-        $query->execute();
-
-        return $query->rowCount() > 0;
-    }
+    // public static function existeUsuarioComCPF($conexao, $empresa_id, $cpf, $usuario_id = NULL)
+    // {
+    // }
 
     // -------------------------- → EXISTE USUÁRIO COM EMAIL ← -------------------------- //
 
@@ -272,39 +226,9 @@ class Validador
      *  @param int|null $usuario_id - ID do usuario (para exclusão na verificação de edição)
      *  @return bool - Verdadeiro se já existe o email
      */
-    public static function existeUsuarioComEMAIL($conexao, $empresa_id, $email, $usuario_id = NULL)
-    {
-        if (empty($email)) {
-            return FALSE;
-        }
-
-        // Sanitiza o email
-        $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return FALSE;
-        }
-
-        $sql = "SELECT * FROM `usuario` WHERE `empresa_id` = :empresa_id AND `email` = :email";
-
-        if ($usuario_id) {
-            $sql .= " AND `id` != :usuario_id";
-        }
-
-        $sql .= " LIMIT 1";
-
-        $query = $conexao->prepare($sql);
-        $query->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-        $query->bindParam(":email", $email, PDO::PARAM_STR);
-
-        if ($usuario_id) {
-            $query->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
-        }
-
-        $query->execute();
-
-        return $query->rowCount() > 0;
-    }
+    // public static function existeUsuarioComEMAIL($conexao, $empresa_id, $email, $usuario_id = NULL)
+    // {
+    // }
 
     // -------------------------- → EXISTE CLIENTE COM WHATSAPP ← -------------------------- //
 
@@ -316,32 +240,9 @@ class Validador
      *  @param int|null $cliente_id - ID do cliente (para exclusão na verificação de edição)
      *  @return bool - Verdadeiro se já existe o WhatsApp
      */
-    public static function existeClienteComWhatsApp($conexao, $empresa_id, $whatsapp, $cliente_id = NULL)
-    {
-        if (empty($whatsapp)) {
-            return FALSE;
-        }
-
-        $sql = "SELECT * FROM `cliente` WHERE `empresa_id` = :empresa_id AND `whatsapp` = :whatsapp";
-
-        if ($cliente_id) {
-            $sql .= " AND `id` != :cliente_id";
-        }
-
-        $sql .= " LIMIT 1";
-
-        $query = $conexao->prepare($sql);
-        $query->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-        $query->bindParam(":whatsapp", $whatsapp, PDO::PARAM_STR);
-
-        if ($cliente_id) {
-            $query->bindParam(":cliente_id", $cliente_id, PDO::PARAM_INT);
-        }
-
-        $query->execute();
-
-        return $query->rowCount() > 0;
-    }
+    // public static function existeClienteComWhatsApp($conexao, $empresa_id, $whatsapp, $cliente_id = NULL)
+    // {
+    // }
 
     // -------------------------- → CNPJ ← -------------------------- //
 
@@ -391,102 +292,6 @@ class Validador
         $dv2 = ($resto < 2) ? 0 : 11 - $resto;
 
         return ($cnpj[13] == $dv2);
-    }
-
-    // -------------------------- → EXISTE FORNECEDOR ← -------------------------- //
-
-    /**
-     *  Verifica se existe um fornecedor com os mesmos dados
-     *  @param PDO $conexao - Conexão com o banco de dados
-     *  @param int|null $id - ID do fornecedor (para exclusão na verificação de edição)
-     *  @param string $razao_social - Razão social a ser verificada
-     *  @param string $nome_fantasia - Nome fantasia a ser verificado
-     *  @param string $documento - Documento a ser verificado
-     *  @param int $empresa_id - ID da empresa
-     *  @return bool - Verdadeiro se já existe um fornecedor com esses dados
-     */
-    public static function existeFornecedor($conexao, $id, $razao_social, $nome_fantasia, $documento, $empresa_id)
-    {
-        if (empty($razao_social) && empty($nome_fantasia) && empty($documento)) {
-            return FALSE;
-        }
-
-        // Verifica se já existe um fornecedor com a razão social
-        if (!empty($razao_social)) {
-            $sql = "SELECT * FROM `fornecedor` WHERE `empresa_id` = :empresa_id AND `razao_social` = :razao_social";
-            if ($id) {
-                $sql .= " AND `id` != :id";
-            }
-            $sql .= " LIMIT 1";
-
-            $query = $conexao->prepare($sql);
-            $query->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-            $query->bindParam(":razao_social", $razao_social, PDO::PARAM_STR);
-            if ($id) {
-                $query->bindParam(":id", $id, PDO::PARAM_INT);
-            }
-            $query->execute();
-
-            if ($query->rowCount() > 0) {
-                return [
-                    "existe" => TRUE,
-                    "erro" => "RAZAO_SOCIAL"
-                ];
-            }
-        }
-
-        // Verifica se já existe um fornecedor com o nome fantasia
-        if (!empty($nome_fantasia)) {
-            $sql = "SELECT * FROM `fornecedor` WHERE `empresa_id` = :empresa_id AND `nome_fantasia` = :nome_fantasia";
-            if ($id) {
-                $sql .= " AND `id` != :id";
-            }
-            $sql .= " LIMIT 1";
-
-            $query = $conexao->prepare($sql);
-            $query->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-            $query->bindParam(":nome_fantasia", $nome_fantasia, PDO::PARAM_STR);
-            if ($id) {
-                $query->bindParam(":id", $id, PDO::PARAM_INT);
-            }
-            $query->execute();
-
-            if ($query->rowCount() > 0) {
-                return [
-                    "existe" => TRUE,
-                    "erro" => "NOME_FANTASIA"
-                ];
-            }
-        }
-
-        // Verifica se já existe um fornecedor com o documento
-        if (!empty($documento)) {
-            $sql = "SELECT * FROM `fornecedor` WHERE `empresa_id` = :empresa_id AND `documento` = :documento";
-            if ($id) {
-                $sql .= " AND `id` != :id";
-            }
-            $sql .= " LIMIT 1";
-
-            $query = $conexao->prepare($sql);
-            $query->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
-            $query->bindParam(":documento", $documento, PDO::PARAM_STR);
-            if ($id) {
-                $query->bindParam(":id", $id, PDO::PARAM_INT);
-            }
-            $query->execute();
-
-            if ($query->rowCount() > 0) {
-                return [
-                    "existe" => TRUE,
-                    "erro" => "DOCUMENTO"
-                ];
-            }
-        }
-
-        return [
-            "existe" => FALSE,
-            "erro" => NULL
-        ];
     }
 
     // -------------------------- → EXISTE EMPRESA ← -------------------------- //
@@ -580,7 +385,7 @@ class Validador
     // -------------------------- → VALIDAR USUÁRIO ← -------------------------- //
 
     /**
-     *  Valida os dados de um usuário 
+     *  Valida os dados de um usuário
      *  @param array $dados - Dados do usuário
      *  @param PDO $conexao - Conexão com o banco de dados
      *  @param int $empresa_id - ID da empresa
@@ -623,14 +428,6 @@ class Validador
                     "codigo_erro" => "CPF_INVALIDO"
                 ];
             }
-
-            if (self::existeUsuarioComCPF($conexao, $empresa_id, $dados["cpf"], $usuario_id)) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "Já existe um usuário com este CPF cadastrado!",
-                    "codigo_erro" => "CPF_DUPLICADO"
-                ];
-            }
         } else {
             return [
                 "valido" => FALSE,
@@ -645,14 +442,6 @@ class Validador
                     "valido" => FALSE,
                     "mensagem" => "E-mail inválido! Por favor, informe um e-mail válido.",
                     "codigo_erro" => "EMAIL_INVALIDO"
-                ];
-            }
-
-            if (self::existeUsuarioComEMAIL($conexao, $empresa_id, $dados["email"], $usuario_id)) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "Já existe um usuário com este E-mail cadastrado!",
-                    "codigo_erro" => "EMAIL_DUPLICADO"
                 ];
             }
         } else {
@@ -894,14 +683,6 @@ class Validador
                     "codigo_erro" => "CPF_INVALIDO"
                 ];
             }
-
-            if (self::existeClienteComCPF($conexao, $empresa_id, $dados["cpf"], $cliente_id)) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "Já existe um cliente com este CPF cadastrado!",
-                    "codigo_erro" => "CPF_DUPLICADO"
-                ];
-            }
         }
 
         if (isset($dados["cep"]) && !empty($dados["cep"])) {
@@ -942,169 +723,6 @@ class Validador
                     "codigo_erro" => "NUMERO_INVALIDO"
                 ];
             }
-        }
-
-        return [
-            "valido" => TRUE,
-            "mensagem" => "",
-            "codigo_erro" => NULL
-        ];
-    }
-
-    // -------------------------- → VALIDAR FORNECEDOR ← -------------------------- //
-
-    /**
-     *  Valida os dados de um fornecedor
-     *  @param array $dados - Dados do fornecedor
-     *  @param PDO $conexao - Conexão com o banco de dados
-     *  @param int $empresa_id - ID da empresa
-     *  @return array - Array com status da validação e mensagem de erro, se houver
-     */
-    public static function validarFornecedor($dados, $conexao, $empresa_id = NULL)
-    {
-        $tipo = isset($dados["tipo"]) ? $dados["tipo"] : "CNPJ";
-        $id = isset($dados["id"]) ? $dados["id"] : NULL;
-
-        if (isset($dados["nome_fantasia"]) && isset($dados["responsavel"]) && isset($dados["responsavel_documento"])) {
-            if (empty($dados["nome_fantasia"]) || empty($dados["responsavel"]) || empty($dados["responsavel_documento"])) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "Informe todos os campos obrigatórios",
-                    "codigo_erro" => "CAMPOS_VAZIOS"
-                ];
-            }
-        }
-
-        if ($tipo == "CNPJ") {
-            if (isset($dados["razao_social"]) && !empty($dados["razao_social"])) {
-                if (!self::nomeEValido($dados["razao_social"])) {
-                    return [
-                        "valido" => FALSE,
-                        "mensagem" => "Razão Social inválida. O nome deve conter de 3 à 255 caracteres",
-                        "codigo_erro" => "RAZAO_SOCIAL_INVALIDA"
-                    ];
-                }
-            } else {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "Razão Social é obrigatoria.",
-                    "codigo_erro" => "RAZAO_SOCIAL_VAZIA"
-                ];
-            }
-
-            if (isset($dados["documento"]) && !empty($dados["documento"])) {
-                if (!self::cnpjEValido($dados["documento"])) {
-                    return [
-                        "valido" => FALSE,
-                        "mensagem" => "CNPJ inválido. Por favor, verifique.",
-                        "codigo_erro" => "CNPJ_INVALIDO"
-                    ];
-                }
-            } else {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "CNPJ é obrigatório",
-                    "codigo_erro" => "CNPJ_VAZIO"
-                ];
-            }
-        }
-
-        if (isset($dados["nome_fantasia"]) && !empty($dados["nome_fantasia"])) {
-            if (!self::nomeEValido($dados["nome_fantasia"])) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => $tipo == "CNPJ" ? "Nome Fantasia inválido. O nome deve conter de 3 à 255 caracteres." : "Nome da empresa inválido. O nome deve conter de 3 à 255 caracteres.",
-                    "codigo_erro" => "NOME_FANTASIA_INVALIDO"
-                ];
-            }
-        } else {
-            return [
-                "valido" => FALSE,
-                "mensagem" => $tipo == "CNPJ" ? "Nome Fantasia é obrigatorio." : "Nome da empresa é obrigatório.",
-                "codigo_erro" => "NOME_FANTASIA_VAZIO"
-            ];
-        }
-
-        if (isset($dados["responsavel"]) && !empty($dados["responsavel"])) {
-            if (!self::nomeEValido($dados["responsavel"])) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => $tipo == "CNPJ" ? "Nome do responsável inválido. O nome deve conter de 3 à 255 caracteres;" : "Nome inválido. O nome deve conter de 3 à 255 caracteres.",
-                    "codigo_erro" => "RESPONSAVEL_INVALIDO"
-                ];
-            }
-        } else {
-            return [
-                "valido" => FALSE,
-                "mensagem" => $tipo == "CNPJ" ? "Nome do responsável inválido." : "Nome inválido.",
-                "codigo_erro" => "RESPONSAVEL_VAZIO"
-            ];
-        }
-
-        if (isset($dados["responsavel_documento"]) && !empty($dados["responsavel_documento"])) {
-            if (!self::cpfEValido($dados["responsavel_documento"])) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => $tipo == "CNPJ" ? "CPF do responsável inválido. Por favor, verifique." : "CPF inválido. Por favor, verifique.",
-                    "codigo_erro" => "CPF_INVALIDO"
-                ];
-            }
-        } else {
-            return [
-                "valido" => FALSE,
-                "mensagem" => $tipo == "CNPJ" ? "CPF do responsável é o obrigatório." : "CPF do responsável é obrigatório.",
-                "codigo_erro" => "CPF_VAZIO"
-            ];
-        }
-
-        if (isset($dados["cep"]) && !empty($dados["cep"])) {
-            if (!self::cepEValido($dados["cep"])) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "CEP inválido. Por favor, verifique.",
-                    "codigo_erro" => "CEP_INVALIDO"
-                ];
-            }
-        }
-
-        if (isset($dados["numero"]) && !empty($dados["numero"])) {
-            if (!self::numeroEnderecoEValido($dados["numero"])) {
-                return [
-                    "valido" => FALSE,
-                    "mensagem" => "Número de endereço inválido. Deve começar com dígitos.",
-                    "codigo_erro" => "NUMERO_INVALIDO"
-                ];
-            }
-        }
-
-        $verificacao = self::existeFornecedor($conexao, $id, $dados["razao_social"], $dados["nome_fantasia"], $dados["documento"], $empresa_id);
-        if (isset($verificacao["erro"]) && !empty($verificacao["erro"])) {
-            $mensagem = "Já existe um fornecedor com ";
-            $codigo = "";
-
-            switch ($verificacao["erro"]) {
-                case "RAZAO_SOCIAL":
-                    $mensagem .= "esta Razão Social.";
-                    $codigo = "RAZAO_SOCIAL_DUPLICADA";
-                    break;
-                case "NOME_FANTASIA":
-                    $mensagem .= "este Nome Fantasia.";
-                    $codigo = "NOME_FANTASIA_DUPLICADO";
-                    break;
-                case "DOCUMENTO":
-                    $mensagem .= "este Documento.";
-                    $codigo = "DOCUMENTO_DUPLICADA";
-                    break;
-                default:
-                    $mensagem .= "esses dados.";
-                    $codigo = "DADOS_DUPLICADOS";
-            }
-
-            return [
-                "valido" => FALSE,
-                "mensagem" => $mensagem,
-                "codigo_erro" => $codigo
-            ];
         }
 
         return [

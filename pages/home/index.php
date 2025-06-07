@@ -5,11 +5,12 @@ $suporte_id = isset($_GET["suporte_id"]) ? $_GET["suporte_id"] : NULL;
 $status = (isset($_GET["status"]) && $_GET["status"] !== "NULL") ? $_GET["status"] : NULL;
 $assunto = isset($_GET["assunto"]) ? $_GET["assunto"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
+$dias = isset($_GET["dias"]) ? (int)$_GET["dias"] : null;
 
 $usuario_id = $_SESSION["usuario_grupo"] == 2 ? $_SESSION["usuario_id"] : NULL;
 
-$indexRegistros = $suporte->index([
-    "dias" => 2,
+$indexRegistros = $classSuporte->index([
+    "dias" => $dias,
     "quantidade" => 10,
     "status" => $status,
     "assunto" => $assunto,
@@ -199,30 +200,32 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
                             </thead>
                             <tbody>
                                 <?php foreach ($ticketsAbertos as $registro): ?>
-                                    <tr>
-                                        <td class="fw-medium">#<?php echo htmlspecialchars($registro->id) ?></td>
-                                        <td><?php echo htmlspecialchars($registro->cliente_nome ?? 'N/A') ?></td>
-                                        <td>
-                                            <div class="text-truncate" style="max-width: 200px;">
-                                                <?php echo htmlspecialchars($registro->assunto) ?>
-                                            </div>
-                                        </td>
-                                        <td><?php echo htmlspecialchars($registro->servico_nome ?? 'N/A') ?></td>
-                                        <td>
-                                            <span class="badge bg-<?php echo getStatusClass($registro->status) ?>">
-                                                <?php echo str_replace('_', ' ', $registro->status) ?>
-                                            </span>
-                                        </td>
-                                        <td class="text-muted small">
-                                            <?php echo date("d/m/Y H:i", strtotime($registro->alterado)); ?>
-                                        </td>
-                                        <td class="text-end pe-4">
-                                            <a href="../suporte/detalhes.php?id=<?php echo htmlspecialchars($registro->id) ?>"
-                                                class="btn btn-sm btn-outline-primary">
-                                                <i class="bi bi-eye me-1"></i>Ver
-                                            </a>
-                                        </td>
-                                    </tr>
+                                    <?php if (is_object($registro)): ?>
+                                        <tr>
+                                            <td class="fw-medium">#<?php echo htmlspecialchars($registro->id) ?></td>
+                                            <td><?php echo htmlspecialchars($registro->cliente_nome ?? 'N/A') ?></td>
+                                            <td>
+                                                <div class="text-truncate" style="max-width: 200px;">
+                                                    <?php echo htmlspecialchars($registro->assunto) ?>
+                                                </div>
+                                            </td>
+                                            <td><?php echo htmlspecialchars($registro->servico_nome ?? 'N/A') ?></td>
+                                            <td>
+                                                <span class="badge bg-<?php echo getStatusClass($registro->status) ?>">
+                                                    <?php echo str_replace('_', ' ', $registro->status) ?>
+                                                </span>
+                                            </td>
+                                            <td class="text-muted small">
+                                                <?php echo date("d/m/Y H:i", strtotime($registro->alterado)); ?>
+                                            </td>
+                                            <td class="text-end pe-4">
+                                                <a href="../suporte/detalhes.php?id=<?php echo htmlspecialchars($registro->id) ?>"
+                                                    class="btn btn-sm btn-outline-primary">
+                                                    <i class="bi bi-eye me-1"></i>Ver
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
                                 <?php endforeach; ?>
                             </tbody>
                         </table>

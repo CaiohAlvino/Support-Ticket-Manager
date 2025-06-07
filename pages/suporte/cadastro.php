@@ -3,7 +3,7 @@
 <div class="sessao">
     <div class="row">
         <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
-            <a href="index.php" class="btn btn-voltar botao-noty-voltar">
+            <a href="#" onclick="history.back(); return false;" class="btn btn-voltar botao-noty-voltar">
                 <i class="bi-chevron-left me-2"></i>
                 Voltar
             </a>
@@ -22,7 +22,7 @@
                 <select class="form-select select2 input-validar-select campo-obrigatorio" id="cliente_id" name="cliente_id">
                     <option value="">Selecione um Cliente</option>
                     <?php
-                    $clientes = $classCliente->pegarTodos();
+                    $clientes = $classCliente->listarClientes();
                     foreach ($clientes as $cliente): ?>
                         <option value='<?php echo $cliente->id ?>'><?php echo $cliente->nome_fantasia ? $cliente->nome_fantasia : $cliente->responsavel_nome ?></option>
                     <?php endforeach ?>
@@ -34,10 +34,10 @@
                 <select class="form-select select2 input-validar-select campo-obrigatorio" id="empresa_id" name="empresa_id">
                     <option value="">Selecione uma empresa</option>
                     <?php
-                    $empresas = $empresa->listarEmpresas();
+                    $empresas = $classEmpresa->listarEmpresas();
                     foreach ($empresas as $empresa):
                     ?>
-                        echo "<option value='{$empresa->id}'>{$empresa->nome}</option>";
+                        <option value='<?php echo $empresa->id ?>'><?php echo $empresa->nome ?></option>
                     <?php endforeach ?>
                 </select>
             </div>
@@ -47,11 +47,11 @@
                 <select class="form-select select2 input-validar-select campo-obrigatorio" id="servico_id" name="servico_id">
                     <option value="">Selecione um serviço</option>
                     <?php
-                    $servicos = $servico->listarServicos();
-                    foreach ($servicos as $servico) {
-                        echo "<option value='{$servico->id}'>{$servico->nome}</option>";
-                    }
+                    $servicos = $classServico->listarServicos();
+                    foreach ($servicos as $servico):
                     ?>
+                        <option value='<?php echo $servico->id ?>'><?php echo $servico->nome ?></option>
+                    <?php endforeach ?>
                 </select>
             </div>
 

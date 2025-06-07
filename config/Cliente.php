@@ -166,4 +166,25 @@ class Cliente
             return NULL;
         }
     }
+
+    public function listarClientes()
+    {
+        try {
+            $query = "SELECT * FROM
+                            `cliente`
+                        WHERE
+                            `situacao` = 1
+                        ORDER BY
+                            `nome_fantasia`
+                        ASC";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
+
+            return $stmt->fetchAll();
+        } catch (\Throwable $th) {
+            return [];
+        }
+    }
 }
