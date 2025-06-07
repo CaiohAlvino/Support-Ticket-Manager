@@ -15,12 +15,12 @@ $db = new Database();
 
 $conexao = $db->getConnection();
 
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Usado para testes
-$usuario_id = 1;
+$grupo_id = 2;
 
 $dadosCliente = [
     "id" => isset($_POST["id"]) ? $_POST["id"] : NULL,
@@ -51,6 +51,41 @@ $dadosCliente = [
 //     exit;
 // }
 
+try {
+    // Criptografa a senha antes de salvar
+    $senhaHash = password_hash("123", PASSWORD_DEFAULT);
+
+    $sql = "INSERT INTO `usuario` (
+        `grupo_id`,
+        `nome`,
+        `email`,
+        `senha`
+    ) VALUES (
+        :grupo_id,
+        :nome,
+        :email,
+        :senha
+    )";
+
+    $stmt = $conexao->prepare($sql);
+
+    $stmt->bindParam(":grupo_id", $grupo_id, PDO::PARAM_INT);
+    $stmt->bindParam(":nome", $dadosCliente["responsavel_nome"], PDO::PARAM_STR);
+    $stmt->bindParam(":email", $dadosCliente["responsavel_email"], PDO::PARAM_STR);
+    $stmt->bindParam(":senha", $senhaHash, PDO::PARAM_STR);
+
+    $stmt->execute();
+
+    $usuario_id = $conexao->lastInsertId();
+} catch (PDOException $e) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Erro ao cadastrar usuário: " . $e->getMessage()
+    ]);
+    exit;
+}
+
+// ------------- Cadastro Cliente ------------- //
 try {
     $conexao->beginTransaction();
 

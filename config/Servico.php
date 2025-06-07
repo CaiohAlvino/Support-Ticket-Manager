@@ -41,6 +41,9 @@ class Servico
 
             $query .= " ORDER BY `nome` ASC";
 
+            $offset = ($pagina - 1) * $limite;
+            $query .= " LIMIT $limite OFFSET $offset";
+
             $stmt = $this->db->prepare($query);
             $stmtCount = $this->db->prepare($queryCount);
 
@@ -48,11 +51,6 @@ class Servico
                 $stmt->bindValue($key, $value);
                 $stmtCount->bindValue($key, $value);
             }
-
-            $offset = ($pagina - 1) * $limite;
-
-            $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
-            $stmt->bindValue(":limite", $limite, PDO::PARAM_INT);
 
             $stmt->execute();
             $stmtCount->execute();
