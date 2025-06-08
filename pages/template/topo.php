@@ -23,7 +23,9 @@ require("../../config/Cliente.php");
 require("../../config/Suporte.php");
 require("../../config/SuporteMensagem.php");
 require("../../config/Empresa.php");
+require("../../config/Grupo.php");
 require("../../config/Servico.php");
+require("../../config/Usuario.php");
 
 $db = new Database();
 $validador = new Validador();
@@ -33,7 +35,9 @@ $classCliente = new Cliente($db->getConnection());
 $classSuporte = new Suporte($db->getConnection());
 $classSuporteMensagem = new SuporteMensagem($db->getConnection());
 $classEmpresa = new Empresa($db->getConnection());
+$classGrupo = new Grupo($db->getConnection());
 $classServico = new Servico($db->getConnection());
+$classUsuario = new Usuario($db->getConnection());
 ?>
 
 <body class="layout-fixed">
