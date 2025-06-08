@@ -87,6 +87,7 @@ $mensagem_registro = $classSuporteMensagem->pegarPorSuporteId($id);
                 </div>
             </div>
         </div>
+
         <div class="sessao">
             <h2 class="subtitulo mb-0">Histórico de Interação</h2>
             <?php
@@ -95,7 +96,7 @@ $mensagem_registro = $classSuporteMensagem->pegarPorSuporteId($id);
             ?>
                 <div class=" p-3 border border-1 rounded mt-2">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <?php if ($mensagens->proprietario == "USUARIO"): ?>
+                        <?php if ($mensagens->proprietario == "CLIENTE"): ?>
                             <span class="usuario-nome-cliente fw-bold">
                                 <?php
                                 echo $suporte_registro->cliente_nome_fantasia ? htmlspecialchars($suporte_registro->cliente_nome_fantasia) : ($suporte_registro->cliente_responsavel_nome ? htmlspecialchars($suporte_registro->cliente_responsavel_nome) : 'Cliente');
