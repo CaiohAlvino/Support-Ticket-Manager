@@ -16,11 +16,11 @@ $paginacao = $indexRegistros["paginacao"];
 <header class="sessao">
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Serviço</h1>
+            <h1 class="titulo">Usuário</h1>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end">
             <a href="cadastro.php" class="btn btn-adicionar">
-                <i class="bi-plus-lg" aria-hidden="true"></i> Novo Serviço
+                <i class="bi-plus-lg" aria-hidden="true"></i> Novo Usuário
             </a>
         </div>
     </div>
@@ -43,8 +43,8 @@ $paginacao = $indexRegistros["paginacao"];
             <div class="mb-3">
                 <i class="bi bi-people fs-1"></i>
             </div>
-            <h5 class="fw-bold">Nenhum serviço encontrado</h5>
-            <p class="mb-0">Confira se os dados estão corretos ou cadastre um novo serviço.</p>
+            <h5 class="fw-bold">Nenhum usuário encontrado</h5>
+            <p class="mb-0">Confira se os dados estão corretos ou cadastre um novo usuário.</p>
         </div>
     <?php else: ?>
         <div class="table-responsive">

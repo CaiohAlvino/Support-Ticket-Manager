@@ -20,6 +20,9 @@ class Grupo
             $where = array();
             $params = array();
 
+            // Recupera o grupo do usuário da sessão
+            $grupoUsuario = isset($_SESSION['usuario_grupo']) ? (int)$_SESSION['usuario_grupo'] : null;
+
             if ($nome) {
                 $where[] = "nome LIKE :nome";
                 $params[":nome"] = "%$nome%";
@@ -30,8 +33,11 @@ class Grupo
                 $params[":situacao"] = $situacao;
             }
 
-            $query = "SELECT * FROM `grupo`";
+            if ($grupoUsuario !== 1) {
+                $where[] = " AND `id` NOT IN (1,2)";
+            }
 
+            $query = "SELECT * FROM `grupo`";
             $queryCount = "SELECT COUNT(*) as total FROM `grupo`";
 
             if ($where) {
@@ -114,16 +120,20 @@ class Grupo
     public function listarGrupos()
     {
         try {
-            $query = "SELECT * FROM
-                            `grupo`
-                        WHERE
-                            `situacao` = 1
-                        ORDER BY
-                            `nome`
-                        ASC";
+            // Recupera o grupo do usuário da sessão
+            $grupoUsuario = isset($_SESSION['usuario_grupo']) ? (int)$_SESSION['usuario_grupo'] : null;
+
+            $query = "SELECT * FROM `grupo` WHERE `situacao` = 1";
+            $params = [];
+
+            if ($grupoUsuario !== 1) {
+                $query .= " AND `id` NOT IN (1,2)";
+            }
+
+            $query .= " ORDER BY `id` ASC";
 
             $stmt = $this->db->prepare($query);
-            $stmt->execute();
+            $stmt->execute($params);
             $stmt->setFetchMode(PDO::FETCH_OBJ);
 
             return $stmt->fetchAll();

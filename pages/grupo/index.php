@@ -16,11 +16,11 @@ $paginacao = $indexRegistros["paginacao"];
 <header class="sessao">
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Serviço</h1>
+            <h1 class="titulo">Grupos</h1>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end">
             <a href="cadastro.php" class="btn btn-adicionar">
-                <i class="bi-plus-lg" aria-hidden="true"></i> Novo Serviço
+                <i class="bi-plus-lg" aria-hidden="true"></i> Novo Grupos
             </a>
         </div>
     </div>
@@ -84,7 +84,7 @@ $paginacao = $indexRegistros["paginacao"];
                             </tr>
 
                             <?php $registroExcluir = $registro; ?>
-                            <?php $data_action_excluir = "servico/excluir.php"; ?>
+                            <?php $data_action_excluir = "grupo/excluir.php"; ?>
                             <?php include("../components/excluir.php"); ?>
                         <?php endif; ?>
                     <?php endforeach; ?>
