@@ -13,12 +13,12 @@ $registros = $indexRegistros["resultados"];
 $paginacao = $indexRegistros["paginacao"];
 ?>
 
-<header class="sessao nao-mostrar-impressao">
+<header class="sessao">
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
             <h1 class="titulo">Empresa</h1>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end nao-mostrar-impressao">
             <a href="cadastro.php" class="btn btn-adicionar">
                 <i class="bi-plus-lg" aria-hidden="true"></i> Nova Empresa
             </a>
@@ -30,7 +30,7 @@ $paginacao = $indexRegistros["paginacao"];
 </header>
 
 <div class="sessao">
-    <form method="get">
+    <form method="get" class="nao-mostrar-impressao">
         <div class="row mb-3">
             <div class="col-xl-5 col-lg-7 col-md-7 col-sm-12 col-1">
                 <label>nome</label>
@@ -56,7 +56,7 @@ $paginacao = $indexRegistros["paginacao"];
                     <tr>
                         <th>Situação</th>
                         <th>Nome</th>
-                        <th>Ações</th>
+                        <th class="nao-mostrar-impressao">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -71,7 +71,7 @@ $paginacao = $indexRegistros["paginacao"];
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo isset($registro->nome) ? $registro->nome : "--"; ?></td>
-                                <td>
+                                <td class="nao-mostrar-impressao">
                                     <a href="edicao.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar">
                                         <i class="bi-pencil-square"></i> Editar
                                     </a>
