@@ -1,15 +1,16 @@
--- phpMyAdmin SQL Dump CORRIGIDO
+-- phpMyAdmin SQL Dump
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 03/06/2025 às 14:12 (CORRIGIDO)
+-- Tempo de geração: 11/06/2025 às 12:16
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -56,8 +57,11 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`id`, `usuario_id`, `tipo`, `documento`, `razao_social`, `nome_fantasia`, `telefone`, `email`, `responsavel_nome`, `responsavel_email`, `responsavel_telefone`, `responsavel_documento`, `cep`, `cidade`, `estado`, `pais`, `endereco`, `numero`, `bairro`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 1, 'CPF', '121.969.859-88', NULL, 'Teste Fantasia', '(44) 9 9169-2589', NULL, 'CAIO HENRIQUE ALMEIDA ALVINO', '', '(44) 9 9169-2589', '121.969.859-88', '87203-460', 'Cianorte', 'Paraná', NULL, NULL, '390', 'Jardim Universidade I', 1, '2025-05-17 21:37:41', '2025-06-03 11:51:35'),
-(2, 3, 'CNPJ', '86.642.481/0001-54', 'Luiza Vende', 'Magazine Luiza', '(44) 9 9999-9999', 'magazine@gmail.com', 'Luiza', 'luiza@gmail.com', '(44) 8 8888-8888', '266.365.221-88', '53425-460', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-06-03 12:06:23', '2025-06-03 12:06:23');
+(1, 1, 'CPF', '', NULL, 'Caio Vendas', '(44) 9 9169-2589', NULL, 'CAIO', 'caio@caio.com', '(44) 9 9169-2589', '556.246.944-82', '87203-460', 'Cianorte', 'Paraná', NULL, '', '123', 'Jardim Universidade I', 1, '2025-05-17 21:37:41', '2025-06-08 03:22:22'),
+(2, 3, 'CNPJ', '86.642.481/0001-54', 'HHM', 'oficinas de Saul Goodman & asociados', '(44) 9 9999-9999', 'saul.goodman@goodman.com', 'Saul Goodman', 'saul.goodman@gmail.com', '(64) 9 2486-3658', '266.365.221-88', '53425-460', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-06-03 12:06:23', '2025-06-10 23:20:36'),
+(3, 7, 'CPF', '', NULL, 'Los Pollos Hermanos', '(32) 4 2725-6236', NULL, 'Gustavo Fring', 'gus.meth@LPH.com', '(23) 6 2625-6236', '651.978.767-19', '66630-580', 'Belém', 'Pará', NULL, 'Alameda Ananindeua', '48', 'Bengui', 1, '2025-06-08 03:28:50', '2025-06-08 03:28:50'),
+(4, 8, 'CNPJ', '25.264.232/0001-88', 'Gray Matter Technologies LTDA', 'Gray Matter Technologies', '(25) 6 2562-4562', NULL, 'Elliott Schwartz', 'elliott.gray@matter.com', '(24) 5 2362-5656', '350.969.484-80', '60346-206', 'Fortaleza', 'Ceará', NULL, 'Vila Santa Cecília', '720', 'Jardim Guanabara', 1, '2025-06-08 03:31:17', '2025-06-08 03:31:17'),
+(5, 9, 'CPF', '', NULL, 'A1A Car Wash', '(67) 6 7365-7356', NULL, 'Walter White', 'walter.white@a1a.com', '(35) 6 3457-5346', '183.326.832-62', '08081-150', 'São Paulo', 'São Paulo', NULL, 'Rua Bonito de Santa Fé', '34', 'Parque Paulistano', 1, '2025-06-08 03:33:27', '2025-06-08 03:33:27');
 
 -- --------------------------------------------------------
 
@@ -78,9 +82,11 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`id`, `nome`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 'WDevel', 0, '2025-06-01 14:10:29', '2025-06-01 14:10:29'),
-(2, 'Clinora', 1, '2025-06-03 11:58:32', '2025-06-03 11:58:32'),
-(3, 'O Topo Digital', 1, '2025-06-03 11:58:32', '2025-06-03 11:58:32');
+(1, 'Venezia\'s', 1, '2025-06-01 14:10:29', '2025-06-10 23:18:33'),
+(2, 'Caltech', 1, '2025-06-03 11:58:32', '2025-06-10 23:19:36'),
+(3, 'methtech', 1, '2025-06-03 11:58:32', '2025-06-10 23:21:53'),
+(4, 'AMC', 1, '2025-06-11 03:16:24', '2025-06-11 03:16:24'),
+(5, 'Dos Hombres', 1, '2025-06-11 03:25:23', '2025-06-11 03:25:23');
 
 -- --------------------------------------------------------
 
@@ -129,7 +135,8 @@ INSERT INTO `empresa_servico` (`id`, `empresa_id`, `servico_id`, `situacao`, `ca
 (2, 2, 2, 1, '2025-06-03 12:00:08', '2025-06-03 12:00:08'),
 (3, 3, 1, 1, '2025-06-03 12:00:25', '2025-06-03 12:00:25'),
 (4, 1, 2, 1, '2025-06-03 12:00:25', '2025-06-03 12:00:25'),
-(5, 1, 3, 1, '2025-06-03 12:00:38', '2025-06-03 12:00:38');
+(5, 1, 3, 1, '2025-06-03 12:00:38', '2025-06-03 12:00:38'),
+(6, 3, 4, 1, '2025-06-11 00:29:17', '2025-06-11 00:29:17');
 
 -- --------------------------------------------------------
 
@@ -177,7 +184,10 @@ CREATE TABLE `grupo` (
 INSERT INTO `grupo` (`id`, `nome`, `situacao`, `cadastrado`, `alterado`) VALUES
 (1, 'MASTER', 1, '2025-05-17 21:31:12', '2025-05-17 21:31:12'),
 (2, 'CLIENTE', 1, '2025-05-17 21:32:17', '2025-05-17 21:33:00'),
-(3, 'SUPORTE CLINORA', 1, '2025-06-03 12:01:37', '2025-06-03 12:01:37');
+(3, 'SUPORTE', 1, '2025-06-03 12:01:37', '2025-06-08 03:15:46'),
+(4, 'SUPORTE 2', 1, '2025-06-08 03:16:03', '2025-06-08 03:16:03'),
+(5, 'SUPORTE 3', 1, '2025-06-08 03:16:09', '2025-06-08 03:16:09'),
+(6, 'SUPORTE 4', 1, '2025-06-11 03:59:44', '2025-06-11 03:59:44');
 
 -- --------------------------------------------------------
 
@@ -200,7 +210,10 @@ CREATE TABLE `servico` (
 INSERT INTO `servico` (`id`, `nome`, `situacao`, `cadastrado`, `alterado`) VALUES
 (1, 'Site', 1, '2025-06-01 14:09:38', '2025-06-01 14:09:52'),
 (2, 'Software', 1, '2025-06-03 11:59:28', '2025-06-03 11:59:28'),
-(3, 'Marketing Orgânico', 1, '2025-06-03 11:59:28', '2025-06-03 11:59:28');
+(3, 'Marketing Orgânico', 1, '2025-06-03 11:59:28', '2025-06-03 11:59:28'),
+(4, 'Lojas Virtuais', 1, '2025-06-11 00:29:17', '2025-06-11 00:29:17'),
+(5, 'Caltech Insight', 1, '2025-06-11 00:38:59', '2025-06-11 00:38:59'),
+(6, 'Banco de Dados', 1, '2025-06-11 03:25:45', '2025-06-11 03:26:19');
 
 -- --------------------------------------------------------
 
@@ -226,9 +239,9 @@ CREATE TABLE `suporte` (
 --
 
 INSERT INTO `suporte` (`id`, `empresa_id`, `servico_id`, `cliente_id`, `usuario_id`, `assunto`, `status`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 1, 1, 1, NULL, 'Quebrou o cell', 'ABERTO', 1, '2025-06-01 14:22:22', '2025-06-01 14:22:22'),
-(2, 3, 1, 2, 1, 'Rank do Google', 'ABERTO', 1, '2025-06-03 12:10:31', '2025-06-03 12:10:31'),
-(3, 1, 2, 1, 1, 'Site bugado', 'ABERTO', 1, '2025-06-03 12:10:31', '2025-06-03 12:10:31');
+(1, 1, 1, 2, NULL, 'Meu Site de caiu (https://salahmed-ctrlz.github.io/BetterCallSaul/#/)', 'ABERTO', 1, '2025-06-01 14:22:22', '2025-06-08 03:44:40'),
+(2, 3, 2, 3, 1, 'O sistema da minha lanchonete está com defeito no Login', 'RESPONDIDO', 1, '2025-06-03 12:10:31', '2025-06-08 04:12:24'),
+(3, 1, 3, 5, NULL, 'O marketing não está trazendo resultado', 'ABERTO', 1, '2025-06-03 12:10:31', '2025-06-08 03:49:48');
 
 -- --------------------------------------------------------
 
@@ -251,9 +264,10 @@ CREATE TABLE `suporte_mensagem` (
 --
 
 INSERT INTO `suporte_mensagem` (`id`, `suporte_id`, `mensagem`, `proprietario`, `respondido`, `cadastrado`, `alterado`) VALUES
-(1, 1, 'Meu celular quebrou', 'USUARIO', 0, '2025-06-01 14:23:18', '2025-06-01 14:23:18'),
-(2, 2, 'Meu site não está na primeira página do Google', 'CLIENTE', 1, '2025-06-03 12:11:08', '2025-06-03 12:11:08'),
-(3, 3, 'Meu site está tudo quebrado', 'CLIENTE', 1, '2025-06-03 12:12:13', '2025-06-03 12:12:13');
+(1, 1, 'Poderia resolver isso rápido? Estou perdendo clientes assim.', 'CLIENTE', 0, '2025-06-01 14:23:18', '2025-06-08 03:51:03'),
+(2, 2, 'Ninguém consegue fazer o login no sistema, estamos fazendo os pedidos e os lançamentos tudo pelo papel, pode resolver isso?', 'CLIENTE', 1, '2025-06-03 12:11:08', '2025-06-08 03:52:26'),
+(3, 3, 'Preciso de mais pessoas vindo para meu Lava rápido, a polícia vai suspeitar se tiver vindo poucos clientes', 'CLIENTE', 1, '2025-06-03 12:12:13', '2025-06-08 03:54:51'),
+(4, 2, 'Arrumamos o sistema e fizemos a atualização, poderia verificar se está tudo certo?', 'USUARIO', 1, '2025-06-08 03:14:38', '2025-06-08 03:53:36');
 
 -- --------------------------------------------------------
 
@@ -278,9 +292,16 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `grupo_id`, `nome`, `email`, `senha`, `token`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 1, 'Admin', 'caioh.alvino22@gmail.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', 'c5042246e6cd589fd9aeaa4bc71c4ed71ab7ea6df9ee9a6088d7a53c898522da', 1, '2025-05-17 21:34:48', '2025-06-03 11:54:56'),
-(2, 2, 'Cliente', 'cliente@gmail.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', '6d74b53ffa9491f7a70782363a0ae1452cfac24f41ebd09f0b476cdcfab969f8', 1, '2025-05-17 21:35:48', '2025-06-03 11:55:39'),
-(3, 3, 'Luiz', 'luiz@gmail.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', NULL, 1, '2025-06-03 12:02:20', '2025-06-03 12:02:20');
+(1, 1, 'Caio Alvino', 'caioh.alvino22@gmail.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', 'e511010881c1d6fca878a6faa1c258c2d07e92e30313fd4fdeffe9c61df9eada', 1, '2025-05-17 21:34:48', '2025-06-08 04:20:29'),
+(2, 1, 'Admin', 'admin@admin.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', 'c3638d487cb17cc5d5cb5262d6cdbf00c0c9aa20a6cc4343250a4edb23868d63', 1, '2025-05-17 21:35:48', '2025-06-08 03:14:20'),
+(3, 2, 'Saul Goodman', 'saul.goodman@goodman.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', NULL, 1, '2025-06-03 12:02:20', '2025-06-08 03:40:06'),
+(4, 3, 'Suporte', 'suporte@suporte.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', '017ad891d1c124561479fe9885d05e8ad20933fc4416b8a2bcacb976bd620b15', 1, '2025-06-08 03:16:50', '2025-06-08 04:14:56'),
+(5, 4, 'Suporte 2', 'suporte2@suporte.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', NULL, 1, '2025-06-08 03:17:14', '2025-06-08 03:18:16'),
+(6, 5, 'Suporte 3', 'suporte3@suporte.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', NULL, 1, '2025-06-08 03:18:37', '2025-06-08 03:18:37'),
+(7, 2, 'Gustavo Fring', 'gus.meth@LPH.com', '$2y$10$XHkPYYsa6/A/0A1dnFllzu7mve4ctmmgMyAbbo3SFCPyL5xE3gMIy', NULL, 1, '2025-06-08 03:28:50', '2025-06-08 03:28:50'),
+(8, 2, 'Elliott Schwartz', 'elliott.gray@matter.com', '$2y$10$xN8V8UKRoTBdTLt4TPFpMebF3YNzpvj5AURtyDnkyFqID9FoFEqTm', NULL, 1, '2025-06-08 03:31:17', '2025-06-08 03:31:17'),
+(9, 2, 'Walter White', 'walter.white@a1a.com', '$2y$10$vQoclea3qTyueg9fTuM83OG4a1reGpXQ09ZnvN2JRgkMbAWLztLc2', NULL, 1, '2025-06-08 03:33:27', '2025-06-08 03:33:27'),
+(10, 3, 'Hyper Suporte', 'hyper.suporte@suporte.com', '123', NULL, 1, '2025-06-11 03:54:54', '2025-06-11 03:54:54');
 
 --
 -- Índices para tabelas despejadas
@@ -360,20 +381,20 @@ ALTER TABLE `usuario`
   ADD KEY `fk_usuario_grupo_idx` (`grupo_id`);
 
 --
--- AUTO_INCREMENT para tabelas despejadas (RESETADOS)
+-- AUTO_INCREMENT para tabelas despejadas
 --
 
 --
 -- AUTO_INCREMENT de tabela `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `empresa_cliente`
@@ -385,7 +406,7 @@ ALTER TABLE `empresa_cliente`
 -- AUTO_INCREMENT de tabela `empresa_servico`
 --
 ALTER TABLE `empresa_servico`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `empresa_usuario`
@@ -397,13 +418,13 @@ ALTER TABLE `empresa_usuario`
 -- AUTO_INCREMENT de tabela `grupo`
 --
 ALTER TABLE `grupo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `servico`
 --
 ALTER TABLE `servico`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `suporte`
@@ -415,13 +436,13 @@ ALTER TABLE `suporte`
 -- AUTO_INCREMENT de tabela `suporte_mensagem`
 --
 ALTER TABLE `suporte_mensagem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restrições para tabelas despejadas
