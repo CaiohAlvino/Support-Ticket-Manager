@@ -42,7 +42,7 @@ $classUsuario = new Usuario($db->getConnection());
 
 <body class="layout-fixed">
     <!-- Header -->
-    <header class="header">
+    <header class="header nao-mostrar-impressao">
         <div class="header-content">
             <div class="d-flex align-items-center gap-3">
                 <button class="menu-toggle btn btn-link p-0 me-2" id="menuToggle" aria-label="Menu lateral" title="Menu lateral"><i class="bi bi-list fs-2"></i></button>
@@ -89,7 +89,7 @@ $classUsuario = new Usuario($db->getConnection());
         </div>
     </header>
     <!-- Sidebar -->
-    <nav class="sidebar" id="sidebar">
+    <nav class="sidebar nao-mostrar-impressao" id="sidebar">
         <div class="sidebar-nav">
             <div class="sidebar-section mb-2">
                 <small class="text-muted text-uppercase ms-2">

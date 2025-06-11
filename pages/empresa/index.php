@@ -13,7 +13,7 @@ $registros = $indexRegistros["resultados"];
 $paginacao = $indexRegistros["paginacao"];
 ?>
 
-<header class="sessao">
+<header class="sessao nao-mostrar-impressao">
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
             <h1 class="titulo">Empresa</h1>
@@ -22,6 +22,9 @@ $paginacao = $indexRegistros["paginacao"];
             <a href="cadastro.php" class="btn btn-adicionar">
                 <i class="bi-plus-lg" aria-hidden="true"></i> Nova Empresa
             </a>
+            <button type="button" class="btn btn-imprimir botao-noty-ativo ms-2" onclick="window.print();">
+                <i class="bi bi-printer"></i> Gerar Relatório
+            </button>
         </div>
     </div>
 </header>

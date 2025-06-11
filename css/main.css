@@ -246,3 +246,9 @@ body,
 [aria-label] {
     cursor: pointer;
 }
+
+@media print {
+    .nao-mostrar-impressao {
+        display: none !important;
+    }
+}
