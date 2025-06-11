@@ -9,7 +9,6 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $dadosServico = [
-    "empresa_id" => isset($_POST["empresa_id"]) ? (int)$_POST["empresa_id"] : NULL,
     "nome" => isset($_POST["nome"]) ? trim($_POST["nome"]) : NULL
 ];
 

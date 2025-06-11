@@ -108,6 +108,10 @@ $paginacao = $indexRegistros["paginacao"];
                                         class="btn btn-sm btn-excluir">
                                         <i class="bi bi-trash"></i> Excluir
                                     </button>
+
+                                    <a href="empresa.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-empresa">
+                                        <i class="bi-building"></i> Empresas
+                                    </a>
                                 </td>
                             </tr>
 

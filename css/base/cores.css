@@ -72,6 +72,12 @@
     --btn-buscar-texto: var(--cor-branco);
 
     /* Botões - Ações */
+    --btn-empresa-bg: transparent;
+    --btn-empresa-texto: #229dc5;
+    --btn-empresa-borda: #229dc5;
+    --btn-servico-bg: transparent;
+    --btn-servico-texto: #2a7d8c;
+    --btn-servico-borda: #2a7d8c;
     --btn-editar-bg: transparent;
     --btn-editar-texto: #2a3a8c;
     --btn-editar-borda: #2a3a8c;

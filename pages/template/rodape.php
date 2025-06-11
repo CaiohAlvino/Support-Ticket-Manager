@@ -21,6 +21,9 @@
 <script src="../../js/dashboard.js"></script>
 <script src="../../js/suporte.js"></script>
 <script src="../../js/servico.js"></script>
+<script src="../../js/empresa.js"></script>
+<script src="../../js/usuario.js"></script>
+<script src="../../js/grupo.js"></script>
 
 </body>
 

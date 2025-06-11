@@ -80,6 +80,10 @@ $paginacao = $indexRegistros["paginacao"];
                                         class="btn btn-sm btn-excluir">
                                         <i class="bi bi-trash"></i> Excluir
                                     </button>
+
+                                    <a href="servico.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-servico">
+                                        <i class="bi-award-fill"></i> Serviços
+                                    </a>
                                 </td>
                             </tr>
 

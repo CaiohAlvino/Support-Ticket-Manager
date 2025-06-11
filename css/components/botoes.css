@@ -64,6 +64,28 @@
     color: #fff !important;
 }
 
+.btn-empresa {
+    background: var(--btn-empresa-bg);
+    color: var(--btn-empresa-texto) !important;
+    border: 1px solid var(--btn-empresa-borda);
+}
+.btn-empresa:hover,
+.btn-empresa:focus {
+    background: #e3e7ed;
+    color: var(--btn-empresa-texto) !important;
+}
+
+.btn-servico {
+    background: var(--btn-servico-bg);
+    color: var(--btn-servico-texto) !important;
+    border: 1px solid var(--btn-servico-borda);
+}
+.btn-servico:hover,
+.btn-servico:focus {
+    background: #e3e7ed;
+    color: var(--btn-servico-texto) !important;
+}
+
 .btn-editar {
     background: var(--btn-editar-bg);
     color: var(--btn-editar-texto) !important;

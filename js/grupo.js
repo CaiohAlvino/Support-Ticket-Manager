@@ -1,8 +1,8 @@
-$("#servico-cadastrar").submit(function (event) {
+$("#grupo-cadastrar").submit(function (event) {
     event.preventDefault();
 
     $(".campo-obrigatorio").trigger("blur");
-    FeedbackVisual.limparTodosFeedbacks("#servico-cadastrar");
+    FeedbackVisual.limparTodosFeedbacks("#grupo-cadastrar");
 
     let isValid = true;
     let action = $(this).data("action");
