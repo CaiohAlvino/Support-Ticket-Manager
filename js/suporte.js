@@ -118,7 +118,7 @@ $(document).ready(function () {
             url: `../../controller/${action}`,
             type: "POST",
             dataType: "json",
-            data: $(this).serialize(), // REMOVIDO: + "&status=AGUARDANDO_SUPORTE"
+            data: $(this).serialize(),
             success: function (response) {
                 NotyE.exception({ response, reload: true });
             },

@@ -6,12 +6,22 @@ $status = (isset($_GET["status"]) && $_GET["status"] !== "NULL") ? $_GET["status
 $assunto = isset($_GET["assunto"]) ? $_GET["assunto"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
 
+$usuario_id = $_SESSION["usuario_grupo"] ?? NULL;
+
+if ($_SESSION["usuario_grupo"] == 2) {
+    $cliente = $classCliente->pegarPorUsuarioId($_SESSION["usuario_id"]);
+    $usuario_id = NULL;
+} else {
+    $cliente = NULL;
+}
+
+
 $indexRegistros = $classSuporte->index([
     "status" => $status,
     "assunto" => $assunto,
     "pagina" => $pagina,
     "limite" => 15
-], $_SESSION["usuario_id"]);
+], $cliente, $usuario_id);
 
 $registros = $indexRegistros["resultados"];
 

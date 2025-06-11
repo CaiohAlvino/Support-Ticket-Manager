@@ -12,7 +12,7 @@ class Suporte
      * Lista tickets de suporte com filtros e paginação.
      * Corrigido: uso de prepared statements e SQL seguro.
      */
-    public function index($parametros = array(), $usuario_id = NULL)
+    public function index($parametros = array(), $cliente = NULL, $usuario_id = NULL)
     {
         try {
             $suporte_id = isset($parametros["suporte_id"]) ? (int)$parametros["suporte_id"] : null;
@@ -28,11 +28,15 @@ class Suporte
 
             if ($usuario_id) {
                 $where[] = "`suporte`.`usuario_id` = :usuario_id";
-                $params[":usuario_id"] = $usuario_id;
+                $params[":usuario_id"] = (int)$usuario_id;
+            }
+            if ($cliente && isset($cliente->id)) {
+                $where[] = "`suporte`.`cliente_id` = :cliente_id";
+                $params[":cliente_id"] = (int)$cliente->id;
             }
             if ($suporte_id) {
                 $where[] = "`suporte`.`id` = :suporte_id";
-                $params[":suporte_id"] = $suporte_id;
+                $params[":suporte_id"] = (int)$suporte_id;
             }
             if ($status) {
                 $where[] = "`suporte`.`status` = :status";

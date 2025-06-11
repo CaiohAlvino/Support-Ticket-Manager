@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 ABERTO: { label: "Aberto", color: "#198754" },
                 AGUARDANDO_SUPORTE: { label: "Aguardando", color: "#ffc107" },
                 FECHADO: { label: "Fechado", color: "#6c757d" },
-                CRITICO: { label: "Crítico", color: "#dc3545" },
+                RESPONDIDO: { label: "Respondido", color: "#0dcaf0" },
             };
 
             for (const [status, count] of Object.entries(statusData)) {

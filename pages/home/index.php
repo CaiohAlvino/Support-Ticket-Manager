@@ -9,6 +9,8 @@ $dias = isset($_GET["dias"]) ? (int)$_GET["dias"] : null;
 
 $usuario_id = $_SESSION["usuario_grupo"] == 2 ? $_SESSION["usuario_id"] : NULL;
 
+$cliente = $classCliente->pegarPorUsuarioId($usuario_id);
+
 $indexRegistros = $classSuporte->index([
     "dias" => $dias,
     "quantidade" => 10,
@@ -16,7 +18,7 @@ $indexRegistros = $classSuporte->index([
     "assunto" => $assunto,
     "pagina" => $pagina,
     "limite" => 15
-], $usuario_id);
+], $cliente);
 
 $registros = $indexRegistros["resultados"];
 $paginacao = $indexRegistros["paginacao"];
@@ -26,7 +28,7 @@ $statusCounts = [
     'ABERTO' => 0,
     'AGUARDANDO_SUPORTE' => 0,
     'FECHADO' => 0,
-    'CRITICO' => 0
+    'RESPONDIDO' => 0
 ];
 foreach ($registros as $registro) {
     if (is_object($registro) && isset($statusCounts[$registro->status])) {
@@ -73,9 +75,8 @@ function getStatusClass($status)
 }
 
 // Filtrar tickets em aberto para a tabela
-$ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABERTO', 'AGUARDANDO_SUPORTE']));
+$ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABERTO', 'AGUARDANDO_SUPORTE', 'RESPONDIDO']));
 ?>
-
 <!-- Cabeçalho do Dashboard -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1 class="mb-0">Dashboard de Suporte</h1>
@@ -125,8 +126,8 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
                         <i class="bi bi-hourglass-split text-white fs-4"></i>
                     </div>
                     <div class="ms-3">
-                        <h6 class="mb-1 text-muted">Aguardando</h6>
-                        <h4 class="mb-0"><?php echo $statusCounts['AGUARDANDO_SUPORTE'] ?></h4>
+                        <h6 class="mb-1 text-muted">Em Andamento</h6>
+                        <h4 class="mb-0"><?php echo $statusCounts['AGUARDANDO_SUPORTE'] + $statusCounts['RESPONDIDO'] ?></h4>
                     </div>
                 </div>
             </div>
@@ -170,7 +171,8 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
                             <select name="status" class="form-select" style="width: auto;">
                                 <option value="">Todos Status</option>
                                 <option value="ABERTO" <?php echo $status === 'ABERTO' ? 'selected' : '' ?>>Aberto</option>
-                                <option value="AGUARDANDO_SUPORTE" <?php echo $status === 'AGUARDANDO_SUPORTE' ? 'selected' : '' ?>>Aguardando</option>
+                                <option value="AGUARDANDO_SUPORTE" <?php echo $status === 'AGUARDANDO_SUPORTE' ? 'selected' : '' ?>>Aguardando Suporte</option>
+                                <option value="RESPONDIDO" <?php echo $status === 'RESPONDIDO' ? 'selected' : '' ?>>Respondido</option>
                                 <option value="FECHADO" <?php echo $status === 'FECHADO' ? 'selected' : '' ?>>Fechado</option>
                             </select>
                         </form>
@@ -211,9 +213,16 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
                                             </td>
                                             <td><?php echo htmlspecialchars($registro->servico_nome ?? 'N/A') ?></td>
                                             <td>
-                                                <span class="badge bg-<?php echo getStatusClass($registro->status) ?>">
-                                                    <?php echo str_replace('_', ' ', $registro->status) ?>
-                                                </span>
+                                            <td>
+                                                <?php if ($registro->status == "ABERTO"): ?>
+                                                    <span class="badge text-bg-success">ABERTO</span>
+                                                <?php elseif ($registro->status == "AGUARDANDO_SUPORTE"): ?>
+                                                    <span class="badge text-bg-warning">AGUARDANDO SUPORTE</span>
+                                                <?php elseif ($registro->status == "RESPONDIDO"): ?>
+                                                    <span class="badge text-bg-info">RESPONDIDO</span>
+                                                <?php else: ?>
+                                                    <span class="badge text-bg-danger">FECHADO</span>
+                                                <?php endif; ?>
                                             </td>
                                             <td class="text-muted small">
                                                 <?php echo date("d/m/Y H:i", strtotime($registro->alterado)); ?>
@@ -236,94 +245,96 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
     </div>
 </div>
 
-<div class="row g-4 mb-4">
-    <!-- Gráficos -->
-    <div class="col-lg-8">
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">Distribuição de Tickets</h5>
-            </div>
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="text-center">
-                            <h6 class="text-muted mb-3">Por Status</h6>
-                            <canvas id="ticketStatusChart" style="max-width:250px;max-height:250px;"></canvas>
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="text-center">
-                            <h6 class="text-muted mb-3">Por Responsável</h6>
-                            <canvas id="ticketUserChart" style="max-width:250px;max-height:250px;"></canvas>
-                        </div>
-                    </div>
+<?php if ($_SESSION["usuario_grupo"] != 2): ?>
+    <div class="row g-4 mb-4">
+        <!-- Gráficos -->
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Distribuição de Tickets em Andamento</h5>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Sidebar -->
-    <div class="col-lg-4">
-        <!-- Serviços Mais Solicitados -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">Serviços Mais Solicitados</h5>
-            </div>
-            <div class="card-body p-0">
-                <?php if (empty($servicoCounts)): ?>
-                    <div class="p-3 text-center text-muted">
-                        <i class="bi bi-pie-chart display-6 mb-2"></i>
-                        <p class="mb-0">Nenhum dado disponível</p>
-                    </div>
-                <?php else: ?>
-                    <div class="list-group list-group-flush">
-                        <?php
-                        $count = 0;
-                        foreach ($servicoCounts as $servico => $quantidade):
-                            if ($count >= 3) break; // Limitar a 3 itens
-                            $count++;
-                        ?>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-0"><?php echo htmlspecialchars($servico) ?></h6>
-                                    <small class="text-muted">
-                                        <?php echo number_format(($quantidade / count($registros)) * 100, 1) ?>% do total
-                                    </small>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">
-                                    <?php echo $quantidade ?>
-                                </span>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <h6 class="text-muted mb-3">Por Status</h6>
+                                <canvas id="ticketStatusChart" style="max-width:250px;max-height:250px;"></canvas>
                             </div>
-                        <?php endforeach; ?>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="text-center">
+                                <h6 class="text-muted mb-3">Por Responsável</h6>
+                                <canvas id="ticketUserChart" style="max-width:250px;max-height:250px;"></canvas>
+                            </div>
+                        </div>
                     </div>
-                <?php endif; ?>
+                </div>
             </div>
         </div>
 
-        <!-- Resumo Rápido -->
-        <div class="card border-0 shadow-sm mt-4">
-            <div class="card-header bg-white">
-                <h5 class="card-title mb-0">Resumo Rápido</h5>
-            </div>
-            <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-6">
-                        <div class="text-center">
-                            <div class="h4 mb-1 text-primary"><?php echo count($userTicketCounts) ?></div>
-                            <div class="small text-muted">Responsáveis</div>
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Serviços Mais Solicitados -->
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Serviços Mais Solicitados</h5>
+                </div>
+                <div class="card-body p-0">
+                    <?php if (empty($servicoCounts)): ?>
+                        <div class="p-3 text-center text-muted">
+                            <i class="bi bi-pie-chart display-6 mb-2"></i>
+                            <p class="mb-0">Nenhum dado disponível</p>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="text-center">
-                            <div class="h4 mb-1 text-success"><?php echo count($servicoCounts) ?></div>
-                            <div class="small text-muted">Serviços</div>
+                    <?php else: ?>
+                        <div class="list-group list-group-flush">
+                            <?php
+                            $count = 0;
+                            foreach ($servicoCounts as $servico => $quantidade):
+                                if ($count >= 3) break; // Limitar a 3 itens
+                                $count++;
+                            ?>
+                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0"><?php echo htmlspecialchars($servico) ?></h6>
+                                        <small class="text-muted">
+                                            <?php echo number_format(($quantidade / count($registros)) * 100, 1) ?>% do total
+                                        </small>
+                                    </div>
+                                    <span class="badge bg-primary rounded-pill">
+                                        <?php echo $quantidade ?>
+                                    </span>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+
+            <!-- Resumo Rápido -->
+            <div class="card border-0 shadow-sm mt-4">
+                <div class="card-header bg-white">
+                    <h5 class="card-title mb-0">Resumo Rápido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h4 mb-1 text-primary"><?php echo count($userTicketCounts) ?></div>
+                                <div class="small text-muted">Responsáveis</div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-center">
+                                <div class="h4 mb-1 text-success"><?php echo count($servicoCounts) ?></div>
+                                <div class="small text-muted">Serviços</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+<?php endif; ?>
 
 <script>
     // Dados para os gráficos

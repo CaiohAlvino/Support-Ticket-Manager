@@ -167,6 +167,26 @@ class Cliente
         }
     }
 
+    public function pegarPorUsuarioId($usuario_id = NULL)
+    {
+        try {
+            if (!$usuario_id) {
+                return NULL;
+            }
+
+            $query = "SELECT `cliente`.* FROM `cliente` WHERE `cliente`.`usuario_id` = :usuario_id LIMIT 1";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $registro = $stmt->fetch(PDO::FETCH_OBJ);
+            return $registro;
+        } catch (\Throwable $th) {
+            return NULL;
+        }
+    }
+
     public function listarClientes()
     {
         try {
