@@ -121,7 +121,7 @@ class Empresa
                     WHERE
                         `situacao` = 1
                     ORDER BY
-                        `nome`
+                        `id`
                     ASC";
 
             $stmt = $this->db->prepare($query);

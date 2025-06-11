@@ -20,6 +20,7 @@
 <script src="../../js/cliente.js"></script>
 <script src="../../js/dashboard.js"></script>
 <script src="../../js/suporte.js"></script>
+<script src="../../js/servico.js"></script>
 
 </body>
 
