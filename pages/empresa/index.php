@@ -65,9 +65,9 @@ $paginacao = $indexRegistros["paginacao"];
                             <tr class="<?php echo isset($focu_empresa_id) && $registro->id == $focu_empresa_id ? 'table-active' : ''; ?>">
                                 <td>
                                     <?php if (isset($registro->situacao) && $registro->situacao == 1): ?>
-                                        <span class="badge status-situacao">Ativo</span>
+                                        <span class="badge text-bg-success">Ativo</span>
                                     <?php else: ?>
-                                        <span class="badge status-insituacao">Inativo</span>
+                                        <span class="badge text-bg-danger">Inativo</span>
                                     <?php endif; ?>
                                 </td>
                                 <td><?php echo isset($registro->nome) ? $registro->nome : "--"; ?></td>

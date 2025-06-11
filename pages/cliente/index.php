@@ -27,10 +27,13 @@ $paginacao = $indexRegistros["paginacao"];
             <h1 class="titulo">Cliente
             </h1>
         </div>
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end">
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end nao-mostrar-impressao">
             <a href="cadastro.php" class="btn btn-adicionar">
                 <i class="bi-plus-lg" aria-hidden="true"></i> Novo Cliente
             </a>
+            <button type="button" class="btn btn-imprimir botao-noty-ativo ms-2" onclick="window.print();">
+                <i class="bi bi-printer"></i> Gerar Relatório
+            </button>
         </div>
     </div>
 </header>
@@ -64,24 +67,24 @@ $paginacao = $indexRegistros["paginacao"];
             <table class="table table-hover">
                 <thead>
                     <tr>
-                        <th>Situação</th>
+                        <th class="nao-mostrar-impressao">Situação</th>
                         <th>Tipo Empresa</th>
                         <th>Nome Responsavel</th>
                         <th>Nome Fantasia</th>
                         <th>Razão Social</th>
                         <th>Documento</th>
-                        <th>Ações</th>
+                        <th class="nao-mostrar-impressao">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($registros as $registro): ?>
                         <?php if (is_object($registro)): ?>
                             <tr class="<?php echo isset($focu_cliente_id) && $registro->id == $focu_cliente_id ? 'table-active' : ''; ?>">
-                                <td>
+                                <td class="nao-mostrar-impressao">
                                     <?php if (isset($registro->situacao) && $registro->situacao == 1): ?>
-                                        <span class="badge status-situacao">Ativo</span>
+                                        <span class="badge text-bg-success">Ativo</span>
                                     <?php else: ?>
-                                        <span class="badge status-insituacao">Inativo</span>
+                                        <span class="badge text-bg-danger">Inativo</span>
                                     <?php endif; ?>
                                 </td>
                                 <td>
@@ -96,7 +99,7 @@ $paginacao = $indexRegistros["paginacao"];
                                 <td><?php echo isset($registro->nome_fantasia) ? $registro->nome_fantasia : "--"; ?></td>
                                 <td><?php echo isset($registro->razao_social) ? $registro->razao_social : "--"; ?></td>
                                 <td><?php echo isset($registro->documento) && $registro->documento ? $registro->documento : (isset($registro->responsavel_documento) ? $registro->responsavel_documento : "--"); ?></td>
-                                <td>
+                                <td class="nao-mostrar-impressao">
                                     <a href="edicao.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-editar">
                                         <i class="bi-pencil-square"></i> Editar
                                     </a>
