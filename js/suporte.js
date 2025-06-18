@@ -127,4 +127,43 @@ $(document).ready(function () {
             },
         });
     });
+
+    // Atualiza empresas ao selecionar cliente
+    $("#cliente_id").on("change", function () {
+        var clienteId = $(this).val();
+        var $empresaSelect = $("#empresa_id");
+        $empresaSelect.html('<option value="">Carregando...</option>');
+        if (!clienteId) {
+            $empresaSelect.html('<option value="">Selecione uma empresa</option>');
+            return;
+        }
+        $.ajax({
+            url: "../../controller/empresa/empresas-por-cliente.php",
+            type: "GET",
+            data: { cliente_id: clienteId },
+            dataType: "json",
+            success: function (response) {
+                if (response.debug) {
+                    console.log(response.debug);
+                }
+                var empresas = response.empresas || [];
+                var options = '<option value="">Selecione uma empresa</option>';
+                if (empresas.length > 0) {
+                    empresas.forEach(function (empresa) {
+                        options += '<option value="' + empresa.id + '">' + empresa.nome + '</option>';
+                    });
+                }
+                $empresaSelect.html(options);
+                $empresaSelect.trigger("change");
+            },
+            error: function () {
+                $empresaSelect.html('<option value="">Erro ao carregar empresas</option>');
+            }
+        });
+    });
+
+    // Se o campo cliente_id for hidden (usuário cliente), dispara o change para carregar as empresas automaticamente
+    if ($("#cliente_id").is(":hidden") || $("#cliente_id").attr("type") === "hidden") {
+        $("#cliente_id").trigger("change");
+    }
 });

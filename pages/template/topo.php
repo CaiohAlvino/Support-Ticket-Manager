@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="../../libs/select2/style.css">
     <link rel="stylesheet" href="../../libs/noty/style.css">
 </head>
-<?php require("../../config/Database.php");
+<?php
+require("../../config/Database.php");
 require("../../config/Validador.php");
 require("../../config/Estado.php");
 
@@ -26,6 +27,9 @@ require("../../config/Empresa.php");
 require("../../config/Grupo.php");
 require("../../config/Servico.php");
 require("../../config/Usuario.php");
+require("../../config/EmpresaCliente.php");
+require("../../config/EmpresaServico.php");
+require("../../config/EmpresaUsuario.php");
 
 $db = new Database();
 $validador = new Validador();
@@ -38,6 +42,9 @@ $classEmpresa = new Empresa($db->getConnection());
 $classGrupo = new Grupo($db->getConnection());
 $classServico = new Servico($db->getConnection());
 $classUsuario = new Usuario($db->getConnection());
+$classEmpresaCliente = new EmpresaCliente($db->getConnection());
+$classEmpresaServico = new EmpresaServico($db->getConnection());
+// $classEmpresaUsuario = new EmpresaUsuario($db->getConnection());
 ?>
 
 <body class="layout-fixed">

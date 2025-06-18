@@ -17,28 +17,38 @@
     <form id="suporte-cadastrar" data-action="suporte/cadastrar.php">
         <div class="row">
 
-            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
-                <label for="cliente_id">Cliente <span class="campo-obrigatorio text-danger">*</span></label>
-                <select class="form-select select2 input-validar-select campo-obrigatorio" id="cliente_id" name="cliente_id">
-                    <option value="">Selecione um Cliente</option>
-                    <?php
-                    $clientes = $classCliente->listarClientes();
-                    foreach ($clientes as $cliente): ?>
-                        <option value='<?php echo $cliente->id ?>'><?php echo $cliente->nome_fantasia ? $cliente->nome_fantasia : $cliente->responsavel_nome ?></option>
-                    <?php endforeach ?>
-                </select>
-            </div>
+            <?php
+            if ($_SESSION["usuario_grupo"] != 2): ?>
+                <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
+                    <label for="cliente_id">Cliente <span class="campo-obrigatorio text-danger">*</span></label>
+                    <select class="form-select select2 input-validar-select campo-obrigatorio" id="cliente_id" name="cliente_id">
+                        <option value="">Selecione um Cliente</option>
+                        <?php
+                        $clientes = $classCliente->listarClientes();
+                        foreach ($clientes as $cliente): ?>
+                            <option value='<?php echo $cliente->id ?>'><?php echo $cliente->nome_fantasia ? $cliente->nome_fantasia : $cliente->responsavel_nome ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            <?php else:
+                // Busca o cliente_id pelo usuario_id logado
+                $usuario_id = $_SESSION["usuario_id"];
+                $cliente_id = null;
+                $stmt = $db->prepare("SELECT id FROM cliente WHERE usuario_id = :usuario_id LIMIT 1");
+                $stmt->bindValue(":usuario_id", $usuario_id, PDO::PARAM_INT);
+                $stmt->execute();
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+                if ($row) {
+                    $cliente_id = $row['id'];
+                }
+            ?>
+                <input type="hidden" name="cliente_id" id="cliente_id" value="<?php echo $cliente_id; ?>">
+            <?php endif; ?>
 
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
                 <label for="empresa_id">Empresa <span class="campo-obrigatorio text-danger">*</span></label>
                 <select class="form-select select2 input-validar-select campo-obrigatorio" id="empresa_id" name="empresa_id">
                     <option value="">Selecione uma empresa</option>
-                    <?php
-                    $empresas = $classEmpresa->listarEmpresas();
-                    foreach ($empresas as $empresa):
-                    ?>
-                        <option value='<?php echo $empresa->id ?>'><?php echo $empresa->nome ?></option>
-                    <?php endforeach ?>
                 </select>
             </div>
 
