@@ -17,7 +17,7 @@ $classEmpresaCliente = new EmpresaCliente($db->getConnection());
 $empresas = $classEmpresaCliente->pegarEmpresas($cliente_id);
 
 // Loga o resultado para o console do navegador
-if (empty($empresas)) {
+if (count($empresas) == 0) {
     echo json_encode(["debug" => "Nenhuma empresa encontrada para o cliente_id " . $cliente_id, "empresas" => []]);
     exit;
 }

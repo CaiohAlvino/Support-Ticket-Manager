@@ -16,6 +16,7 @@
 <!-- Custom Scripts -->
 <script src="../../js/mask.js"></script>
 <script src="../../js/sidebar.js"></script>
+<script src="../../js/excluir.js"></script>
 <script src="../../js/login.js"></script>
 <script src="../../js/cliente.js"></script>
 <script src="../../js/dashboard.js"></script>
