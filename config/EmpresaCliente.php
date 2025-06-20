@@ -22,22 +22,23 @@ class EmpresaCliente
             $params = array();
 
             if ($empresa_id) {
-                $where[] = "empresa_cliente.empresa_id = :empresa_id";
+                $where[] = "`empresa_cliente`.`empresa_id` = :empresa_id";
                 $params[":empresa_id"] = $empresa_id;
             }
             if ($cliente_id) {
-                $where[] = "empresa_cliente.cliente_id = :cliente_id";
+                $where[] = "`empresa_cliente`.`cliente_id` = :cliente_id";
                 $params[":cliente_id"] = $cliente_id;
             }
             if ($ativo !== null) {
-                $where[] = "empresa_cliente.ativo = :ativo";
+                $where[] = "`empresa_cliente`.`situacao` = :ativo";
                 $params[":ativo"] = $ativo;
             }
 
             $query = "SELECT
-                        empresa_cliente.*,
+                        `empresa_cliente`.*,
                         `empresa`.`nome` AS empresa_nome,
-                        `cliente`.`nome` AS cliente_nome
+                        `cliente`.`nome_fantasia` AS cliente_nome_fantasia,
+                        `cliente`.`responsavel_nome` AS cliente_nome_responsavel
                     FROM
                         `empresa_cliente`
                     LEFT JOIN

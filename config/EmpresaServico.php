@@ -22,27 +22,37 @@ class EmpresaServico
             $params = array();
 
             if ($empresa_id) {
-                $where[] = "empresa_servico.empresa_id = :empresa_id";
+                $where[] = "`empresa_servico`.`empresa_id` = :empresa_id";
                 $params[":empresa_id"] = $empresa_id;
             }
             if ($servico_id) {
-                $where[] = "empresa_servico.servico_id = :servico_id";
+                $where[] = "`empresa_servico`.`servico_id` = :servico_id";
                 $params[":servico_id"] = $servico_id;
             }
             if ($ativo !== null) {
-                $where[] = "empresa_servico.ativo = :ativo";
+                $where[] = "`empresa_servico`.`situacao` = :ativo";
                 $params[":ativo"] = $ativo;
             }
 
-            $query = "SELECT empresa_servico.*, `empresa`.`nome` AS empresa_nome, `servico`.`nome` AS servico_nome
-                        FROM empresa_servico
-                        LEFT JOIN empresa ON `empresa`.`id` = `empresa_servico`.`empresa_id`
-                        LEFT JOIN servico ON `servico`.`id` = `empresa_servico`.`servico_id`";
+            $query = "SELECT
+                        `empresa_servico`.*,
+                        `empresa`.`nome` AS empresa_nome,
+                        `servico`.`nome` AS servico_nome
+                    FROM
+                        `empresa_servico`
+                        LEFT JOIN
+                            `empresa` ON `empresa`.`id` = `empresa_servico`.`empresa_id`
+                        LEFT JOIN
+                            `servico` ON `servico`.`id` = `empresa_servico`.`servico_id`";
 
-            $queryCount = "SELECT COUNT(empresa_servico.id) as total
-                            FROM empresa_servico
-                            LEFT JOIN empresa ON `empresa`.`id` = `empresa_servico`.`empresa_id`
-                            LEFT JOIN servico ON `servico`.`id` = `empresa_servico`.`servico_id`";
+            $queryCount = "SELECT
+                                COUNT(`empresa_servico`.`id`) as total
+                            FROM
+                                `empresa_servico`
+                            LEFT JOIN
+                                `empresa` ON `empresa`.`id` = `empresa_servico`.`empresa_id`
+                            LEFT JOIN
+                                `servico` ON `servico`.`id` = `empresa_servico`.`servico_id`";
 
             if ($where) {
                 $query .= " WHERE " . implode(" AND ", $where);

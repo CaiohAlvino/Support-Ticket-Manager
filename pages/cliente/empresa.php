@@ -2,11 +2,10 @@
 <?php
 $nome = isset($_GET["nome"]) ? $_GET["nome"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
-$id = isset($_GET["id"]) ? $_GET["id"] : null;
+$id = isset($_GET["id"]) ? (int)$_GET["id"] : NULL;
 
-$indexRegistros = $classEmpresaServico->index([
-    "empresa_id" => $id,
-    "nome" => $nome,
+$indexRegistros = $classEmpresaCliente->index([
+    "cliente_id" => $id,
     "pagina" => $pagina,
     "limite" => 15
 ]);
@@ -14,8 +13,8 @@ $registros = $indexRegistros["resultados"];
 
 $paginacao = $indexRegistros["paginacao"];
 
-$servicos = $classServico->listarServicos();
-$empresa = $classEmpresa->pegarPorId($id);
+$empresas = $classEmpresa->listarEmpresas();
+$cliente = $classCliente->pegarPorId($id);
 ?>
 <header class="sessao">
     <div class="row">
@@ -23,7 +22,7 @@ $empresa = $classEmpresa->pegarPorId($id);
             <a href="index.php" class="btn btn-voltar botao-noty-voltar"><i class="bi-chevron-left me-2"></i> Voltar</a>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Serviços da empresa: <?php echo $empresa->nome; ?></h1>
+            <h1 class="titulo">Empresa do cliente: <?php echo $cliente->nome_fantasia ? $cliente->nome_fantasia : $cliente->responsavel_nome ?></h1>
         </div>
     </div>
 </header>
@@ -33,11 +32,11 @@ $empresa = $classEmpresa->pegarPorId($id);
         <input type="hidden" name="empresa_id" id="empresa_id" value="<?php echo $id; ?>">
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
-                <label for="servico_id" class="form-label">Adicionar serviços <span class="campo-obrigatorio text-danger">*</span></label>
-                <select name="servico_id" id="servico_id" class="form-select select2 input-validar-select campo-obrigatorio">
-                    <option value="">Selecione um serviço</option>
-                    <?php foreach ($servicos as $servico): ?>
-                        <option value="<?php echo $servico->id; ?>"><?php echo $servico->nome; ?></option>
+                <label for="servico_id" class="form-label">Adicionar empresas <span class="campo-obrigatorio text-danger">*</span></label>
+                <select name="empresa_id" id="empresa_id" class="form-select select2 input-validar-select campo-obrigatorio">
+                    <option value="">Selecione uma empresa</option>
+                    <?php foreach ($empresas as $empresa): ?>
+                        <option value="<?php echo $empresa->id; ?>"><?php echo $empresa->nome; ?></option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -57,13 +56,10 @@ $empresa = $classEmpresa->pegarPorId($id);
             <div class="mb-3">
                 <i class="bi bi-people fs-1"></i>
             </div>
-            <h5 class="fw-bold">Nenhum serviço encontrado</h5>
-            <p class="mb-0">Confira se os dados estão corretos ou cadastre um novo serviço.</p>
+            <h5 class="fw-bold">Nenhuma empresa encontrada</h5>
+            <p class="mb-0">Confira se os dados estão corretos ou cadastre uma nova empresa.</p>
         </div>
     <?php else: ?>
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h6 class="titulo">Serviços prestados</h6>
-        </div>
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
@@ -84,21 +80,20 @@ $empresa = $classEmpresa->pegarPorId($id);
                                         <span class="badge text-bg-danger">Inativo</span>
                                     <?php endif; ?>
                                 </td>
-                                <td><?php echo isset($registro->servico_nome) ? $registro->servico_nome : "--"; ?></td>
+                                <td><?php echo isset($registro->empresa_nome) ? $registro->empresa_nome : "--"; ?></td>
                                 <td class="nao-mostrar-impressao">
                                     <button
                                         data-bs-toggle="modal"
                                         data-bs-target="#excluir-<?php echo $registro->id; ?>"
                                         type="button"
-                                        class="btn btn-sm btn-excluir"
-                                        data-empresa-id="<?php echo $id; ?>">
+                                        class="btn btn-sm btn-excluir">
                                         <i class="bi bi-trash"></i> Excluir
                                     </button>
                                 </td>
                             </tr>
 
                             <?php $registroExcluir = $registro; ?>
-                            <?php $data_action_excluir = "empresa/excluir-servico.php"; ?>
+                            <?php $data_action_excluir = "empresa/excluir.php"; ?>
                             <?php include("../components/excluir.php"); ?>
                         <?php endif; ?>
                     <?php endforeach; ?>
