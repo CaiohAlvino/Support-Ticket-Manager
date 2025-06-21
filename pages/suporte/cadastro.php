@@ -20,8 +20,8 @@
             <?php
             if ($_SESSION["usuario_grupo"] != 2): ?>
                 <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
-                    <label for="cliente_id">Cliente <span class="campo-obrigatorio text-danger">*</span></label>
-                    <select class="form-select select2 input-validar-select campo-obrigatorio" id="cliente_id" name="cliente_id">
+                    <label for="cliente_id_suporte">Cliente <span class="campo-obrigatorio text-danger">*</span></label>
+                    <select class="form-select select2 input-validar-select campo-obrigatorio" id="cliente_id_suporte" name="cliente_id_suporte">
                         <option value="">Selecione um Cliente</option>
                         <?php
                         $clientes = $classCliente->listarClientes();
@@ -42,7 +42,7 @@
                     $cliente_id = $row['id'];
                 }
             ?>
-                <input type="hidden" name="cliente_id" id="cliente_id" value="<?php echo $cliente_id; ?>">
+                <input type="hidden" name="cliente_id_suporte" id="cliente_id_suporte" value="<?php echo $cliente_id; ?>">
             <?php endif; ?>
 
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 mb-3">

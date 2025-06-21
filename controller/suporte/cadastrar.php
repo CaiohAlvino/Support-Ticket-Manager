@@ -25,7 +25,7 @@ $usuario_id = isset($usuario->id) ? $usuario->id : NULL;
 $dadosSuporte = [
     "empresa_id" => isset($_POST["empresa_id"]) ? $_POST["empresa_id"] : NULL,
     "servico_id" => isset($_POST["servico_id"]) ? $_POST["servico_id"] : NULL,
-    "cliente_id" => isset($_POST["cliente_id"]) ? $_POST["cliente_id"] : NULL,
+    "cliente_id" => isset($_POST["cliente_id_suporte"]) ? $_POST["cliente_id_suporte"] : NULL,
     "assunto" => isset($_POST["assunto"]) ? $_POST["assunto"] : NULL,
     "mensagem" => isset($_POST["mensagem"]) ? $_POST["mensagem"] : NULL,
 ];

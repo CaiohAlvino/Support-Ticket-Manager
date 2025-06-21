@@ -44,7 +44,7 @@ $classServico = new Servico($db->getConnection());
 $classUsuario = new Usuario($db->getConnection());
 $classEmpresaCliente = new EmpresaCliente($db->getConnection());
 $classEmpresaServico = new EmpresaServico($db->getConnection());
-// $classEmpresaUsuario = new EmpresaUsuario($db->getConnection());
+$classEmpresaUsuario = new EmpresaUsuario($db->getConnection());
 ?>
 
 <body class="layout-fixed">

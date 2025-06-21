@@ -37,12 +37,12 @@ if ($existeServico->rowCount() > 0) {
     exit;
 } else {
     try {
-        $servico = $db->prepare(
-            "INSERT INTO
+        $query = "INSERT INTO
                 `empresa_servico` (`empresa_id`, `servico_id`)
             VALUES
-                (:empresa_id, :servico_id)"
-        );
+                (:empresa_id, :servico_id)";
+
+        $servico = $db->prepare($query);
 
         $servico->bindParam(":empresa_id", $empresa_id, PDO::PARAM_INT);
         $servico->bindParam(":servico_id", $servico_id, PDO::PARAM_INT);

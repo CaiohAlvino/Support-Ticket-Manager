@@ -4,8 +4,8 @@ $nome = isset($_GET["nome"]) ? $_GET["nome"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
 $id = isset($_GET["id"]) ? (int)$_GET["id"] : NULL;
 
-$indexRegistros = $classEmpresaCliente->index([
-    "cliente_id" => $id,
+$indexRegistros = $classEmpresaUsuario->index([
+    "usuario_id" => $id,
     "pagina" => $pagina,
     "limite" => 15
 ]);
@@ -14,7 +14,7 @@ $registros = $indexRegistros["resultados"];
 $paginacao = $indexRegistros["paginacao"];
 
 $empresas = $classEmpresa->listarEmpresas();
-$cliente = $classCliente->pegarPorId($id);
+$usuario = $classUsuario->pegarPorId($id);
 ?>
 <header class="sessao">
     <div class="row">
@@ -22,14 +22,14 @@ $cliente = $classCliente->pegarPorId($id);
             <a href="index.php" class="btn btn-voltar botao-noty-voltar"><i class="bi-chevron-left me-2"></i> Voltar</a>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Empresa do cliente: <?php echo $cliente->nome_fantasia ? $cliente->nome_fantasia : $cliente->responsavel_nome ?></h1>
+            <h1 class="titulo">Empresas do usuario: <?php echo $usuario->nome ?></h1>
         </div>
     </div>
 </header>
 
 <div class="sessao">
-    <form id="empresa-cliente-cadastrar" data-action="cliente/cadastrar-empresa.php">
-        <input type="hidden" name="cliente_id" id="cliente_id" value="<?php echo $id; ?>">
+    <form id="empresa-usuario-cadastrar" data-action="usuario/cadastrar-empresa.php">
+        <input type="hidden" name="usuario_id" id="usuario_id" value="<?php echo $id; ?>">
         <div class="row">
             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-3">
                 <label for="empresa_id" class="form-label">Adicionar empresas <span class="campo-obrigatorio text-danger">*</span></label>
@@ -93,7 +93,7 @@ $cliente = $classCliente->pegarPorId($id);
                             </tr>
 
                             <?php $registroExcluir = $registro; ?>
-                            <?php $data_action_excluir = "cliente/excluir-empresa.php"; ?>
+                            <?php $data_action_excluir = "usuario/excluir-empresa.php"; ?>
                             <?php include("../components/excluir.php"); ?>
                         <?php endif; ?>
                     <?php endforeach; ?>

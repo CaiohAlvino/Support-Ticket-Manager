@@ -288,4 +288,36 @@ $(document).ready(function () {
             $(".campo-obrigatorio").trigger("blur");
         }
     });
+
+    $("#empresa-cliente-cadastrar").submit(function (event) {
+        event.preventDefault();
+
+        $(".campo-obrigatorio").trigger("blur");
+        FeedbackVisual.limparTodosFeedbacks("#empresa-cliente-cadastrar");
+        let isValid = true;
+        let action = $(this).data("action");
+
+        let empresa_id = $("#empresa_id").val().trim();
+        if (empresa_id === "") {
+            FeedbackVisual.mostrarErro($("#empresa_id"), "Por favor, informe o Serviço.");
+            isValid = false;
+        } else if (typeof window.validadorSelect !== "undefined" && !window.validadorSelect.validar(empresa_id)) {
+            isValid = false;
+        }
+
+        if (isValid) {
+            $.ajax({
+                url: `../../controller/${action}`,
+                type: "POST",
+                dataType: "json",
+                data: $(this).serialize(),
+                success: function (response) {
+                    NotyE.exception({ response, reload: true });
+                },
+                error: function (xhr, status, error) {
+                    NotyE.exception({ error: true, xhr });
+                },
+            });
+        }
+    });
 });

@@ -129,7 +129,7 @@ $(document).ready(function () {
     });
 
     // Atualiza empresas ao selecionar cliente
-    $("#cliente_id").on("change", function () {
+    $("#cliente_id_suporte").on("change", function () {
         var clienteId = $(this).val();
         var $empresaSelect = $("#empresa_id");
         $empresaSelect.html('<option value="">Carregando...</option>');
