@@ -91,7 +91,7 @@ $paginacao = $indexRegistros["paginacao"];
                             </tr>
 
                             <?php $registroExcluir = $registro; ?>
-                            <?php $data_action_excluir = "servico/excluir.php"; ?>
+                            <?php $data_action_excluir = "usuario/excluir.php"; ?>
                             <?php include("../components/excluir.php"); ?>
                         <?php endif; ?>
                     <?php endforeach; ?>
