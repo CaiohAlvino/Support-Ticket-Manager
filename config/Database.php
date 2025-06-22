@@ -2,10 +2,10 @@
 
 class Database
 {
-    private $host = "localhost";
-    private $dbName = "support_ticket_manager";
-    private $username = "root";
-    private $password = "";
+    private $host = "tcc-db-phpmyadmin.a5b4kx.easypanel.host";
+    private $dbName = "support-ticket-manager";
+    private $username = "alvino";
+    private $password = "WQDThX9tbD";
     private $charset = "utf8mb4";
     private $pdo;
     private $error;
@@ -17,7 +17,7 @@ class Database
 
     private function connect()
     {
-        $dsn = "mysql:host={$this->host};dbname={$this->dbName};";
+        $dsn = "mysql:host={$this->host};port=3306;dbname={$this->dbName};charset={$this->charset}";
 
         try {
             $this->pdo = new PDO(
