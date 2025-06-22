@@ -151,4 +151,18 @@ $classEmpresaUsuario = new EmpresaUsuario($db->getConnection());
     </nav>
     <!-- Main Content -->
     <main class="main-content" id="mainContent">
+        <div class="cabecalho mostrar-impressao">
+            <div class="cabecalho-impressao">
+                <div class="cabecalho-impressao-logo">
+                    <div class="cabecalho-impressao-info">
+                        <div class="logo d-flex align-items-center text-decoration-none"><i class="bi bi-ticket-perforated fs-3 me-2"></i><span class="fw-bold fs-4">Support Ticket Manager</span></div>
+                        <span class="text-muted">Gerenciamento de Suporte</span>
+                    </div>
+                </div>
+                <div class="cabecalho-impressao-dados">
+                    <div><strong>Usuário:</strong> <?php echo isset($_SESSION['usuario_nome']) ? htmlspecialchars($_SESSION['usuario_nome']) : 'Usuário'; ?></div>
+                    <div><strong>Data/Hora:</strong> <?php echo date('d/m/Y H:i'); ?></div>
+                </div>
+            </div>
+        </div>
         <!-- Conteúdo principal aqui -->

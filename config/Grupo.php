@@ -47,8 +47,11 @@ class Grupo
 
             $query .= " ORDER BY `nome` ASC";
 
-            $offset = ($pagina - 1) * $limite;
-            $query .= " LIMIT $limite OFFSET $offset";
+            // Só adiciona LIMIT/OFFSET se limite for definido e maior que zero
+            if ($limite !== null && $limite > 0) {
+                $offset = ($pagina - 1) * $limite;
+                $query .= " LIMIT $limite OFFSET $offset";
+            }
 
             $stmt = $this->db->prepare($query);
             $stmtCount = $this->db->prepare($queryCount);

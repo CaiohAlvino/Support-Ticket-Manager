@@ -1,3 +1,9 @@
+<div class="rodape mostrar-impressao">
+    <div class="rodape-impressao">
+        <div><strong>Support Ticket Manager</strong> &copy; <?php echo date('Y'); ?></div>
+        <div class="rodape-impressao-msg">Documento gerado pelo sistema de gerenciamento de suporte. Uso restrito e confidencial.</div>
+    </div>
+</div>
 </main>
 <!-- Scripts principais -->
 <script src="../../libs/jquery/script.js"></script>

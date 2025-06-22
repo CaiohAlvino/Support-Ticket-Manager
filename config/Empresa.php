@@ -18,7 +18,7 @@ class Empresa
 
             $nome = isset($parametros["nome"]) ? $parametros["nome"] : NULL;
             $pagina = isset($parametros["pagina"]) ? $parametros["pagina"] : 1;
-            $limite = isset($parametros["limite"]) ? $parametros["limite"] : 10;
+            $limite = isset($parametros["limite"]) ? $parametros["limite"] : null;
 
             $where = array();
 
@@ -39,7 +39,9 @@ class Empresa
 
             $query .= " ORDER BY `empresa`.`id` ASC";
 
-            $query .= " LIMIT :limite OFFSET :offset";
+            if ($limite) {
+                $query .= " LIMIT :limite OFFSET :offset";
+            }
 
             $stmt = $this->db->prepare($query);
             $stmtCount = $this->db->prepare($queryCount);
@@ -49,10 +51,11 @@ class Empresa
                 $stmtCount->bindParam(":nome", $nome, PDO::PARAM_STR);
             }
 
-            $offset = ($pagina - 1) * $limite;
-
-            $stmt->bindParam(":limite", $limite, PDO::PARAM_INT);
-            $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+            if ($limite) {
+                $offset = ($pagina - 1) * $limite;
+                $stmt->bindParam(":limite", $limite, PDO::PARAM_INT);
+                $stmt->bindParam(":offset", $offset, PDO::PARAM_INT);
+            }
 
             $stmt->execute();
             $stmtCount->execute();
@@ -62,9 +65,9 @@ class Empresa
 
             $paginação = array(
                 "pagina" => $pagina,
-                "limite" => $limite,
+                "limite" => $limite ? $limite : $total,
                 "total" => $total,
-                "total_paginas" => ceil($total / $limite)
+                "total_paginas" => $limite ? ceil($total / $limite) : 1
             );
 
             return array(

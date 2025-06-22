@@ -2,11 +2,14 @@
 <?php
 $nome = isset($_GET['nome']) ? $_GET['nome'] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
+$relatorio = isset($_GET['relatorio']) ? $_GET['relatorio'] : 0;
+
+$limiteConsulta = ($relatorio == 1) ? null : 15;
 
 $indexRegistros = $classServico->index([
     "nome" => $nome,
     "pagina" => $pagina,
-    "limite" => 15
+    "limite" => $limiteConsulta
 ]);
 $registros = $indexRegistros["resultados"];
 
@@ -22,7 +25,7 @@ $paginacao = $indexRegistros["paginacao"];
             <a href="cadastro.php" class="btn btn-adicionar">
                 <i class="bi-plus-lg" aria-hidden="true"></i> Novo Serviço
             </a>
-            <button type="button" class="btn btn-imprimir botao-noty-ativo ms-2" onclick="window.print();">
+            <button type="button" class="btn btn-imprimir botao-noty-ativo ms-2" id="btnRelatorio">
                 <i class="bi bi-printer"></i> Gerar Relatório
             </button>
         </div>
@@ -94,51 +97,71 @@ $paginacao = $indexRegistros["paginacao"];
                 </tbody>
             </table>
         </div>
+    <?php endif; ?>
 </div>
 
 <?php $linkPaginacaoUrlParametros = "&limite=" . $paginacao['limite'] . "&nome=$nome"; ?>
 
 <?php
-        $limite = 2;
-        $inicio = ((($pagina - $limite) > 1) ? $pagina - $limite : 1);
-        $fim = ((($pagina + $limite) < $paginacao['total_paginas']) ? $pagina + $limite : $paginacao['total_paginas']);
+$limiteNavegacao = 2;
+$inicio = ((($pagina - $limiteNavegacao) > 1) ? $pagina - $limiteNavegacao : 1);
+$fim = ((($pagina + $limiteNavegacao) < $paginacao['total_paginas']) ? $pagina + $limiteNavegacao : $paginacao['total_paginas']);
 ?>
 
-<nav aria-label="Page navigation">
-    <ul class="pagination justify-content-center mt-3">
-        <?php if ($paginacao['pagina'] > 1): ?>
-            <li class="page-item">
-                <a class="me-2 btn btn-outline-dark" href="?pagina=<?php echo $paginacao['pagina'] - 1; ?><?php echo $linkPaginacaoUrlParametros; ?>">
-                    Anterior
-                </a>
-            </li>
-        <?php endif; ?>
-
-        <?php for ($i = $inicio; $i <= $fim; $i++) : ?>
-            <?php if ($i == $paginacao['pagina']): ?>
-                <li class="page-item active">
-                    <a class="ms-1 me-1 btn btn-dark">
-                        <?php echo $i; ?>
-                    </a>
-                </li>
-            <?php else: ?>
+<?php if ($limiteConsulta !== null): ?>
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center mt-3">
+            <?php if ($paginacao['pagina'] > 1): ?>
                 <li class="page-item">
-                    <a class="ms-1 me-1 btn btn-outline-dark" href="?pagina=<?php echo $i; ?><?php echo $linkPaginacaoUrlParametros; ?>">
-                        <?php echo $i; ?>
+                    <a class="me-2 btn btn-outline-dark" href="?pagina=<?php echo $paginacao['pagina'] - 1; ?><?php echo $linkPaginacaoUrlParametros; ?>">
+                        Anterior
                     </a>
                 </li>
             <?php endif; ?>
-        <?php endfor; ?>
 
-        <?php if ($paginacao['pagina'] < $paginacao['total_paginas']): ?>
-            <li class="ms-2 page-item">
-                <a class="btn btn-outline-dark" href="?pagina=<?php echo $paginacao['pagina'] + 1; ?><?php echo $linkPaginacaoUrlParametros; ?>">
-                    Próxima
-                </a>
-            </li>
-        <?php endif; ?>
-    </ul>
-</nav>
+            <?php for ($i = $inicio; $i <= $fim; $i++) : ?>
+                <?php if ($i == $paginacao['pagina']): ?>
+                    <li class="page-item active">
+                        <a class="ms-1 me-1 btn btn-dark">
+                            <?php echo $i; ?>
+                        </a>
+                    </li>
+                <?php else: ?>
+                    <li class="page-item">
+                        <a class="ms-1 me-1 btn btn-outline-dark" href="?pagina=<?php echo $i; ?><?php echo $linkPaginacaoUrlParametros; ?>">
+                            <?php echo $i; ?>
+                        </a>
+                    </li>
+                <?php endif; ?>
+            <?php endfor; ?>
+
+            <?php if ($paginacao['pagina'] < $paginacao['total_paginas']): ?>
+                <li class="ms-2 page-item">
+                    <a class="btn btn-outline-dark" href="?pagina=<?php echo $paginacao['pagina'] + 1; ?><?php echo $linkPaginacaoUrlParametros; ?>">
+                        Próxima
+                    </a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
 <?php endif; ?>
 
 <?php include("../template/rodape.php"); ?>
+
+<script>
+    document.getElementById('btnRelatorio').addEventListener('click', function() {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('relatorio') === '1') {
+            window.print();
+        } else {
+            url.searchParams.set('relatorio', '1');
+            window.location.href = url.toString();
+        }
+    });
+    window.addEventListener('DOMContentLoaded', function() {
+        const url = new URL(window.location.href);
+        if (url.searchParams.get('relatorio') === '1') {
+            setTimeout(() => window.print(), 300);
+        }
+    });
+</script>
