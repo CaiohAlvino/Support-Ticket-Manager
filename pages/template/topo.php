@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -58,7 +61,7 @@ $classEmpresaUsuario = new EmpresaUsuario($db->getConnection());
             <div class="d-flex align-items-center gap-3">
                 <div class="dropdown">
                     <button class="dropdown-toggle btn btn-light d-flex align-items-center gap-2" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-person-circle fs-4"></i>
-                        <?php session_start();
+                        <?php
 
                         if (isset($_SESSION['usuario_nome'])) {
                             echo '<span class="user-name">' . htmlspecialchars($_SESSION['usuario_nome']) . '</span>';
