@@ -1,0 +1,618 @@
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 32px;
+    box-shadow: 0 4px 24px rgba(42, 58, 140, 0.08);
+    z-index: 1000;
+    border-bottom: 1px solid var(--cor-borda);
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    min-width: 0;
+}
+
+.logo-clinora-container {
+    border-right: 2px solid var(--cor-borda);
+    padding: 0.5em 1em 0.5em 0em;
+}
+
+.clinora-logo {
+    height: 30px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+}
+
+.empresa-logo {
+    height: 40px;
+    width: auto;
+    max-width: 120px;
+    object-fit: contain;
+}
+
+.usuario-imagem {
+    object-fit: cover;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(42, 58, 140, 0.1);
+    border: 2px solid var(--cor-branco);
+    transition: box-shadow 0.2s, border 0.2s;
+}
+
+.usuario-imagem:hover {
+    box-shadow: 0 4px 16px rgba(42, 58, 140, 0.18);
+    border: 2px solid var(--cor-principal);
+}
+
+.tabela-imagem {
+    object-fit: cover;
+    width: 30px;
+    height: 30px;
+    max-width: 30px;
+    max-height: 30px;
+    border-radius: 15px;
+}
+
+.empresa-nome {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--cor-texto);
+}
+
+.empresa-nome i {
+    color: var(--cor-principal);
+    opacity: 0.8;
+    flex-shrink: 0;
+}
+
+.menu-toggle {
+    background: none;
+    border: none;
+    font-size: 26px;
+    cursor: pointer;
+    color: var(--cor-principal);
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.menu-toggle:hover {
+    background: var(--bg-cinza);
+    color: var(--cor-verde);
+    box-shadow: 0 2px 8px rgba(42, 58, 140, 0.1);
+}
+
+#botao-sair {
+    padding: 8px 16px;
+    background: white;
+    color: var(--cor-texto);
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.sidebar {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    bottom: 0;
+    width: 260px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(6px);
+    transition: width 0.3s, background 0.3s;
+    overflow-y: auto;
+    border-right: 1px solid var(--cor-borda);
+    z-index: 999;
+    padding-top: 18px;
+    box-shadow: 2px 0 16px rgba(42, 58, 140, 0.06);
+}
+
+.sidebar.collapsed {
+    width: 70px;
+}
+
+.menu-item {
+    padding: 10px 18px;
+    display: flex;
+    align-items: center;
+    color: var(--cor-texto);
+    text-decoration: none;
+    border-radius: 24px;
+    margin: 4px 16px;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+    background: transparent;
+    gap: 0px 14px;
+    font-weight: 500;
+    position: relative;
+}
+
+.menu-item:hover,
+.menu-item.active {
+    background: #eef3ff;
+    color: var(--cor-principal);
+    box-shadow: 0 2px 8px rgba(42, 58, 140, 0.07);
+}
+
+.menu-item.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 8px;
+    bottom: 8px;
+    width: 4px;
+    border-radius: 4px;
+    background: var(--cor-principal);
+}
+
+.menu-item i {
+    width: 22px;
+    text-align: center;
+    font-size: 18px;
+    color: var(--cor-principal);
+    opacity: 0.85;
+}
+
+.menu-text {
+    white-space: nowrap;
+    opacity: 1;
+    transition: var(--transition);
+    font-size: 0.95rem;
+}
+
+.sidebar.collapsed .menu-text {
+    opacity: 0;
+    display: none;
+}
+.main-content {
+    margin-left: 260px;
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+    background: var(--bg-cinza);
+    min-height: calc(100vh - 64px);
+}
+.main-content.collapsed {
+    margin-left: 70px;
+}
+
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #cdd1d6;
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #a8adb3;
+}
+
+@media (max-width: 992px) {
+    .header {
+        padding: 0 12px;
+    }
+
+    .header-left {
+        gap: 12px;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+        position: fixed;
+        z-index: 1100;
+        width: 80vw;
+        max-width: 320px;
+        left: 0;
+        top: 64px;
+        height: calc(100vh - 64px);
+        background: #fff;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .sidebar.sidebar-open {
+        transform: translateX(0);
+        box-shadow: 2px 0 16px rgba(42, 58, 140, 0.18);
+    }
+    .sidebar.collapsed {
+        transform: translateX(-100%);
+        width: 80vw;
+    }
+    .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 64px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 1099;
+        transition: opacity 0.2s;
+        opacity: 0;
+        pointer-events: none;
+    }
+    .sidebar-overlay.active {
+        display: block;
+        opacity: 1;
+        pointer-events: all;
+    }
+    .main-content {
+        margin-left: 0 !important;
+        padding: 15px;
+    }
+    .main-content.collapsed {
+        margin-left: 0 !important;
+    }
+
+    .sidebar:not(.collapsed) .menu-text {
+        opacity: 1;
+        display: block;
+    }
+
+    .sidebar:not(.collapsed) .submenu-icon {
+        display: block;
+    }
+
+    .sidebar:not(.collapsed) + .sidebar-overlay {
+        display: block;
+    }
+
+    .sidebar:not(.collapsed) .has-submenu.active .submenu {
+        display: block !important;
+        height: auto !important;
+        padding: 4px 0;
+    }
+
+    .submenu {
+        transition: height 0.3s ease;
+    }
+}
+
+@media (max-width: 576px) {
+    .clinora-logo,
+    .logo-clinora-container,
+    .modulos-icon-container {
+        display: none;
+    }
+}
+
+@media (min-width: 992px) {
+    body.sidebar-collapsed .sidebar {
+        width: 70px !important;
+        min-width: 70px !important;
+        max-width: 70px !important;
+        overflow-x: hidden;
+    }
+    body.sidebar-collapsed .main-content {
+        margin-left: 70px !important;
+    }
+    .sidebar {
+        transition: width 0.3s;
+    }
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: var(--cor-texto);
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.dropdown-toggle:hover {
+    border-color: var(--cor-principal);
+    color: var(--cor-principal);
+}
+
+.dropdown-toggle i {
+    font-size: 1.2rem;
+}
+
+.dropdown-toggle .bi-person-circle {
+    font-size: 1.5rem;
+    color: var(--cor-principal);
+    opacity: 0.8;
+}
+
+.user-name {
+    font-weight: 500;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.dropdown-menu {
+    min-width: 220px;
+    padding: 8px;
+    border: 1px solid var(--cor-borda);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    color: var(--cor-texto);
+    font-size: 0.95rem;
+    transition: var(--transition);
+}
+
+.dropdown-item i {
+    font-size: 1.1rem;
+    width: 20px;
+    text-align: center;
+}
+
+.dropdown-item:hover {
+    background: var(--bg-cinza);
+    color: var(--cor-principal);
+}
+
+.dropdown-item.text-danger:hover {
+    background: #fff1f0;
+    color: #ff4d4f;
+}
+
+.dropdown-divider {
+    margin: 8px 0;
+    border-color: var(--cor-borda);
+}
+
+@media (max-width: 768px) {
+    .user-name {
+        display: none;
+    }
+
+    .dropdown-toggle {
+        padding: 8px;
+    }
+
+    .dropdown-toggle .bi-chevron-down {
+        display: none;
+    }
+}
+
+.has-submenu {
+    margin: 2px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+}
+
+.has-submenu .menu-header {
+    display: flex;
+    align-items: center;
+    gap: 0px 12px;
+    color: var(--cor-texto);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    width: 100%;
+}
+
+.has-submenu .menu-header i {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #0059de;
+}
+
+.has-submenu .submenu-icon {
+    margin-left: auto;
+    transition: transform 0.3s ease;
+    font-size: 12px;
+    color: var(--cor-texto);
+}
+
+.has-submenu:hover {
+    background: #eef3ff;
+}
+
+.has-submenu:hover .menu-header {
+    color: #0059de;
+    text-decoration: none;
+}
+
+.has-submenu:hover .submenu-icon {
+    color: #0059de;
+}
+
+.has-submenu.active {
+    background: #eef3ff;
+}
+
+.has-submenu.active .menu-header {
+    color: #0059de;
+    text-decoration: none;
+}
+
+.has-submenu.active .submenu-icon {
+    transform: rotate(180deg);
+    color: #0059de;
+}
+
+.submenu {
+    height: 0;
+    overflow: hidden;
+    background: transparent;
+    transition: height 0.3s ease;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.has-submenu.active .submenu {
+    height: auto;
+    padding: 4px 0;
+}
+
+.submenu-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 16px;
+    color: var(--cor-texto);
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    position: relative;
+    border-radius: 4px;
+    gap: 12px;
+    background: transparent;
+}
+
+.submenu-item i {
+    width: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #0059de;
+}
+
+.submenu-item:hover {
+    color: var(--cor-principal);
+    background: #d6e0f7;
+    text-decoration: none;
+}
+
+.submenu-item.active {
+    color: var(--cor-principal);
+    background: #d6e0f7;
+}
+
+.submenu-item .menu-text {
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.sidebar.collapsed .menu-item,
+.sidebar.collapsed .menu-header {
+    justify-content: center;
+}
+
+.sidebar.collapsed .submenu-icon,
+.sidebar.collapsed .menu-text {
+    display: none;
+}
+
+.sidebar.collapsed .submenu {
+    display: none !important;
+}
+
+.modulos-icon-container {
+    position: relative;
+    margin-right: 20px;
+    margin-top: -10px;
+}
+
+.modulos-icon {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    border-radius: 50%;
+    color: var(--cor-branco);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.modulos-icon::before {
+    content: "Módulos";
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--bg-cinza);
+    color: var(--cor-preto);
+    font-size: 0.5rem;
+    font-weight: bold;
+    padding: 4px 6px;
+    border-radius: 6px;
+    white-space: pre;
+    text-align: center;
+    line-height: 1.1;
+    z-index: 100;
+}
+
+.modulos-icon i {
+    font-size: 1.2rem;
+}
+
+.modulo-adicional {
+    display: inline-flex;
+    align-items: center;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    color: white;
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-size: 0.6rem;
+    font-weight: 600;
+    gap: 0.375rem;
+    position: relative;
+    top: -2px;
+    vertical-align: middle;
+}
+
+.modulo-adicional i {
+    font-size: 0.6rem;
+}
+
+body.sidebar-collapsed .sidebar {
+    width: 70px !important;
+}
+body.sidebar-collapsed .sidebar .menu-text,
+body.sidebar-collapsed .sidebar-section small,
+body.sidebar-collapsed .sidebar .submenu,
+body.sidebar-collapsed .sidebar .submenu-icon {
+    display: none !important;
+    opacity: 0 !important;
+}
+body.sidebar-collapsed .sidebar .menu-item {
+    justify-content: center;
+    gap: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+body.sidebar-collapsed .sidebar .menu-item i {
+    margin-right: 0;
+    font-size: 1.35rem;
+}
+body.sidebar-collapsed .sidebar .menu-item.active::before {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 8px;
+    bottom: 8px;
+}

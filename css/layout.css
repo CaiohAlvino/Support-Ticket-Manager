@@ -1,0 +1,93 @@
+/*
+  =============================
+  LAYOUT E CONTAINERS
+  =============================
+  Use utilitários Bootstrap para grid, espaçamentos e responsividade.
+*/
+
+.titulo {
+    font-size: 1.8em;
+    color: var(--cor-titulo);
+    margin: 0px;
+    word-wrap: break-word;
+}
+
+.subtitulo {
+    color: var(--cor-texto);
+    font-weight: 500;
+    font-size: 1.1rem;
+    margin: 0px;
+}
+
+.sessao {
+    background: var(--bg-branco);
+    padding: 0.8em 1em;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    margin-bottom: 0.5rem;
+}
+
+.fs-7 {
+    font-size: 0.9em !important;
+}
+
+.modulo-adicionar-tooltip {
+    --bs-tooltip-color: #ffffff;
+    --bs-tooltip-bg: #6366f1;
+}
+
+.error-container {
+    background-color: var(--bg-branco);
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: var(--box-shadow);
+    margin: 30px auto;
+}
+
+.error-title {
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.error-message {
+    font-size: 14px;
+}
+
+.select2-container {
+    width: 100% !important;
+}
+
+.table td {
+    vertical-align: middle !important;
+}
+
+.select2-container .select2-selection--single {
+    min-height: 38px;
+    padding: 4px 8px;
+}
+
+.select2-container .select2-selection--single .select2-selection__rendered {
+    font-size: 0.9em !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+    word-break: break-all !important;
+    overflow-wrap: break-word !important;
+    line-height: 1.3;
+    max-width: 100%;
+    text-overflow: unset !important;
+}
+
+.select2-results__option {
+    font-size: 0.9em !important;
+    white-space: normal;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+
+input[readonly] {
+    opacity: 0.7 !important;
+    background-color: #f2f2f2 !important;
+    cursor: not-allowed !important;
+    color: #888 !important;
+    border-color: #ddd !important;
+}

@@ -1,0 +1,300 @@
+/* base */
+@import url("./base/fonts.css");
+@import url("./base/cores.css");
+
+/* componentes */
+@import url("./components/botoes.css");
+@import url("./components/tabelas.css");
+@import url("./components/formulario.css");
+@import url("./components/status.css");
+@import url("./components/alertas.css");
+@import url("./components/notificacao.css");
+@import url("./templates/topo.css");
+
+/* layout */
+@import url("./layout.css");
+
+/*
+  =============================
+  MELHORIAS GLOBAIS DE UI/UX
+  =============================
+  Microinterações, responsividade, acessibilidade e detalhes visuais para dashboard premium.
+*/
+
+/* Header com cor sólida, sombra suave, padding e efeito sticky elegante */
+.header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(42, 58, 140, 0.06);
+    border-bottom: 1px solid var(--cor-borda);
+    z-index: 1100;
+    display: flex;
+    align-items: center;
+    padding: 0 32px;
+    transition: box-shadow 0.2s, background 0.2s;
+}
+
+.header .header-content {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 64px;
+}
+
+.header .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    color: var(--cor-principal);
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.header .logo:hover {
+    color: #3ddc97;
+}
+
+.header .brand-text {
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--cor-principal);
+    letter-spacing: 0.01em;
+}
+
+.header .menu-toggle {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--cor-principal);
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.2s, color 0.2s;
+}
+.header .menu-toggle:hover {
+    background: var(--bg-cinza);
+    color: #3ddc97;
+}
+
+.header .dropdown-toggle {
+    background: var(--bg-cinza);
+    border: none;
+    color: var(--cor-principal);
+    font-weight: 500;
+    border-radius: 8px;
+    padding: 8px 16px;
+    transition: background 0.2s, color 0.2s;
+}
+.header .dropdown-toggle:hover {
+    background: #e3e7ed;
+    color: #3ddc97;
+}
+
+.header .user-name {
+    font-weight: 600;
+    color: var(--cor-principal);
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+@media (max-width: 992px) {
+    .header {
+        padding: 0 12px;
+    }
+    .header .brand-text {
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .header {
+        height: 56px;
+        min-height: 56px;
+        padding: 0 4px;
+    }
+    .header .brand-text {
+        font-size: 1rem;
+    }
+}
+
+/* Avatar do usuário (se disponível) */
+.usuario-imagem {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--cor-principal);
+    box-shadow: 0 2px 8px rgba(42, 58, 140, 0.1);
+}
+
+/* Sidebar com cor sólida e destaque no item ativo */
+.sidebar {
+    background: #f5f7fa;
+    border-right: 1px solid var(--cor-borda);
+}
+.menu-item.active,
+.sidebar-link.active {
+    border-left: 4px solid var(--cor-principal);
+    background: #eef3ff;
+    color: var(--cor-principal) !important;
+    font-weight: 600;
+}
+.menu-item:hover,
+.sidebar-link:hover {
+    background: #f0f4fa;
+    color: var(--cor-principal) !important;
+    transition: background 0.2s, color 0.2s;
+}
+
+/* Cards de estatísticas com efeito hover e sombra mais forte */
+.card {
+    border-radius: 14px;
+    box-shadow: 0 2px 12px rgba(42, 58, 140, 0.07);
+    transition: box-shadow 0.2s, transform 0.2s;
+    background: #fff;
+}
+.card:hover {
+    box-shadow: 0 8px 32px rgba(42, 58, 140, 0.13);
+    transform: translateY(-2px) scale(1.01);
+}
+.stats-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    background: var(--cor-principal);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(42, 58, 140, 0.1);
+}
+
+/* Badges de status e prioridade com cor sólida e leve brilho */
+.badge {
+    background: var(--cor-principal);
+    color: #fff !important;
+    box-shadow: 0 1px 4px rgba(42, 58, 140, 0.08);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    border-radius: 8px;
+    padding: 6px 18px;
+    font-size: 0.95em;
+    filter: brightness(1.05);
+}
+
+/* Tabela: ícone de status e hover suave */
+td .badge-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95em;
+}
+tr:hover td {
+    background: #f5f7fa;
+    transition: background 0.2s;
+}
+
+/* Botão flutuante para mobile */
+@media (max-width: 768px) {
+    .btn-fab {
+        position: fixed;
+        right: 24px;
+        bottom: 24px;
+        z-index: 1200;
+        border-radius: 50%;
+        width: 56px;
+        height: 56px;
+        box-shadow: 0 4px 16px rgba(42, 58, 140, 0.18);
+        font-size: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--cor-principal);
+        color: #fff;
+        border: none;
+        transition: box-shadow 0.2s, background 0.2s;
+    }
+    .btn-fab:hover {
+        background: #23306e;
+        box-shadow: 0 8px 32px rgba(42, 58, 140, 0.23);
+    }
+}
+
+/* Background sutil para dashboard */
+body,
+.main-content {
+    background: #f5f7fa;
+}
+
+/* Acessibilidade: foco visível */
+*:focus {
+    outline: 2px solid var(--cor-principal);
+    outline-offset: 2px;
+}
+
+/* Ícones de ação acessíveis */
+[aria-label] {
+    cursor: pointer;
+}
+
+.mostrar-impressao {
+    display: none !important;
+}
+
+@media print {
+    .nao-mostrar-impressao {
+        display: none !important;
+    }
+    .mostrar-impressao {
+        display: block !important;
+    }
+    .cabecalho-impressao {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #222;
+        padding-bottom: 12px;
+        margin-bottom: 28px;
+        background: none !important;
+        box-shadow: none !important;
+    }
+    .cabecalho-impressao img {
+        height: 48px;
+        width: 48px;
+        margin-right: 16px;
+    }
+    .cabecalho-impressao .fw-bold {
+        font-size: 1.5rem;
+        color: #222 !important;
+    }
+    .cabecalho-impressao .text-muted {
+        color: #555 !important;
+        font-size: 1rem;
+    }
+    .cabecalho-impressao div {
+        font-size: 1rem;
+    }
+    .rodape-impressao {
+        text-align: center;
+        font-size: 0.95rem;
+        color: #555;
+        padding-top: 18px;
+        border-top: 1px solid #ccc;
+        margin-top: 32px;
+        background: none !important;
+        box-shadow: none !important;
+    }
+    body, .main-content {
+        background: #fff !important;
+    }
+}

@@ -1,0 +1,122 @@
+/*
+  =============================
+  LOGIN - TELA DE AUTENTICAÇÃO
+  =============================
+  Estilos modernos, responsivos e acessíveis para a tela de login.
+*/
+body.body-login {
+    background: #f5f7fa;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.login-container {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 32px rgba(42, 58, 140, 0.1);
+    padding: 2.5rem 2rem;
+    max-width: 900px;
+    width: 100%;
+    margin: 2rem auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+}
+.login-illustration {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #f5f7fa;
+    border-radius: 12px;
+    padding: 2rem 1rem;
+    min-height: 340px;
+}
+.login-illustration i {
+    font-size: 3.5rem;
+    color: var(--cor-principal);
+    margin-bottom: 1.2rem;
+}
+.welcome-text {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--cor-principal);
+    margin-bottom: 0.5rem;
+}
+.welcome-subtext {
+    color: var(--cor-texto);
+    font-size: 1.05rem;
+    margin-bottom: 0;
+}
+.login-form {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    box-shadow: 0 2px 12px rgba(42, 58, 140, 0.06);
+    min-height: 340px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.login-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--cor-principal);
+    margin-bottom: 1.5rem;
+}
+.form-label {
+    font-weight: 600;
+    color: var(--cor-principal);
+}
+.form-control {
+    border-radius: 8px;
+    min-height: 44px;
+    font-size: 1rem;
+}
+.password-field {
+    position: relative;
+}
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--cor-principal);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.btn-login {
+    margin-top: 1.2rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    background: var(--cor-principal);
+    color: #fff;
+    padding: 0.8rem 0;
+    box-shadow: 0 2px 8px rgba(42, 58, 140, 0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-login:hover,
+.btn-login:focus {
+    background: #23306e;
+    color: #fff;
+    box-shadow: 0 4px 16px rgba(42, 58, 140, 0.13);
+}
+@media (max-width: 900px) {
+    .login-container {
+        flex-direction: column;
+        padding: 2rem 0.5rem;
+    }
+}
+@media (max-width: 768px) {
+    .login-container {
+        padding: 1.2rem 0.2rem;
+    }
+    .login-form,
+    .login-illustration {
+        padding: 1.2rem 0.5rem;
+    }
+}

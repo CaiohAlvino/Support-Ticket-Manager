@@ -1,0 +1,266 @@
+/*
+  =============================
+  NOTIFICAÇÕES MODERNAS
+  =============================
+  Notificações com sombra, gradiente, ícone, botão de fechar elegante e barra de progresso colorida.
+*/
+.noty_theme__aurora.noty_bar {
+    margin: 14px 0;
+    overflow: hidden;
+    border-radius: 12px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(42, 58, 140, 0.13);
+    font-family: "Inter", "Montserrat", Arial, sans-serif;
+    background: linear-gradient(90deg, var(--bg-branco) 60%, var(--bg-cinza) 100%);
+    border-left: 6px solid var(--cor-principal);
+    transition: box-shadow 0.2s, transform 0.2s;
+}
+
+.noty_theme__aurora.noty_bar:hover {
+    box-shadow: 0 16px 40px rgba(42, 58, 140, 0.18);
+    transform: translateY(-2px) scale(1.01);
+}
+
+/* Corpo da notificação */
+.noty_theme__aurora .noty_body {
+    padding: 20px 24px 20px 48px;
+    font-size: 15px;
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    color: var(--cor-texto);
+}
+
+/* Ícones para os diferentes tipos de notificações */
+.noty_theme__aurora .noty_body:before {
+    font-family: "bootstrap-icons";
+    margin-right: 16px;
+    font-size: 22px;
+    display: inline-block;
+    color: var(--cor-principal);
+    opacity: 0.8;
+}
+
+/* Barra de progresso */
+.noty_theme__aurora .noty_progressbar {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 4px;
+    width: 100%;
+    background-color: rgba(42, 58, 140, 0.08);
+}
+
+.noty_theme__aurora .noty_progressbar > div {
+    height: 100%;
+    background: linear-gradient(90deg, var(--cor-principal) 0%, var(--cor-verde) 100%);
+    transition: width 0.3s linear;
+}
+
+/* Botão de fechar */
+.noty_theme__aurora .noty_close_button {
+    position: absolute;
+    top: 16px;
+    right: 18px;
+    background-color: transparent;
+    font-size: 18px;
+    color: var(--cor-principal);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    padding: 4px;
+}
+
+.noty_theme__aurora .noty_close_button:hover {
+    background: var(--bg-cinza);
+    color: var(--cor-vermelho);
+    transform: scale(1.15);
+}
+
+/* Botões de ação */
+.noty_theme__aurora .noty_buttons {
+    padding: 0 16px 16px 16px;
+    text-align: right;
+}
+
+.noty_theme__aurora .noty_buttons .btn {
+    margin-left: 10px;
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: box-shadow 0.2s, transform 0.2s;
+    border: none;
+    outline: none;
+    background: linear-gradient(90deg, var(--cor-principal) 60%, var(--cor-verde) 100%);
+    color: var(--cor-branco);
+}
+
+.noty_theme__aurora .noty_buttons .btn:hover {
+    transform: translateY(-1px) scale(1.03);
+    box-shadow: 0 4px 12px rgba(42, 58, 140, 0.1);
+}
+
+/* Estilos específicos por tipo de notificação */
+
+/* Sucesso */
+.noty_theme__aurora.noty_type__success {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+}
+
+.noty_theme__aurora.noty_type__success .noty_body:before {
+    content: "\F26B";
+    /* Ícone de check-circle-fill */
+}
+
+.noty_theme__aurora.noty_type__success .noty_progressbar > div {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.noty_theme__aurora.noty_type__success .noty_buttons .btn-success {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.noty_theme__aurora.noty_type__success .noty_buttons .btn-success:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Erro */
+.noty_theme__aurora.noty_type__error {
+    background: linear-gradient(135deg, #dc3545, #ff6b6b);
+    color: white;
+}
+
+.noty_theme__aurora.noty_type__error .noty_body:before {
+    content: "\F623";
+    /* Ícone de x-circle-fill */
+}
+
+.noty_theme__aurora.noty_type__error .noty_progressbar > div {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.noty_theme__aurora.noty_type__error .noty_buttons .btn-error {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.noty_theme__aurora.noty_type__error .noty_buttons .btn-error:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Aviso */
+.noty_theme__aurora.noty_type__warning {
+    background: linear-gradient(135deg, #ffc107, #fd7e14);
+    color: #343a40;
+}
+
+.noty_theme__aurora.noty_type__warning .noty_body:before {
+    content: "\F33B";
+    /* Ícone de exclamation-triangle-fill */
+}
+
+.noty_theme__aurora.noty_type__warning .noty_progressbar > div {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.noty_theme__aurora.noty_type__warning .noty_close_button {
+    color: rgba(0, 0, 0, 0.5);
+}
+
+.noty_theme__aurora.noty_type__warning .noty_close_button:hover {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.noty_theme__aurora.noty_type__warning .noty_buttons .btn-warning {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: #343a40;
+}
+
+.noty_theme__aurora.noty_type__warning .noty_buttons .btn-warning:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Informativo */
+.noty_theme__aurora.noty_type__info {
+    background: linear-gradient(135deg, #17a2b8, #4cc9f0);
+    color: white;
+}
+
+.noty_theme__aurora.noty_type__info .noty_body:before {
+    content: "\F430";
+    /* Ícone de info-circle-fill */
+}
+
+.noty_theme__aurora.noty_type__info .noty_progressbar > div {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.noty_theme__aurora.noty_type__info .noty_buttons .btn-info {
+    background-color: rgba(255, 255, 255, 0.3);
+    color: white;
+}
+
+.noty_theme__aurora.noty_type__info .noty_buttons .btn-info:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* Animações de entrada/saída */
+@keyframes noty_aurora_in {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes noty_aurora_out {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+.noty_theme__aurora.noty_open {
+    animation: noty_aurora_in 0.3s ease-out;
+}
+
+.noty_theme__aurora.noty_close {
+    animation: noty_aurora_out 0.3s ease-in;
+}
+
+/* Layout responsivo para dispositivos móveis */
+@media (max-width: 480px) {
+    .noty_theme__aurora.noty_bar {
+        border-radius: 0;
+        margin: 0;
+    }
+
+    .noty_theme__aurora .noty_body {
+        padding: 12px;
+        font-size: 13px;
+    }
+
+    .noty_theme__aurora .noty_close_button {
+        top: 10px;
+        right: 10px;
+    }
+
+    .noty_theme__aurora .noty_buttons {
+        padding: 0 12px 12px 12px;
+    }
+}

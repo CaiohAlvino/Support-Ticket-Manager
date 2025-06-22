@@ -1,0 +1,51 @@
+/*
+  =============================
+  TABELAS
+  =============================
+  Use sempre junto com .table do Bootstrap para responsividade e visual moderno.
+  Exemplo: <table class="table tabela-tickets">
+*/
+
+/*
+  =============================
+  TABELAS MODERNAS
+  =============================
+  Linhas alternadas, cabeçalho destacado, hover, bordas arredondadas e sombra.
+*/
+table {
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(42, 58, 140, 0.07);
+    background: var(--bg-branco);
+}
+
+table,
+th,
+tr {
+    margin-bottom: 0px !important;
+}
+
+table th {
+    font-weight: 700;
+    padding: 0.75rem 0.75rem !important;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    background: var(--bg-cinza);
+    color: var(--cor-principal);
+    border-bottom: 2px solid var(--cor-borda);
+}
+
+table td {
+    padding: 0.7rem 0.75rem !important;
+    font-size: 0.95em;
+    vertical-align: middle;
+}
+
+tr:nth-child(even) td {
+    background: #f8fafc;
+}
+
+tr:hover td {
+    background: #f0f4fa;
+    transition: background 0.2s;
+}

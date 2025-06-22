@@ -1,0 +1,69 @@
+/*
+  =============================
+  ALERTAS E FEEDBACKS
+  =============================
+  Utilize as classes do Bootstrap (.alert, .alert-success, etc) e personalize conforme necessário.
+*/
+
+.alert {
+    font-size: 15px;
+    margin: 1em 0em 0em 0em !important;
+    padding: 1em 1.5em 1em 3.5em;
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(42, 58, 140, 0.07);
+    border-left: 6px solid var(--cor-principal);
+    position: relative;
+    background: var(--bg-branco);
+    color: var(--cor-texto);
+}
+.alert::before {
+    content: "\f05a";
+    font-family: "bootstrap-icons";
+    position: absolute;
+    left: 1.2em;
+    top: 1.1em;
+    font-size: 1.3em;
+    color: var(--cor-principal);
+    opacity: 0.7;
+}
+.alert-success {
+    border-left-color: var(--cor-verde);
+}
+.alert-danger {
+    border-left-color: var(--cor-vermelho);
+}
+.alert-warning {
+    border-left-color: #ffd600;
+}
+.alert-info {
+    border-left-color: var(--cor-principal);
+}
+
+.alerta-cadastrar {
+    background-color: var(--cor-alerta-cadastrar-bg);
+}
+
+.alerta-sem-cadastrar {
+    color: var(--cor-principal);
+    background-color: var(--bg-secundaria);
+}
+
+.alerta-ausente-agenda {
+    background-color: var(--cor-alerta-agenda);
+    color: var(--cor-alerta-agenda-texto);
+}
+
+.alerta-ausente-nao-agenda {
+    background-color: var(--cor-alerta-nao-agenda-base);
+    color: var(--cor-alerta-nao-agenda-texto);
+}
+
+.alerta-agenda-sala-ocupada {
+    background-color: var(--cor-alerta-agenda);
+    color: var(--cor-alerta-agenda-texto);
+}
+
+.mensagem-alerta {
+    background-color: var(--cor-mensagem-alerta-bg);
+    color: var(--cor-mensagem-alerta-texto);
+}
