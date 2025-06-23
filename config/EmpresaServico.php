@@ -102,4 +102,45 @@ class EmpresaServico
             );
         }
     }
+
+    public function pegarServicos($empresa_id)
+    {
+        try {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            if ($empresa_id === NULL) {
+                return [];
+            }
+
+            $query = "SELECT
+                        `empresa_servico`.*,
+                        `empresa`.`nome` AS empresa_nome,
+                        `servico`.`nome` AS servico_nome
+                    FROM
+                        `empresa_servico`
+                    LEFT JOIN
+                        `empresa` ON `empresa`.`id` = `empresa_servico`.`empresa_id`
+                    LEFT JOIN
+                        `servico` ON `servico`.`id` = `empresa_servico`.`servico_id`
+                    WHERE
+                        `empresa_servico`.`empresa_id` = :empresa_id
+                    AND
+                        `empresa_servico`.`situacao` = 1
+                    ORDER BY
+                        `empresa_servico`.`id` ASC";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->bindValue(":empresa_id", (int)$empresa_id, PDO::PARAM_INT);
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
+
+            $result = $stmt->fetchAll();
+            return $result;
+        } catch (\Throwable $th) {
+            error_log('ERRO pegarEmpresas: ' . $th->getMessage());
+            return [];
+        }
+    }
 }

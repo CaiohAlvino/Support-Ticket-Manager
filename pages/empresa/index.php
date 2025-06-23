@@ -15,12 +15,24 @@ $indexRegistros = $classEmpresa->index([
 $registros = $indexRegistros["resultados"];
 
 $paginacao = $indexRegistros["paginacao"];
+
+// Informações sobre empresas do usuário (apenas para usuários não-admin)
+$totalEmpresasUsuario = 0;
+if ($_SESSION["usuario_grupo"] != 1) {
+    $totalEmpresasUsuario = count($registros);
+}
 ?>
 
 <header class="sessao">
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Empresa</h1>
+            <h1 class="titulo">Empresa
+                <?php if ($_SESSION["usuario_grupo"] != 1): ?>
+                    <small class="text-muted fs-6">
+                        (Suas empresas associadas)
+                    </small>
+                <?php endif; ?>
+            </h1>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end nao-mostrar-impressao">
             <a href="cadastro.php" class="btn btn-adicionar">

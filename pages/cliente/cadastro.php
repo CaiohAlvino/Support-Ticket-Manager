@@ -99,7 +99,7 @@
 
                 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                     <label for="responsavel_email_cliente" class="form-label dados-label-email-cliente"></label>
-                    <input type="email" class="form-control input-validar-email" id="responsavel_email_cliente" name="responsavel_email" value="">
+                    <input type="email" class="form-control input-validar-email campo-obrigatorio" id="responsavel_email_cliente" name="responsavel_email" value="">
                 </div>
             </div>
         </div>

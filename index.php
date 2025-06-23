@@ -21,7 +21,9 @@
         <div class="row g-0 align-items-center">
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 login-illustration">
                 <div class="text-center"><i class="bi bi-ticket-perforated"></i></div>
-                <h2 class="welcome-text">Sistema de Gerenciamento de Tickets</h2>
+                <h2 class="welcome-text">Support-Ticket-Manager</h2>
+                <br>
+                <br>
                 <p class="welcome-subtext">Gerencie seus tickets de suporte de forma eficiente e organizada. Acompanhe, responda e resolva solicitações em um só lugar.</p>
             </div>
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 login-form">
