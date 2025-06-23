@@ -11,9 +11,9 @@ class Cliente
     public function index($parametros = array())
     {
         try {
-            // if (session_status() === PHP_SESSION_NONE) {
-            //     session_start();
-            // }
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
 
             $empresa_id = isset($parametros["empresa_id"]) ? $parametros["empresa_id"] : NULL;
             $cliente_id = isset($parametros["cliente_id"]) ? $parametros["cliente_id"] : NULL;

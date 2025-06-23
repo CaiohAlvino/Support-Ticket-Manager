@@ -131,7 +131,7 @@ $(document).ready(function () {
     // Atualiza empresas ao selecionar cliente
     $("#cliente_id_suporte").on("change", function () {
         var clienteId = $(this).val();
-        var $empresaSelect = $("#empresa_id");
+        var $empresaSelect = $("#empresa_id_suporte");
         $empresaSelect.html('<option value="">Carregando...</option>');
         if (!clienteId) {
             $empresaSelect.html('<option value="">Selecione uma empresa</option>');
@@ -150,7 +150,7 @@ $(document).ready(function () {
                 var options = '<option value="">Selecione uma empresa</option>';
                 if (empresas.length > 0) {
                     empresas.forEach(function (empresa) {
-                        options += '<option value="' + empresa.id + '">' + empresa.nome + '</option>';
+                        options += '<option value="' + empresa.id + '">' + empresa.nome + "</option>";
                     });
                 }
                 $empresaSelect.html(options);
@@ -158,12 +158,44 @@ $(document).ready(function () {
             },
             error: function () {
                 $empresaSelect.html('<option value="">Erro ao carregar empresas</option>');
-            }
+            },
+        });
+    }); // Se o campo cliente_id_suporte for hidden (usuário cliente), dispara o change para carregar as empresas automaticamente
+    if ($("#cliente_id_suporte").is(":hidden") || $("#cliente_id_suporte").attr("type") === "hidden") {
+        $("#cliente_id_suporte").trigger("change");
+    }
+
+    // Atualiza empresas ao selecionar cliente
+    $("#empresa_id_suporte").on("change", function () {
+        var empresaId = $(this).val();
+        var $servicoSelect = $("#servico_id");
+        $servicoSelect.html('<option value="">Carregando...</option>');
+        if (!empresaId) {
+            $servicoSelect.html('<option value="">Selecione um serviço</option>');
+            return;
+        }
+        $.ajax({
+            url: "../../controller/empresa/servicos-por-empresa.php",
+            type: "GET",
+            data: { empresa_id: empresaId },
+            dataType: "json",
+            success: function (response) {
+                if (response.debug) {
+                    console.log(response.debug);
+                }
+                var servicos = response.servicos || [];
+                var options = '<option value="">Selecione um serviço</option>';
+                if (servicos.length > 0) {
+                    servicos.forEach(function (servico) {
+                        options += '<option value="' + servico.id + '">' + servico.nome + "</option>";
+                    });
+                }
+                $servicoSelect.html(options);
+                $servicoSelect.trigger("change");
+            },
+            error: function () {
+                $empresaSelect.html('<option value="">Erro ao carregar empresas</option>');
+            },
         });
     });
-
-    // Se o campo cliente_id for hidden (usuário cliente), dispara o change para carregar as empresas automaticamente
-    if ($("#cliente_id").is(":hidden") || $("#cliente_id").attr("type") === "hidden") {
-        $("#cliente_id").trigger("change");
-    }
 });

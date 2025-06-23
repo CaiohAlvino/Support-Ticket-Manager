@@ -46,22 +46,16 @@
             <?php endif; ?>
 
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
-                <label for="empresa_id">Empresa <span class="campo-obrigatorio text-danger">*</span></label>
-                <select class="form-select select2 input-validar-select campo-obrigatorio" id="empresa_id" name="empresa_id">
+                <label for="empresa_id_suporte">Empresa <span class="campo-obrigatorio text-danger">*</span></label>
+                <select class="form-select input-validar-select campo-obrigatorio" id="empresa_id_suporte" name="empresa_id_suporte">
                     <option value="">Selecione uma empresa</option>
                 </select>
             </div>
 
             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-4 col-4 mb-3">
                 <label for="servico_id">Servico <span class="campo-obrigatorio text-danger">*</span></label>
-                <select class="form-select select2 input-validar-select campo-obrigatorio" id="servico_id" name="servico_id">
+                <select class="form-select input-validar-select campo-obrigatorio" id="servico_id" name="servico_id">
                     <option value="">Selecione um serviço</option>
-                    <?php
-                    $servicos = $classServico->listarServicos();
-                    foreach ($servicos as $servico):
-                    ?>
-                        <option value='<?php echo $servico->id ?>'><?php echo $servico->nome ?></option>
-                    <?php endforeach ?>
                 </select>
             </div>
 
