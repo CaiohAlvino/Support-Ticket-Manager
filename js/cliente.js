@@ -26,14 +26,14 @@ $(document).ready(function () {
             }
 
             $(".dados-titulo-cliente").html("Dados do Responsável");
-            $(".dados-label-nome-cliente").html(
-                "Nome do Responsável <span class='formulario-campo-obrigatorio'>*</span>",
-            );
+            $(".dados-label-nome-cliente").html("Nome do Responsável <span class='formulario-campo-obrigatorio'>*</span>");
             $(".dados-label-documento-cliente").html(
                 "CPF do Responsável <span class='formulario-campo-obrigatorio'>*</span>",
             );
             $(".dados-label-whatsapp-cliente").html("Telefone do Responsável");
-            $(".dados-label-email-cliente").html("E-mail do Responsável");
+            $(".dados-label-email-cliente").html(
+                "E-mail do Responsável <span class='formulario-campo-obrigatorio'>*</span>",
+            );
 
             if (dadosOriginaisCliente.razao_social) {
                 $("#razao_social").val(dadosOriginaisCliente.razao_social);
@@ -62,7 +62,7 @@ $(document).ready(function () {
             $(".dados-label-nome-cliente").html("Nome Completo <span class='formulario-campo-obrigatorio'>*</span>");
             $(".dados-label-documento-cliente").html("CPF <span class='formulario-campo-obrigatorio'>*</span>");
             $(".dados-label-whatsapp-cliente").html("Telefone");
-            $(".dados-label-email-cliente").html("E-mail");
+            $(".dados-label-email-cliente").html("E-mail <span class='formulario-campo-obrigatorio'>*</span>");
         }
     }
 
@@ -157,10 +157,7 @@ $(document).ready(function () {
                 tipo === "CNPJ" ? "Por favor, informe o Nome do responsável." : "Por favor, informe seu Nome.",
             );
             isValid = false;
-        } else if (
-            typeof window.validadorResponsavel !== "undefined" &&
-            !window.validadorResponsavel.validar(responsavel)
-        ) {
+        } else if (typeof window.validadorResponsavel !== "undefined" && !window.validadorResponsavel.validar(responsavel)) {
             isValid = false;
         }
 
@@ -172,6 +169,17 @@ $(document).ready(function () {
             );
             isValid = false;
         } else if (typeof window.validadorCPF !== "undefined" && !window.validadorCPF.validar(responsavelDocumento)) {
+            isValid = false;
+        }
+
+        let responsavelEmail = $("#responsavel_email_cliente").val().trim();
+        if (responsavelEmail === "") {
+            FeedbackVisual.mostrarErro(
+                $("#responsavel_email_cliente"),
+                tipo === "CNPJ" ? "Por favor, informe o E-mail do responsável." : "Por favor, informe seu E-mail.",
+            );
+            isValid = false;
+        } else if (typeof window.validadorEmail !== "undefined" && !window.validadorEmail.validar(responsavelEmail)) {
             isValid = false;
         }
 
@@ -253,10 +261,7 @@ $(document).ready(function () {
                 tipo === "CNPJ" ? "Por favor, informe o Nome do responsável." : "Por favor, informe seu Nome.",
             );
             isValid = false;
-        } else if (
-            typeof window.validadorResponsavel !== "undefined" &&
-            !window.validadorResponsavel.validar(responsavel)
-        ) {
+        } else if (typeof window.validadorResponsavel !== "undefined" && !window.validadorResponsavel.validar(responsavel)) {
             isValid = false;
         }
 
@@ -268,6 +273,17 @@ $(document).ready(function () {
             );
             isValid = false;
         } else if (typeof window.validadorCPF !== "undefined" && !window.validadorCPF.validar(responsavelDocumento)) {
+            isValid = false;
+        }
+
+        let responsavelEmail = $("#responsavel_email_cliente").val().trim();
+        if (responsavelEmail === "") {
+            FeedbackVisual.mostrarErro(
+                $("#responsavel_email_cliente"),
+                tipo === "CNPJ" ? "Por favor, informe o E-mail do responsável." : "Por favor, informe seu E-mail.",
+            );
+            isValid = false;
+        } else if (typeof window.validadorEmail !== "undefined" && !window.validadorEmail.validar(responsavelEmail)) {
             isValid = false;
         }
 

@@ -22,12 +22,39 @@ $indexRegistros = $classCliente->index([
 $registros = $indexRegistros["resultados"];
 
 $paginacao = $indexRegistros["paginacao"];
+
+// Informações sobre empresas do usuário (apenas para usuários não-admin)
+$empresasUsuario = [];
+$totalEmpresasUsuario = 0;
+$infoFiltroCliente = null;
+if ($_SESSION["usuario_grupo"] != 1) {
+    $empresasUsuario = $classEmpresa->listarEmpresas();
+    $totalEmpresasUsuario = count($empresasUsuario);
+    $infoFiltroCliente = $classCliente->getInfoFiltro();
+}
 ?>
 
 <header class="sessao">
     <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Cliente
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">            <h1 class="titulo">Cliente
+                <?php if ($_SESSION["usuario_grupo"] != 1 && $totalEmpresasUsuario > 0): ?>
+                    <small class="text-muted fs-6">
+                        (Filtrando por <?php echo $totalEmpresasUsuario; ?> empresa<?php echo $totalEmpresasUsuario > 1 ? 's' : ''; ?> associada<?php echo $totalEmpresasUsuario > 1 ? 's' : ''; ?>
+                        <?php if ($infoFiltroCliente && isset($infoFiltroCliente['total_clientes_sem_empresa']) && $infoFiltroCliente['total_clientes_sem_empresa'] > 0): ?>
+                            + <?php echo $infoFiltroCliente['total_clientes_sem_empresa']; ?> sem empresa)
+                        <?php else: ?>
+                            )
+                        <?php endif; ?>
+                    </small>
+                <?php elseif ($_SESSION["usuario_grupo"] != 1): ?>
+                    <small class="text-muted fs-6">
+                        <?php if ($infoFiltroCliente && isset($infoFiltroCliente['total_clientes_sem_empresa']) && $infoFiltroCliente['total_clientes_sem_empresa'] > 0): ?>
+                            (<?php echo $infoFiltroCliente['total_clientes_sem_empresa']; ?> cliente<?php echo $infoFiltroCliente['total_clientes_sem_empresa'] > 1 ? 's' : ''; ?> sem empresa)
+                        <?php else: ?>
+                            (Nenhuma empresa associada)
+                        <?php endif; ?>
+                    </small>
+                <?php endif; ?>
             </h1>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1 text-end nao-mostrar-impressao">
