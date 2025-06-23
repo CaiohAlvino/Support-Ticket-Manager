@@ -107,13 +107,15 @@ $paginacao = $indexRegistros["paginacao"];
                                         <i class="bi-pencil-square"></i> Editar
                                     </a>
 
-                                    <button
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#excluir-<?php echo $registro->id; ?>"
-                                        type="button"
-                                        class="btn btn-sm btn-excluir">
-                                        <i class="bi bi-trash"></i> Excluir
-                                    </button>
+                                    <?php if ($_SESSION["usuario_grupo"] == 1): ?>
+                                        <button
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#excluir-<?php echo $registro->id; ?>"
+                                            type="button"
+                                            class="btn btn-sm btn-excluir">
+                                            <i class="bi bi-trash"></i> Excluir
+                                        </button>
+                                    <?php endif; ?>
 
                                     <a href="empresa.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-empresa">
                                         <i class="bi-building"></i> Empresas
