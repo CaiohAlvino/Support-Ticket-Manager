@@ -36,7 +36,8 @@ if ($_SESSION["usuario_grupo"] != 1) {
 
 <header class="sessao">
     <div class="row">
-        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">            <h1 class="titulo">Cliente
+        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
+            <h1 class="titulo">Cliente
                 <?php if ($_SESSION["usuario_grupo"] != 1 && $totalEmpresasUsuario > 0): ?>
                     <small class="text-muted fs-6">
                         (Filtrando por <?php echo $totalEmpresasUsuario; ?> empresa<?php echo $totalEmpresasUsuario > 1 ? 's' : ''; ?> associada<?php echo $totalEmpresasUsuario > 1 ? 's' : ''; ?>

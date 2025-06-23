@@ -6,13 +6,17 @@ $status = (isset($_GET["status"]) && $_GET["status"] !== "NULL") ? $_GET["status
 $assunto = isset($_GET["assunto"]) ? $_GET["assunto"] : NULL;
 $pagina = isset($_GET["pagina"]) ? $_GET["pagina"] : 1;
 
-$usuario_id = $_SESSION["usuario_grupo"] ?? NULL;
+$usuario_id = $_SESSION["usuario_id"] ?? NULL;
 
 if ($_SESSION["usuario_grupo"] == 2) {
+    // Para clientes: busca o cliente vinculado ao usuário
     $cliente = $classCliente->pegarPorUsuarioId($_SESSION["usuario_id"]);
-    $usuario_id = NULL;
+    $usuario_id = NULL; // Não filtra por usuario_id na tabela suporte
 } else {
+    // Para admins e suporte: não filtra por cliente específico
     $cliente = NULL;
+    // Para suporte (grupos 3,4,5,6): o filtro por empresas será aplicado automaticamente na classe Suporte
+    // Para admin (grupo 1): verá todos os tickets
 }
 
 

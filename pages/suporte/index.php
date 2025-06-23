@@ -16,12 +16,29 @@ $indexRegistros = $classSuporte->index([
 $registros = $indexRegistros["resultados"];
 
 $paginacao = $indexRegistros["paginacao"];
+
+// Informações sobre filtro de suporte (apenas para usuários não-admin)
+$infoFiltroSuporte = null;
+if ($_SESSION["usuario_grupo"] != 1) {
+    $infoFiltroSuporte = $classSuporte->getInfoFiltro();
+}
 ?>
 
 <header class="sessao">
     <div class="row">
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 my-1">
-            <h1 class="titulo">Suporte</h1>
+            <h1 class="titulo">Suporte
+                <?php if ($_SESSION["usuario_grupo"] != 1 && $infoFiltroSuporte): ?>
+                    <small class="text-muted fs-6">
+                        (<?php echo $infoFiltroSuporte['total_tickets_acesso']; ?> ticket<?php echo $infoFiltroSuporte['total_tickets_acesso'] != 1 ? 's' : ''; ?> acessível<?php echo $infoFiltroSuporte['total_tickets_acesso'] != 1 ? 'eis' : ''; ?>
+                        <?php if ($infoFiltroSuporte['tickets_sem_empresa'] > 0): ?>
+                            - <?php echo $infoFiltroSuporte['tickets_sem_empresa']; ?> sem empresa)
+                        <?php else: ?>
+                            )
+                        <?php endif; ?>
+                    </small>
+                <?php endif; ?>
+            </h1>
         </div>
         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 text-end my-1">
             <a href="cadastro.php" class="btn btn-adicionar">

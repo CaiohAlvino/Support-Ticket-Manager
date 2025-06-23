@@ -7,7 +7,6 @@ class Suporte
     {
         $this->db = $db;
     }
-
     /**
      * Lista tickets de suporte com filtros e paginação.
      * Corrigido: uso de prepared statements e SQL seguro.
@@ -15,6 +14,10 @@ class Suporte
     public function index($parametros = array(), $cliente = NULL, $usuario_id = NULL)
     {
         try {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
             $suporte_id = isset($parametros["suporte_id"]) ? (int)$parametros["suporte_id"] : null;
             $status     = isset($parametros["status"]) ? $parametros["status"] : null;
             $assunto    = isset($parametros["assunto"]) ? $parametros["assunto"] : null;
@@ -25,6 +28,10 @@ class Suporte
 
             $where = array();
             $params = array();
+
+            // Verifica se o usuário não é admin (grupo != 1) para aplicar filtro por empresas
+            $usuario_grupo = isset($_SESSION["usuario_grupo"]) ? $_SESSION["usuario_grupo"] : null;
+            $usuario_sessao_id = isset($_SESSION["usuario_id"]) ? $_SESSION["usuario_id"] : null;
 
             if ($usuario_id) {
                 $where[] = "`suporte`.`usuario_id` = :usuario_id";
@@ -60,14 +67,22 @@ class Suporte
                 " LEFT JOIN `cliente` ON `cliente`.`id` = `suporte`.`cliente_id`" .
                 " LEFT JOIN `servico` ON `servico`.`id` = `suporte`.`servico_id`";
 
-            $query = "SELECT `suporte`.*,
+            // Se não for admin, adiciona joins para filtrar por empresas do usuário + tickets sem empresa
+            if ($usuario_grupo != 1 && $usuario_sessao_id && !$cliente) {
+                $joins .= " LEFT JOIN `empresa_cliente` ON `empresa_cliente`.`cliente_id` = `suporte`.`cliente_id` AND `empresa_cliente`.`situacao` = 1";
+                $joins .= " LEFT JOIN `empresa_usuario` ON `empresa_usuario`.`empresa_id` = `empresa_cliente`.`empresa_id` AND `empresa_usuario`.`situacao` = 1";
+                $where[] = "(`empresa_usuario`.`usuario_id` = :usuario_sessao_id OR `suporte`.`empresa_id` IS NULL OR `empresa_cliente`.`cliente_id` IS NULL)";
+                $params[":usuario_sessao_id"] = $usuario_sessao_id;
+            }
+
+            $query = "SELECT DISTINCT `suporte`.*,
                     `empresa`.`nome` AS empresa_nome,
                     `usuario`.`nome` AS usuario_nome,
                     `cliente`.`nome_fantasia` AS cliente_nome,
                     `servico`.`nome` AS servico_nome
                     FROM `suporte`";
 
-            $queryCount = "SELECT COUNT(`suporte`.`id`) FROM `suporte`";
+            $queryCount = "SELECT COUNT(DISTINCT `suporte`.`id`) FROM `suporte`";
             $query .= $joins;
             $queryCount .= $joins;
 
@@ -216,6 +231,61 @@ class Suporte
             return $stmt->fetchAll(PDO::FETCH_OBJ);
         } catch (\Throwable $th) {
             return [];
+        }
+    }
+
+    /**
+     * Método para debug - retorna informações sobre o filtro aplicado para suporte
+     */
+    public function getInfoFiltro()
+    {
+        try {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $usuario_grupo = isset($_SESSION["usuario_grupo"]) ? $_SESSION["usuario_grupo"] : null;
+            $usuario_id = isset($_SESSION["usuario_id"]) ? $_SESSION["usuario_id"] : null;
+
+            $info = [
+                'usuario_id' => $usuario_id,
+                'usuario_grupo' => $usuario_grupo,
+                'is_admin' => ($usuario_grupo == 1),
+                'aplica_filtro' => ($usuario_grupo != 1 && $usuario_id),
+            ];
+
+            // Se não for admin, busca informações sobre tickets e empresas
+            if ($info['aplica_filtro']) {
+                // Tickets que o usuário pode ver
+                $query = "SELECT COUNT(DISTINCT s.id) as total_tickets
+                         FROM suporte s
+                         LEFT JOIN empresa e ON e.id = s.empresa_id
+                         LEFT JOIN cliente c ON c.id = s.cliente_id
+                         LEFT JOIN empresa_cliente ec ON ec.cliente_id = s.cliente_id AND ec.situacao = 1
+                         LEFT JOIN empresa_usuario eu ON eu.empresa_id = ec.empresa_id AND eu.situacao = 1
+                         WHERE (eu.usuario_id = :usuario_id OR s.empresa_id IS NULL OR ec.cliente_id IS NULL)";
+
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $info['total_tickets_acesso'] = $stmt->fetchColumn();
+
+                // Tickets sem empresa/cliente
+                $query = "SELECT COUNT(*) as tickets_sem_empresa
+                         FROM suporte s
+                         LEFT JOIN empresa_cliente ec ON ec.cliente_id = s.cliente_id AND ec.situacao = 1
+                         WHERE (s.empresa_id IS NULL OR ec.cliente_id IS NULL)";
+
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+
+                $info['tickets_sem_empresa'] = $stmt->fetchColumn();
+            }
+
+            return $info;
+        } catch (\Throwable $th) {
+            return ['erro' => $th->getMessage()];
         }
     }
 }
