@@ -51,7 +51,7 @@ $usuario = $classUsuario->pegarPorId($id);
             </div>
 
             <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
-                <label for="senha" class="form-label">Senha <span class="campo-obrigatorio text-danger">*</span></label>
+                <label for="senha" class="form-label">Nova Senha <span class="campo-obrigatorio text-danger">*</span></label>
                 <input type="password" class="form-control input-validar-senha campo-obrigatorio" id="senha" name="senha" placeholder="Digite a senha do usuário">
             </div>
 

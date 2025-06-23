@@ -160,21 +160,20 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
                     <h5 class="card-title mb-0">Tickets em Andamento</h5>
                     <div class="d-flex gap-2">
                         <form method="GET" class="d-flex gap-2">
-                            <div class="input-group">
-                                <input type="text" name="assunto" class="form-control"
-                                    placeholder="Buscar por assunto..."
-                                    value="<?php echo htmlspecialchars($assunto ?? '') ?>">
-                                <button class="btn btn-outline-secondary" type="submit">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
                             <select name="status" class="form-select" style="width: auto;">
                                 <option value="">Todos Status</option>
                                 <option value="ABERTO" <?php echo $status === 'ABERTO' ? 'selected' : '' ?>>Aberto</option>
                                 <option value="AGUARDANDO_SUPORTE" <?php echo $status === 'AGUARDANDO_SUPORTE' ? 'selected' : '' ?>>Aguardando Suporte</option>
                                 <option value="RESPONDIDO" <?php echo $status === 'RESPONDIDO' ? 'selected' : '' ?>>Respondido</option>
-                                <option value="FECHADO" <?php echo $status === 'FECHADO' ? 'selected' : '' ?>>Fechado</option>
                             </select>
+                            <button class="btn btn-outline-secondary" type="submit">
+                                <i class="bi bi-search"></i>
+                            </button>
+                            <!-- <div class="input-group">
+                                <input type="text" name="assunto" class="form-control"
+                                    placeholder="Buscar por assunto..."
+                                    value="<?php echo htmlspecialchars($assunto ?? '') ?>">
+                            </div> -->
                         </form>
                     </div>
                 </div>
@@ -212,7 +211,6 @@ $ticketsAbertos = array_filter($registros, fn($r) => in_array($r->status, ['ABER
                                                 </div>
                                             </td>
                                             <td><?php echo htmlspecialchars($registro->servico_nome ?? 'N/A') ?></td>
-                                            <td>
                                             <td>
                                                 <?php if ($registro->status == "ABERTO"): ?>
                                                     <span class="badge text-bg-success">ABERTO</span>
