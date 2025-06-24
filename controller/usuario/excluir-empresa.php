@@ -11,14 +11,14 @@ if (!$id) {
     echo json_encode([
         "status" => "error",
         "message" => "Id inválido",
-        "debug" => "cliente ou empresa não informado"
+        "debug" => "usuario ou empresa não informado"
     ]);
     exit;
 }
 
 try {
     $query = "DELETE FROM
-            `empresa_cliente`
+            `empresa_usuario`
         WHERE
             `id` = :id
         LIMIT 1";
@@ -31,7 +31,7 @@ try {
     if ($excluirRegistro->rowCount() > 0) {
         echo json_encode([
             "status" => "success",
-            "message" => "empresa excluída com sucesso"
+            "message" => "Empresa excluída com sucesso"
         ]);
     } else {
         echo json_encode([
@@ -44,7 +44,7 @@ try {
 } catch (Exception $e) {
     echo json_encode([
         "status" => "error",
-        "message" => "Erro ao excluir empresa do cliente",
+        "message" => "Erro ao excluir empresa do usuario",
         "debug" => $e->getMessage()
     ]);
     exit;
