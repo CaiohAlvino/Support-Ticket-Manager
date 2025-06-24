@@ -7,14 +7,17 @@ class Suporte
     {
         $this->db = $db;
     }
-
     /**
      * Lista tickets de suporte com filtros e paginação.
      * Corrigido: uso de prepared statements e SQL seguro.
      */
-    public function index($parametros = array(), $usuario_id = NULL)
+    public function index($parametros = array(), $cliente = NULL, $usuario_id = NULL)
     {
         try {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
             $suporte_id = isset($parametros["suporte_id"]) ? (int)$parametros["suporte_id"] : null;
             $status     = isset($parametros["status"]) ? $parametros["status"] : null;
             $assunto    = isset($parametros["assunto"]) ? $parametros["assunto"] : null;
@@ -26,13 +29,21 @@ class Suporte
             $where = array();
             $params = array();
 
+            // Verifica se o usuário não é admin (grupo != 1) para aplicar filtro por empresas
+            $usuario_grupo = isset($_SESSION["usuario_grupo"]) ? $_SESSION["usuario_grupo"] : null;
+            $usuario_sessao_id = isset($_SESSION["usuario_id"]) ? $_SESSION["usuario_id"] : null;
+
             if ($usuario_id) {
                 $where[] = "`suporte`.`usuario_id` = :usuario_id";
-                $params[":usuario_id"] = $usuario_id;
+                $params[":usuario_id"] = (int)$usuario_id;
+            }
+            if ($cliente && isset($cliente->id)) {
+                $where[] = "`suporte`.`cliente_id` = :cliente_id";
+                $params[":cliente_id"] = (int)$cliente->id;
             }
             if ($suporte_id) {
                 $where[] = "`suporte`.`id` = :suporte_id";
-                $params[":suporte_id"] = $suporte_id;
+                $params[":suporte_id"] = (int)$suporte_id;
             }
             if ($status) {
                 $where[] = "`suporte`.`status` = :status";
@@ -51,17 +62,27 @@ class Suporte
                 $params[":dias"] = $dias;
             }
 
-            $joins = " LEFT JOIN `empresa` ON `empresa`.id = `suporte`.`empresa_id`" .
-                " LEFT JOIN `usuario` ON `usuario`.id = `suporte`.`usuario_id`" .
-                " LEFT JOIN `cliente` ON `cliente`.id = `suporte`.`cliente_id`";
+            $joins = " LEFT JOIN `empresa` ON `empresa`.`id` = `suporte`.`empresa_id`" .
+                " LEFT JOIN `usuario` ON `usuario`.`id` = `suporte`.`usuario_id`" .
+                " LEFT JOIN `cliente` ON `cliente`.`id` = `suporte`.`cliente_id`" .
+                " LEFT JOIN `servico` ON `servico`.`id` = `suporte`.`servico_id`";
 
-            $query = "SELECT `suporte`.*,
+            // Se não for admin, adiciona joins para filtrar por empresas do usuário + tickets sem empresa
+            if ($usuario_grupo != 1 && $usuario_sessao_id && !$cliente) {
+                $joins .= " LEFT JOIN `empresa_cliente` ON `empresa_cliente`.`cliente_id` = `suporte`.`cliente_id` AND `empresa_cliente`.`situacao` = 1";
+                $joins .= " LEFT JOIN `empresa_usuario` ON `empresa_usuario`.`empresa_id` = `empresa_cliente`.`empresa_id` AND `empresa_usuario`.`situacao` = 1";
+                $where[] = "(`empresa_usuario`.`usuario_id` = :usuario_sessao_id OR `suporte`.`empresa_id` IS NULL OR `empresa_cliente`.`cliente_id` IS NULL)";
+                $params[":usuario_sessao_id"] = $usuario_sessao_id;
+            }
+
+            $query = "SELECT DISTINCT `suporte`.*,
                     `empresa`.`nome` AS empresa_nome,
                     `usuario`.`nome` AS usuario_nome,
-                    `cliente`.`nome_fantasia` AS cliente_nome
+                    `cliente`.`nome_fantasia` AS cliente_nome,
+                    `servico`.`nome` AS servico_nome
                     FROM `suporte`";
 
-            $queryCount = "SELECT COUNT(`suporte`.`id`) FROM `suporte`";
+            $queryCount = "SELECT COUNT(DISTINCT `suporte`.`id`) FROM `suporte`";
             $query .= $joins;
             $queryCount .= $joins;
 
@@ -127,7 +148,7 @@ class Suporte
 
     /**
      * Busca um ticket de suporte por ID.
-     * Corrigido: uso de prepared statement.
+     * Corrigido: uso de prepared statement com joins completos.
      */
     public function pegarPorId($id = null)
     {
@@ -135,17 +156,20 @@ class Suporte
             if (!$id) {
                 return null;
             }
-            $query = "SELECT `suporte`.* FROM `suporte` WHERE `suporte`.`id` = :id LIMIT 1";
-            // $query = "SELECT `suporte`.*,
-            // `cliente`.`nome` AS cliente_nome,
-            // `cliente`.`email` AS cliente_email,
-            // `usuario`.`nome` AS usuario_nome,
-            // `empresa`.`razao_social` AS empresa_nome
-            // FROM `suporte`
-            // LEFT JOIN `cliente` on `cliente`.id = `suporte`.`cliente_id`
-            // LEFT JOIN `usuario` on `usuario`.id = `suporte`.`usuario_id`
-            // LEFT JOIN `empresa` on `empresa`.id = `suporte`.`empresa_id`
-            // WHERE `suporte`.`id` = :id LIMIT 1";
+            $query = "SELECT `suporte`.*,
+                `cliente`.`nome_fantasia` AS cliente_nome_fantasia,
+                `cliente`.`razao_social` AS cliente_razao_social,
+                `cliente`.`responsavel_nome` AS cliente_responsavel_nome,
+                `cliente`.`responsavel_email` AS cliente_responsavel_email,
+                `servico`.`nome` AS servico_nome,
+                `usuario`.`nome` AS usuario_nome,
+                `empresa`.`nome` AS empresa_nome
+                FROM `suporte`
+                LEFT JOIN `cliente` ON `cliente`.`id` = `suporte`.`cliente_id`
+                LEFT JOIN `usuario` ON `usuario`.`id` = `suporte`.`usuario_id`
+                LEFT JOIN `empresa` ON `empresa`.`id` = `suporte`.`empresa_id`
+                LEFT JOIN `servico` ON `servico`.`id` = `suporte`.`servico_id`
+                WHERE `suporte`.`id` = :id LIMIT 1";
 
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(":id", (int)$id, PDO::PARAM_INT);
@@ -153,6 +177,7 @@ class Suporte
             $registro = $stmt->fetch(PDO::FETCH_OBJ);
             return $registro;
         } catch (\Throwable $th) {
+            error_log("Erro em pegarPorId: " . $th->getMessage());
             return null;
         }
     }
@@ -165,16 +190,102 @@ class Suporte
     {
         try {
             $ativo = isset($filtros["ativo"]) ? $filtros["ativo"] : null;
-            $query = "SELECT `suporte`.* FROM `suporte`";
+
+            $query = "SELECT `suporte`.*,
+                `cliente`.`nome` AS cliente_nome,
+                `cliente`.`email` AS cliente_email,
+                `usuario`.`nome` AS usuario_nome,
+                `empresa`.`razao_social` AS empresa_nome,
+                `servico`.`nome` AS servico_nome
+                FROM `suporte`
+                LEFT JOIN `cliente` ON `cliente`.`id` = `suporte`.`cliente_id`
+                LEFT JOIN `usuario` ON `usuario`.`id` = `suporte`.`usuario_id`
+                LEFT JOIN `empresa` ON `empresa`.`id` = `suporte`.`empresa_id`
+                LEFT JOIN `servico` ON `servico`.`id` = `suporte`.`servico_id`";
+
             if ($ativo === "ATIVO") {
-                $query .= " AND `suporte`.`ativo` = 1";
+                $query .= " WHERE `suporte`.`ativo` = 1";
             }
+
             $stmt = $this->db->prepare($query);
             $stmt->execute();
             $registros = $stmt->fetchAll(PDO::FETCH_OBJ);
             return $registros;
         } catch (\Throwable $th) {
             return [];
+        }
+    }
+
+    public function listarSuportes()
+    {
+        try {
+            $query = "SELECT * FROM
+                            `suporte`
+                        WHERE
+                            `suporte`.`ativo` = 1
+                        ORDER BY
+                            `suporte`.`cadastrado` DESC";
+
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_OBJ);
+        } catch (\Throwable $th) {
+            return [];
+        }
+    }
+
+    /**
+     * Método para debug - retorna informações sobre o filtro aplicado para suporte
+     */
+    public function getInfoFiltro()
+    {
+        try {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
+            $usuario_grupo = isset($_SESSION["usuario_grupo"]) ? $_SESSION["usuario_grupo"] : null;
+            $usuario_id = isset($_SESSION["usuario_id"]) ? $_SESSION["usuario_id"] : null;
+
+            $info = [
+                'usuario_id' => $usuario_id,
+                'usuario_grupo' => $usuario_grupo,
+                'is_admin' => ($usuario_grupo == 1),
+                'aplica_filtro' => ($usuario_grupo != 1 && $usuario_id),
+            ];
+
+            // Se não for admin, busca informações sobre tickets e empresas
+            if ($info['aplica_filtro']) {
+                // Tickets que o usuário pode ver
+                $query = "SELECT COUNT(DISTINCT s.id) as total_tickets
+                         FROM suporte s
+                         LEFT JOIN empresa e ON e.id = s.empresa_id
+                         LEFT JOIN cliente c ON c.id = s.cliente_id
+                         LEFT JOIN empresa_cliente ec ON ec.cliente_id = s.cliente_id AND ec.situacao = 1
+                         LEFT JOIN empresa_usuario eu ON eu.empresa_id = ec.empresa_id AND eu.situacao = 1
+                         WHERE (eu.usuario_id = :usuario_id OR s.empresa_id IS NULL OR ec.cliente_id IS NULL)";
+
+                $stmt = $this->db->prepare($query);
+                $stmt->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
+                $stmt->execute();
+
+                $info['total_tickets_acesso'] = $stmt->fetchColumn();
+
+                // Tickets sem empresa/cliente
+                $query = "SELECT COUNT(*) as tickets_sem_empresa
+                         FROM suporte s
+                         LEFT JOIN empresa_cliente ec ON ec.cliente_id = s.cliente_id AND ec.situacao = 1
+                         WHERE (s.empresa_id IS NULL OR ec.cliente_id IS NULL)";
+
+                $stmt = $this->db->prepare($query);
+                $stmt->execute();
+
+                $info['tickets_sem_empresa'] = $stmt->fetchColumn();
+            }
+
+            return $info;
+        } catch (\Throwable $th) {
+            return ['erro' => $th->getMessage()];
         }
     }
 }

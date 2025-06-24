@@ -1,18 +1,24 @@
 /**
  *  Validador base para os outros validadores
- *  @inicializar - Inicializações de mensagems em tempo reais
- *  @validar - Validação dos valores  
- *  @param valor - Valor a ser validado 
  */
 class Validador {
     constructor() {
+        this.campoObrigatorio = "campo-obrigatorio";
         this.inicializar();
     }
 
+    /**
+     *  Inicializa o validador com eventos em tempo real
+     */
     inicializar() {
         // Método a ser sobrescrito pelas classes filhas
     }
 
+    /**
+     *  Valida um valor
+     *  @param {*} valor - Valor a ser validado
+     *  @returns {Boolean} - Verdadeiro se o valor for válido
+     */
     validar(valor) {
         // Método a ser sobrescrito pelas classes filhas
         return true;
@@ -21,8 +27,7 @@ class Validador {
 
 // -------------------------- → FeedbackVisual ← -------------------------- //
 /**
- *  
- *  @mostrarErro inicializar - Inicializações de mensagems em tempo reais
+ * Classe dedicada a mostrar avisos em tempo real para o usuário final
  */
 class FeedbackVisual {
     /**
@@ -34,38 +39,29 @@ class FeedbackVisual {
     static mostrarErro(campo, mensagem, opcoesPersonalizadas = {}) {
         const $campo = $(campo);
         const opcoesPadrao = {
-            classeAdicional: 'error-message',
-            tempoExibicao: null
+            classeAdicional: "error-message",
+            tempoExibicao: null,
         };
 
         const opcoes = { ...opcoesPadrao, ...opcoesPersonalizadas };
 
         $campo.removeClass("is-valid").addClass("is-invalid");
 
-        // Remover mensagens de erro existentes
         $campo.siblings(".invalid-feedback").remove();
 
-        // Se estiver em um input-group, remover mensagens após o input-group também
-        const $inputGroup = $campo.closest('.input-group');
+        const $inputGroup = $campo.closest(".input-group");
         if ($inputGroup.length > 0) {
             $inputGroup.siblings(".invalid-feedback").remove();
         }
 
         const elementoErro = $(`<div class="invalid-feedback ${opcoes.classeAdicional}">${mensagem}</div>`);
 
-        // Tratamento especial para Select2 dentro de input-group
         if ($campo.hasClass("select2") && $inputGroup.length > 0) {
             $campo.next(".select2-container").addClass("is-invalid");
-            // Coloca a mensagem após o input-group inteiro
             $inputGroup.after(elementoErro);
-
-            // Adiciona classe is-invalid no input-group também para facilitar estilização
             $inputGroup.addClass("is-invalid");
-        }
-        // Tratamento especial para Select2 padrão
-        else if ($campo.hasClass("select2")) {
+        } else if ($campo.hasClass("select2")) {
             $campo.next(".select2-container").addClass("is-invalid");
-            // Coloca a mensagem após o container do Select2
             $campo.next(".select2-container").after(elementoErro);
         } else {
             $campo.after(elementoErro);
@@ -93,25 +89,22 @@ class FeedbackVisual {
     static mostrarSucesso(campo, opcoesPersonalizadas = {}) {
         const $campo = $(campo);
         const opcoesPadrao = {
-            classeAdicional: 'text-success',
-            tempoExibicao: null
+            classeAdicional: "text-success",
+            tempoExibicao: null,
         };
 
         const opcoes = { ...opcoesPadrao, ...opcoesPersonalizadas };
 
         $campo.removeClass("is-invalid").addClass("is-valid");
 
-        // Remover mensagens de erro existentes
         $campo.siblings(".invalid-feedback").remove();
 
-        // Se estiver em um input-group, remover mensagens após o input-group também
-        const $inputGroup = $campo.closest('.input-group');
+        const $inputGroup = $campo.closest(".input-group");
         if ($inputGroup.length > 0) {
             $inputGroup.siblings(".invalid-feedback").remove();
             $inputGroup.removeClass("is-invalid");
         }
 
-        // Tratamento especial para Select2
         if ($campo.hasClass("select2")) {
             $campo.next(".select2-container").removeClass("is-invalid").addClass("is-valid");
         }
@@ -127,46 +120,39 @@ class FeedbackVisual {
     }
 
     /**
-     * Mostra uma mensagem de aviso para um campo (não impede o envio do formulário)
-     * @param {Element|String} campo - O campo que apresentou o aviso
-     * @param {String} mensagem - A mensagem de aviso a ser exibida
-     * @param {Object} opcoesPersonalizadas - Opções adicionais de estilo
+     *  Mostra uma mensagem de aviso para um campo (não impede o envio do formulário)
+     *  @param {Element|String} campo - O campo que apresentou o aviso
+     *  @param {String} mensagem - A mensagem de aviso a ser exibida
+     *  @param {Object} opcoesPersonalizadas - Opções adicionais de estilo
      */
     static mostrarAviso(campo, mensagem, opcoesPersonalizadas = {}) {
         const $campo = $(campo);
         const opcoesPadrao = {
-            classeAdicional: 'warning-message',
-            tempoExibicao: null
+            classeAdicional: "warning-message",
+            tempoExibicao: null,
         };
 
         const opcoes = { ...opcoesPadrao, ...opcoesPersonalizadas };
 
-        // Não adiciona classe "is-invalid" para manter o formulário válido
-        // mas adiciona uma classe de aviso visual
         $campo.removeClass("is-invalid is-valid").addClass("has-warning");
 
-        // Remover mensagens existentes
         $campo.siblings(".invalid-feedback, .mensagem-alerta").remove();
 
-        // Se estiver em um input-group, remover mensagens após o input-group também
-        const $inputGroup = $campo.closest('.input-group');
+        const $inputGroup = $campo.closest(".input-group");
         if ($inputGroup.length > 0) {
             $inputGroup.siblings(".invalid-feedback, .mensagem-alerta").remove();
             $inputGroup.removeClass("is-invalid");
         }
 
-        const elementoAviso = $(`<div class="alert mensagem-alerta ${opcoes.classeAdicional}"><i class="bi bi-exclamation-triangle mx-2"></i>${mensagem}</div>`);
+        const elementoAviso = $(
+            `<div class="alert mensagem-alerta ${opcoes.classeAdicional}"><i class="bi bi-exclamation-triangle mx-2"></i>${mensagem}</div>`,
+        );
 
-        // Tratamento especial para Select2 dentro de input-group
         if ($campo.hasClass("select2") && $inputGroup.length > 0) {
             $campo.next(".select2-container").addClass("has-warning");
-            // Coloca a mensagem após o input-group
             $inputGroup.after(elementoAviso);
-        }
-        // Tratamento para Select2 normal
-        else if ($campo.hasClass("select2")) {
+        } else if ($campo.hasClass("select2")) {
             $campo.next(".select2-container").addClass("has-warning");
-            // Coloca a mensagem após o container do Select2
             $campo.next(".select2-container").after(elementoAviso);
         } else {
             $campo.after(elementoAviso);
@@ -184,51 +170,52 @@ class FeedbackVisual {
     }
 
     /**
-     * Mostra feedback de carregamento para um campo que está consultando API
-     * @param {Element|String} campo - O campo principal que está realizando a consulta
-     * @param {Array|String} camposRelacionados - Campos relacionados para desabilitar durante a consulta
-     * @param {String} mensagem - Mensagem de carregamento
-     * @param {Object} opcoesPersonalizadas - Opções adicionais
+     *  Mostra feedback de carregamento para um campo que está consultando API
+     *  @param {Element|String} campo - O campo principal que está realizando a consulta
+     *  @param {Array|String} camposRelacionados - Campos relacionados para desabilitar durante a consulta
+     *  @param {String} mensagem - Mensagem de carregamento
+     *  @param {Object} opcoesPersonalizadas - Opções adicionais
+     *  @returns {Object} - Objeto com método concluir() para finalizar o carregamento
      */
-    static mostrarCarregamento(campo, camposRelacionados = [], mensagem = "Carregando...", opcoesPersonalizadas = {}) {
+    static mostrarCarregamento(
+        campo,
+        camposRelacionados = [],
+        mensagem = "Carregando...",
+        opcoesPersonalizadas = {},
+    ) {
         const $campo = $(campo);
         const opcoesPadrao = {
-            classeAdicional: 'loading-feedback',
-            tempoExibicao: null
+            classeAdicional: "loading-feedback",
+            tempoExibicao: null,
         };
 
         const opcoes = { ...opcoesPadrao, ...opcoesPersonalizadas };
 
-        // Salvar estado original do campo principal
-        $campo.data('estado-original', {
-            disabled: $campo.prop('disabled'),
-            valor: $campo.val()
+        $campo.data("estado-original", {
+            disabled: $campo.prop("disabled"),
+            valor: $campo.val(),
         });
 
-        // Desabilitar o campo principal
-        $campo.prop('disabled', true);
+        $campo.prop("disabled", true);
 
-        // Tratar e desabilitar campos relacionados
         let $camposRelacionados = [];
         if (camposRelacionados) {
-            $camposRelacionados = Array.isArray(camposRelacionados) ?
-                camposRelacionados.map(c => $(c)) : [$(camposRelacionados)];
+            $camposRelacionados = Array.isArray(camposRelacionados)
+                ? camposRelacionados.map(c => $(c))
+                : [$(camposRelacionados)];
 
-            // Guardar estados e desabilitar campos relacionados
             $camposRelacionados.forEach($campoRel => {
-                $campoRel.data('estado-original', {
-                    disabled: $campoRel.prop('disabled'),
-                    valor: $campoRel.val()
+                $campoRel.data("estado-original", {
+                    disabled: $campoRel.prop("disabled"),
+                    valor: $campoRel.val(),
                 });
-                $campoRel.prop('disabled', true);
+                $campoRel.prop("disabled", true);
             });
         }
 
-        // Remover qualquer feedback existente
         $campo.siblings(".invalid-feedback, .valid-feedback, .loading-feedback").remove();
 
-        // Se estiver em um input-group, remover mensagens após o input-group também
-        const $inputGroup = $campo.closest('.input-group');
+        const $inputGroup = $campo.closest(".input-group");
         if ($inputGroup.length > 0) {
             $inputGroup.siblings(".invalid-feedback, .valid-feedback, .loading-feedback").remove();
             $inputGroup.removeClass("is-invalid");
@@ -236,48 +223,55 @@ class FeedbackVisual {
 
         $campo.removeClass("is-invalid is-valid").addClass("is-loading");
 
-        // Tratamento especial para Select2
         if ($campo.hasClass("select2")) {
             $campo.next(".select2-container").removeClass("is-invalid is-valid").addClass("is-loading");
         }
 
-        // Criar elemento de feedback de carregamento
-        const $feedbackCarregamento = $(`<div class="loading-feedback ${opcoes.classeAdicional}">
-        <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-        <span>${mensagem}</span>
-    </div>`);
+        const $feedbackCarregamento = $(
+            `<div class="loading-feedback ${opcoes.classeAdicional}">
+                <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                <span>${mensagem}</span>
+            </div>`,
+        );
 
-        // Adicionar o feedback após o campo ou após o input-group se existir
         if ($inputGroup.length > 0) {
             $inputGroup.after($feedbackCarregamento);
         } else {
             $campo.after($feedbackCarregamento);
         }
 
-        // Retornar objeto com método para finalizar o carregamento
         return {
             concluir: (sucesso = true, mensagemResultado = "") => {
-                // Remover estado de carregamento
-                $campo.removeClass("is-loading");
+                $campo.removeClass("is-loading is-invalid is-valid");
                 $feedbackCarregamento.remove();
 
-                // Restaurar estado do campo principal
-                const estadoOriginal = $campo.data('estado-original');
-                if (estadoOriginal) {
-                    $campo.prop('disabled', estadoOriginal.disabled);
-                    $campo.removeData('estado-original');
+                if ($inputGroup.length > 0) {
+                    $inputGroup.removeClass("is-invalid is-valid");
                 }
 
-                // Restaurar estados dos campos relacionados
+                const estadoOriginal = $campo.data("estado-original");
+                if (estadoOriginal) {
+                    $campo.prop("disabled", estadoOriginal.disabled);
+                    $campo.removeData("estado-original");
+                }
+
                 $camposRelacionados.forEach($campoRel => {
-                    const estadoOriginalRel = $campoRel.data('estado-original');
+                    const estadoOriginalRel = $campoRel.data("estado-original");
                     if (estadoOriginalRel) {
-                        $campoRel.prop('disabled', estadoOriginalRel.disabled);
-                        $campoRel.removeData('estado-original');
+                        $campoRel.prop("disabled", estadoOriginalRel.disabled);
+                        $campoRel.removeData("estado-original");
                     }
                 });
 
-                // Mostrar feedback de sucesso ou erro conforme resultado
+                if ($campo.hasClass("select2")) {
+                    $campo.next(".select2-container").removeClass("is-loading is-invalid is-valid");
+                }
+
+                $campo.siblings(".invalid-feedback, .valid-feedback").remove();
+                if ($inputGroup.length > 0) {
+                    $inputGroup.siblings(".invalid-feedback, .valid-feedback").remove();
+                }
+
                 if (sucesso) {
                     if (mensagemResultado) {
                         FeedbackVisual.mostrarSucesso(campo, { mensagem: mensagemResultado });
@@ -287,13 +281,38 @@ class FeedbackVisual {
                 } else {
                     FeedbackVisual.mostrarErro(campo, mensagemResultado || "Erro na operação.");
                 }
-
-                // Se tiver Select2, atualizar o estado visual
-                if ($campo.hasClass("select2")) {
-                    $campo.next(".select2-container").removeClass("is-loading");
-                }
-            }
+            },
         };
+    }
+
+    /**
+     *  Habilita um campo e seus campos relacionados
+     *  @param {Element|String} campo - O campo principal a ser habilitado
+     *  @param {Array|String} camposRelacionados - Campos relacionados para habilitar
+     */
+    static habilitarCampo(campo, camposRelacionados = []) {
+        const $campo = $(campo);
+
+        $campo.prop("disabled", false);
+
+        if (camposRelacionados.length > 0) {
+            camposRelacionados.forEach(seletor => {
+                $(seletor).prop("disabled", false);
+            });
+        }
+
+        if ($campo.hasClass("select2")) {
+            $campo.next(".select2-container").removeClass("select2-container--disabled");
+            if ($campo.hasClass("select2-hidden-accessible")) {
+                $campo.select2("enable", true);
+            }
+        }
+
+        const $inputGroup = $campo.closest(".input-group");
+        if ($inputGroup.length > 0) {
+            $inputGroup.removeClass("is-invalid");
+            $inputGroup.find("input, select").prop("disabled", false);
+        }
     }
 
     /**
@@ -302,17 +321,16 @@ class FeedbackVisual {
      */
     static limparFeedback(campo) {
         const $campo = $(campo);
+
         $campo.removeClass("is-invalid is-valid has-warning");
         $campo.siblings(".invalid-feedback, .mensagem-alerta, .error-message").remove();
 
-        // Limpar feedback após o input-group se existir
-        const $inputGroup = $campo.closest('.input-group');
+        const $inputGroup = $campo.closest(".input-group");
         if ($inputGroup.length > 0) {
             $inputGroup.removeClass("is-invalid");
             $inputGroup.siblings(".invalid-feedback, .mensagem-alerta, .error-message").remove();
         }
 
-        // Tratamento especial para Select2
         if ($campo.hasClass("select2")) {
             $campo.next(".select2-container").removeClass("is-invalid is-valid has-warning");
         }
@@ -321,11 +339,12 @@ class FeedbackVisual {
     /**
      *  Limpa o feedback de todos os campos do formulário
      *  @param {String} formSelector - Seletor do formulário
-     *  @param {Boolean} tirarAvisos - Valida se é necessário tirar os avisos de alerta
+     *  @param {Boolean} tirarAvisos - Se deve remover também os avisos de alerta
      */
     static limparTodosFeedbacks(formSelector, tirarAvisos = false) {
         $(`${formSelector} .is-invalid`).removeClass("is-invalid");
         $(`${formSelector} .is-valid`).removeClass("is-valid");
+
         $(`${formSelector} .invalid-feedback`).remove();
         $(`${formSelector} .error-message`).remove();
         if (tirarAvisos) {
@@ -354,8 +373,6 @@ class FeedbackVisual {
     }
 }
 
-
-
 /**
  *  Validações de Documentos
  *  CPF, CNPJ, CEP e Número Endereço
@@ -363,12 +380,12 @@ class FeedbackVisual {
 // -------------------------- → Validador CPF ← -------------------------- //
 class ValidadorCPF extends Validador {
     inicializar() {
-        $(".input-validar-cpf").on("input blur", (event) => {
+        $(".input-validar-cpf").on("input blur", event => {
             const campo = event.target;
             const cpf = $(campo).val().trim();
 
             if (cpf === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe o CPF.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -382,7 +399,7 @@ class ValidadorCPF extends Validador {
             }
         });
 
-        $(".input-validar-cpf-nao-obrigatorio").on("input blur", (event) => {
+        $(".input-validar-cpf-nao-obrigatorio").on("input blur", event => {
             const campo = event.target;
             const cpf = $(campo).val().trim();
 
@@ -414,7 +431,9 @@ class ValidadorCPF extends Validador {
 
         cpf = cpf.replace(/[^\d]+/g, "");
 
-        if (cpf === "" || cpf.length !== 11) { return false; }
+        if (cpf === "" || cpf.length !== 11) {
+            return false;
+        }
         if (/^(\d)\1+$/.test(cpf)) {
             return false;
         }
@@ -446,12 +465,12 @@ class ValidadorCPF extends Validador {
 // -------------------------- → Validador CNPJ ← -------------------------- //
 class ValidadorCNPJ extends Validador {
     inicializar() {
-        $(".input-validar-cnpj").on("input blur", (event) => {
+        $(".input-validar-cnpj").on("input blur", event => {
             const campo = event.target;
             const cnpj = $(campo).val().trim();
 
             if (cnpj === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe o CNPJ.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -478,7 +497,9 @@ class ValidadorCNPJ extends Validador {
 
         cnpj = cnpj.replace(/[^\d]+/g, "");
 
-        if (cnpj === "" || cnpj.length !== 14) { return false; }
+        if (cnpj === "" || cnpj.length !== 14) {
+            return false;
+        }
 
         if (/^(\d)\1+$/.test(cnpj)) {
             return false;
@@ -495,7 +516,7 @@ class ValidadorCNPJ extends Validador {
             if (pos < 2) pos = 9;
         }
 
-        let resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        let resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
         if (resultado !== parseInt(digitos.charAt(0))) {
             return false;
         }
@@ -510,7 +531,7 @@ class ValidadorCNPJ extends Validador {
             if (pos < 2) pos = 9;
         }
 
-        resultado = soma % 11 < 2 ? 0 : 11 - soma % 11;
+        resultado = soma % 11 < 2 ? 0 : 11 - (soma % 11);
         if (resultado !== parseInt(digitos.charAt(1))) {
             return false;
         }
@@ -522,7 +543,7 @@ class ValidadorCNPJ extends Validador {
 // -------------------------- → Validador CEP ← -------------------------- //
 class ValidadorCEP extends Validador {
     inicializar() {
-        $(".input-validar-cep").on("input blur", (event) => {
+        $(".input-validar-cep").on("input blur", event => {
             const campo = event.target;
             const cep = $(campo).val().trim().replace(/\D/g, "");
 
@@ -554,6 +575,7 @@ class ValidadorCEP extends Validador {
      *  @param {String} cep - O CEP a ser consultado
      *  @param {Element} campo - O campo que contém o CEP
      */
+    // Modifique o método consultarCEP na classe ValidadorCEP
     consultarCEP(cep, campo) {
         // Selecionar os campos relacionados que devem ser desabilitados durante a consulta
         const camposRelacionados = [
@@ -561,11 +583,15 @@ class ValidadorCEP extends Validador {
             ".campo-bairro",
             ".campo-cidade",
             ".campo-estado",
-            ".campo-numero"
+            ".campo-numero",
         ];
 
         // Iniciar o feedback de carregamento
-        const carregamento = FeedbackVisual.mostrarCarregamento(campo, camposRelacionados, "Consultando CEP...");
+        const carregamento = FeedbackVisual.mostrarCarregamento(
+            campo,
+            camposRelacionados,
+            "Consultando CEP...",
+        );
 
         $.getJSON(`https://viacep.com.br/ws/${cep}/json/`, function (data) {
             if (!data.erro) {
@@ -579,24 +605,44 @@ class ValidadorCEP extends Validador {
 
                 // Mapa direto de UF para nome do estado
                 const estados = {
-                    'AC': 'Acre', 'AL': 'Alagoas', 'AP': 'Amapá', 'AM': 'Amazonas', 'BA': 'Bahia',
-                    'CE': 'Ceará', 'DF': 'Distrito Federal', 'ES': 'Espírito Santo', 'GO': 'Goiás',
-                    'MA': 'Maranhão', 'MT': 'Mato Grosso', 'MS': 'Mato Grosso do Sul', 'MG': 'Minas Gerais',
-                    'PA': 'Pará', 'PB': 'Paraíba', 'PR': 'Paraná', 'PE': 'Pernambuco', 'PI': 'Piauí',
-                    'RJ': 'Rio de Janeiro', 'RN': 'Rio Grande do Norte', 'RS': 'Rio Grande do Sul',
-                    'RO': 'Rondônia', 'RR': 'Roraima', 'SC': 'Santa Catarina', 'SP': 'São Paulo',
-                    'SE': 'Sergipe', 'TO': 'Tocantins'
+                    AC: "Acre",
+                    AL: "Alagoas",
+                    AP: "Amapá",
+                    AM: "Amazonas",
+                    BA: "Bahia",
+                    CE: "Ceará",
+                    DF: "Distrito Federal",
+                    ES: "Espírito Santo",
+                    GO: "Goiás",
+                    MA: "Maranhão",
+                    MT: "Mato Grosso",
+                    MS: "Mato Grosso do Sul",
+                    MG: "Minas Gerais",
+                    PA: "Pará",
+                    PB: "Paraíba",
+                    PR: "Paraná",
+                    PE: "Pernambuco",
+                    PI: "Piauí",
+                    RJ: "Rio de Janeiro",
+                    RN: "Rio Grande do Norte",
+                    RS: "Rio Grande do Sul",
+                    RO: "Rondônia",
+                    RR: "Roraima",
+                    SC: "Santa Catarina",
+                    SP: "São Paulo",
+                    SE: "Sergipe",
+                    TO: "Tocantins",
                 };
 
                 $estadoSelect.val(estados[data.uf]);
                 if ($estadoSelect.hasClass("select2")) {
-                    $estadoSelect.trigger('change.select2');
+                    $estadoSelect.trigger("change.select2");
                 }
 
                 // Garantir que todos os campos estejam habilitados para edição
-                $(campo).prop('disabled', false);
+                $(campo).prop("disabled", false);
                 camposRelacionados.forEach(seletor => {
-                    $(seletor).prop('disabled', false);
+                    $(seletor).prop("disabled", false);
                 });
 
                 // Focar no campo número
@@ -605,15 +651,27 @@ class ValidadorCEP extends Validador {
                 // Finalizar carregamento com sucesso
                 carregamento.concluir(true, "CEP localizado com sucesso!");
             } else {
-                // Garantir que o campo de CEP esteja habilitado mesmo em caso de erro
-                $(campo).prop('disabled', false);
+                // IMPORTANTE: Garantir que TODOS os campos sejam habilitados mesmo em caso de erro
+                $(campo).prop("disabled", false);
+                camposRelacionados.forEach(seletor => {
+                    $(seletor).prop("disabled", false);
+                });
+
+                // Usar o método habilitarCampo para garantir que tudo funcione
+                FeedbackVisual.habilitarCampo(campo, camposRelacionados);
 
                 // Finalizar carregamento com erro
                 carregamento.concluir(false, "CEP não encontrado.");
             }
         }).fail(function () {
-            // Garantir que o campo de CEP esteja habilitado mesmo em caso de erro
-            $(campo).prop('disabled', false);
+            // IMPORTANTE: Garantir que TODOS os campos sejam habilitados mesmo em caso de erro de conexão
+            $(campo).prop("disabled", false);
+            camposRelacionados.forEach(seletor => {
+                $(seletor).prop("disabled", false);
+            });
+
+            // Usar o método habilitarCampo para garantir que tudo funcione
+            FeedbackVisual.habilitarCampo(campo, camposRelacionados);
 
             // Finalizar carregamento com erro de conexão
             carregamento.concluir(false, "Erro ao consultar CEP. Verifique sua conexão.");
@@ -624,7 +682,7 @@ class ValidadorCEP extends Validador {
 // -------------------------- → Validador Número Endereço ← -------------------------- //
 class ValidadorNumeroEndereco extends Validador {
     inicializar() {
-        $(".input-validar-numero-endereco").on("input blur", (event) => {
+        $(".input-validar-numero-endereco").on("input blur", event => {
             const campo = event.target;
             const valor = $(campo).val().trim();
 
@@ -659,31 +717,32 @@ class ValidadorNumeroEndereco extends Validador {
     }
 }
 
-
-
 /**
- *  Validações de Nome e Valores
+ *  Validações de Valores
  *  Nome, Data Nascimento, Data, Horário e Valor
  */
 // -------------------------- → Validador Nome ← -------------------------- //
 class ValidadorNome extends Validador {
     inicializar() {
-        $(".input-validar-nome").on("input blur", (event) => {
+        $(".input-validar-nome").on("input blur", event => {
             const campo = event.target;
             const nome = $(campo).val().trim();
             // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
             // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'-]+$/;
 
             if (nome === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
                 }
-            } else if (nome.length > 255) {
-                FeedbackVisual.mostrarErro(campo, "Deve conter menor que 255 caracteres.");
+                return;
+            }
+
+            if (nome.length > 255) {
+                FeedbackVisual.mostrarErro(campo, "O nome deve ser menor que 255 caracteres.");
             } else if (nome.length < 3) {
-                FeedbackVisual.mostrarErro(campo, "Deve conter pelo menos 3 caracteres.");
+                FeedbackVisual.mostrarErro(campo, "O nome deve ter pelo menos 3 caracteres.");
             } else {
                 FeedbackVisual.limparFeedback(campo);
             }
@@ -696,21 +755,7 @@ class ValidadorNome extends Validador {
      *  @returns {Boolean} - Verdadeiro se o nome for válido
      */
     validar(nome) {
-        if (!nome) {
-            return false;
-        }
-
-        if (nome === "") {
-            return false;
-        }
-
-        nome = nome.trim();
-
-        if (nome.length < 3) {
-            return false;
-        }
-
-        if (nome.length > 255) {
+        if (!nome || nome === "" || nome.length < 3 || nome.length > 255) {
             return false;
         }
 
@@ -727,12 +772,12 @@ class ValidadorNome extends Validador {
 // -------------------------- → Validador Data Nascimento ← -------------------------- //
 class ValidadorDataNascimento extends Validador {
     inicializar() {
-        $(".input-validar-data-nascimento").on("input blur", (event) => {
+        $(".input-validar-data-nascimento").on("input blur", event => {
             const campo = event.target;
             const data = $(campo).val().trim();
 
             if (data === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Data de nascimento é obrigatória.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -786,7 +831,7 @@ class ValidadorDataNascimento extends Validador {
 // -------------------------- → Validador Data ← -------------------------- //
 class ValidadorData extends Validador {
     inicializar() {
-        $(".input-validar-data").on("input blur", (event) => {
+        $(".input-validar-data").on("input blur", event => {
             const campo = event.target;
             const data = $(campo).val().trim();
 
@@ -795,7 +840,7 @@ class ValidadorData extends Validador {
 
             // Verifica se é campo obrigatório e está vazio
             if (data === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe a Data.");
                 }
                 return;
@@ -803,7 +848,7 @@ class ValidadorData extends Validador {
 
             // Verifica se é data antiga (apenas se existir data)
             if ($(campo).hasClass("validar-data-antiga")) {
-                const hoje = moment().startOf('day');
+                const hoje = moment().startOf("day");
                 const dataDigitada = moment(data);
 
                 if (dataDigitada.isValid() && dataDigitada.isBefore(hoje)) {
@@ -825,13 +870,13 @@ class ValidadorData extends Validador {
 // -------------------------- → Validador Horário ← -------------------------- //
 class ValidadorHorario extends Validador {
     inicializar() {
-        $(".input-validar-horario").on("input blur", (event) => {
+        $(".input-validar-horario").on("input blur", event => {
             const campo = event.target;
             const horario = $(campo).val().trim();
 
             if (horario === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
-                    FeedbackVisual.mostrarErro(campo, "Por favor, informar o Horário.")
+                if ($(campo).hasClass(this.campoObrigatorio)) {
+                    FeedbackVisual.mostrarErro(campo, "Por favor, informar o Horário.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
                 }
@@ -853,12 +898,12 @@ class ValidadorHorario extends Validador {
 // -------------------------- → Validador Valor ← -------------------------- //
 class ValidadorValor extends Validador {
     inicializar() {
-        $(".input-validar-valor").on("input blur", (event) => {
+        $(".input-validar-valor").on("input blur", event => {
             const campo = event.target;
             const valor = $(campo).val().trim();
 
             if (valor === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informar o Valor.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -877,8 +922,6 @@ class ValidadorValor extends Validador {
         return valor.trim() !== "";
     }
 }
-
-
 
 /**
  *  Validações de Número de Celular e WhatsApp
@@ -908,7 +951,7 @@ class ValidadorWhatsapp extends Validador {
     inicializar() {
         $(".input-validar-whatsapp").each((index, campo) => {
             const $campo = $(campo);
-            const $grupoInput = $campo.closest('.input-group');
+            const $grupoInput = $campo.closest(".input-group");
             const $selectPais = $grupoInput.find('select[name="pais"]');
 
             if ($selectPais.length > 0) {
@@ -938,7 +981,7 @@ class ValidadorWhatsapp extends Validador {
         });
 
         $selectPais.on("change", () => {
-            $campo.val('');
+            $campo.val("");
             FeedbackVisual.limparFeedback($campo[0]);
         });
     }
@@ -948,7 +991,7 @@ class ValidadorWhatsapp extends Validador {
             const whatsapp = $campo.val().trim();
 
             if (whatsapp === "") {
-                if ($campo.hasClass("campo-obrigatorio")) {
+                if ($campo.hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro($campo[0], "Por favor, informe o número de WhatsApp");
                 } else {
                     FeedbackVisual.limparFeedback($campo[0]);
@@ -970,19 +1013,17 @@ class ValidadorWhatsapp extends Validador {
     }
 
     validarPorPais(whatsapp, codigoPais) {
-        const numeroLimpo = typeof whatsapp === 'string' ?
-            whatsapp.replace(/[^\d]+/g, "") :
-            whatsapp.toString();
+        const numeroLimpo =
+            typeof whatsapp === "string" ? whatsapp.replace(/[^\d]+/g, "") : whatsapp.toString();
 
         const config = this.configuracoesPorPais[codigoPais] || {
             minDigitos: 8,
             maxDigitos: 15,
-            nome: "Outro País"
+            nome: "Outro País",
         };
 
         const dentroDoLimite =
-            numeroLimpo.length >= config.minDigitos &&
-            numeroLimpo.length <= config.maxDigitos;
+            numeroLimpo.length >= config.minDigitos && numeroLimpo.length <= config.maxDigitos;
 
         if (config.formatoRegex && dentroDoLimite) {
             return config.formatoRegex.test(numeroLimpo);
@@ -1006,8 +1047,6 @@ class ValidadorWhatsapp extends Validador {
     }
 }
 
-
-
 /**
  *  Validações de Campos de Login
  *  E-mail e Senha
@@ -1015,18 +1054,18 @@ class ValidadorWhatsapp extends Validador {
 // -------------------------- → Validador Email ← -------------------------- //
 class ValidadorEmail extends Validador {
     inicializar() {
-        $(".input-validar-email").on("input blur", (event) => {
+        $(".input-validar-email").on("input blur", event => {
             const campo = event.target;
             const email = $(campo).val().trim();
 
             if (email === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe o E-mail.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
                 }
             } else if (email.length > 255) {
-                FeedbackVisual.mostrarErro(campo, "E-mail deve menor que 255 caracteres.");
+                FeedbackVisual.mostrarErro(campo, "E-mail deve ser menor que 255 caracteres.");
             } else {
                 FeedbackVisual.limparFeedback(campo);
             }
@@ -1055,18 +1094,18 @@ class ValidadorEmail extends Validador {
 // -------------------------- → Validador Senha ← -------------------------- //
 class ValidadorSenha extends Validador {
     inicializar() {
-        $(".input-validar-senha").on("input blur", (event) => {
+        $(".input-validar-senha").on("input blur", event => {
             const campo = event.target;
             const senha = $(campo).val().trim();
 
             if (senha === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe a Senha.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
                 }
             } else if (senha.length < 3) {
-                FeedbackVisual.mostrarErro(campo, "Senha deve ser maior que 3 caracteres.")
+                FeedbackVisual.mostrarErro(campo, "Senha deve ser maior que 3 caracteres.");
             } else if (senha.length > 255) {
                 FeedbackVisual.mostrarErro(campo, "Senha deve ser menor que 255 caracteres.");
             } else {
@@ -1074,12 +1113,12 @@ class ValidadorSenha extends Validador {
             }
         });
 
-        $(".input-validar-senha-login").on("input blur", (event) => {
+        $(".input-validar-senha-login").on("input blur", event => {
             const campo = event.target;
             const senha = $(campo).val().trim();
 
             if (senha === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe a Senha.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -1112,8 +1151,6 @@ class ValidadorSenha extends Validador {
     }
 }
 
-
-
 /**
  *  Validações das Informações de Empresas
  *  Razão Social, Nome Fantasia, Nome Empresa e Responsável
@@ -1121,13 +1158,13 @@ class ValidadorSenha extends Validador {
 // -------------------------- → Validador Razão Social ← -------------------------- //
 class ValidadorRazaoSocial extends Validador {
     inicializar() {
-        $(".input-validar-razao-social").on("input blur", (event) => {
+        $(".input-validar-razao-social").on("input blur", event => {
             const campo = event.target;
             const razaoSocial = $(campo).val().trim();
             // const regexRazaoSocial = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()-]+$/;
 
             if (razaoSocial === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Razão Social é obrigatória.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -1173,13 +1210,13 @@ class ValidadorRazaoSocial extends Validador {
 // -------------------------- → Validador Nome Fantasia ← -------------------------- //
 class ValidadorNomeFantasia extends Validador {
     inicializar() {
-        $(".input-validar-nome-fantasia").on("input blur", (event) => {
+        $(".input-validar-nome-fantasia").on("input blur", event => {
             const campo = event.target;
             const nomeFantasia = $(campo).val().trim();
             // const regexNomeFantasia = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
 
             if (nomeFantasia === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome Fantasia.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -1225,13 +1262,13 @@ class ValidadorNomeFantasia extends Validador {
 // -------------------------- → Validador Nome Empresa ← -------------------------- //
 class ValidadorNomeEmpresa extends Validador {
     inicializar() {
-        $(".input-validar-nome-empresa").on("input blur", (event) => {
+        $(".input-validar-nome-empresa").on("input blur", event => {
             const campo = event.target;
             const nomeEmpresa = $(campo).val().trim();
             // const regexNomeEmpresa = /^[A-Za-zÀ-ÖØ-öø-ÿ0-9\s'.&()!@#$%*+-]+$/;
 
             if (nomeEmpresa === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome da Empresa.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -1273,13 +1310,13 @@ class ValidadorNomeEmpresa extends Validador {
 // -------------------------- → Validador Responsável ← -------------------------- //
 class ValidadorResponsavel extends Validador {
     inicializar() {
-        $(".input-validar-responsavel").on("input blur", (event) => {
+        $(".input-validar-responsavel").on("input blur", event => {
             const campo = event.target;
             const responsavel = $(campo).val().trim();
             // const regexNome = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
 
             if (responsavel === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe o Nome do responsável.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
@@ -1295,7 +1332,10 @@ class ValidadorResponsavel extends Validador {
     }
 
     validar(responsavel) {
-        if (typeof window.validadorNome !== 'undefined' && typeof window.validadorNome.validar === 'function') {
+        if (
+            typeof window.validadorNome !== "undefined" &&
+            typeof window.validadorNome.validar === "function"
+        ) {
             return window.validadorNome.validar(responsavel);
         }
 
@@ -1317,8 +1357,6 @@ class ValidadorResponsavel extends Validador {
         return true;
     }
 }
-
-
 
 /**
  *  Validações de Campos Diversos
@@ -1383,12 +1421,12 @@ class ValidadorSelect extends Validador {
         const campo = $select[0];
 
         // Se estiver aberto, não validar
-        if ($select.hasClass("select2") && $select.data('select2') && $select.data('select2').isOpen()) {
+        if ($select.hasClass("select2") && $select.data("select2") && $select.data("select2").isOpen()) {
             return;
         }
 
         if (!valor || valor === "") {
-            if ($select.hasClass("campo-obrigatorio")) {
+            if ($select.hasClass(this.campoObrigatorio)) {
                 FeedbackVisual.mostrarErro(campo, "Por favor, selecione uma opção.");
             } else {
                 FeedbackVisual.limparFeedback(campo);
@@ -1467,12 +1505,12 @@ class ValidadorSelectSelecionado extends Validador {
         const campo = $select[0];
 
         // Se estiver aberto, não validar
-        if ($select.hasClass("select2") && $select.data('select2') && $select.data('select2').isOpen()) {
+        if ($select.hasClass("select2") && $select.data("select2") && $select.data("select2").isOpen()) {
             return;
         }
 
         if (valor && valor !== "" && valor !== "NULL") {
-            if ($select.hasClass("notificacao-obrigatoria")) {
+            if ($select.hasClass(this.campoObrigatorio)) {
                 FeedbackVisual.mostrarErro(campo, "Adicione o item antes de continuar.");
             } else {
                 FeedbackVisual.mostrarErro(campo, "Adicione o item antes de continuar.");
@@ -1501,7 +1539,7 @@ class ValidadorRadio extends Validador {
             $(`input[name="${name}"]`).on("change blur", () => {
                 const selecionado = $(`input[name="${name}"]:checked`).length > 0;
 
-                if (!selecionado && $radioGroup.hasClass("campo-obrigatorio")) {
+                if (!selecionado && $radioGroup.hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro($radioGroup, "Por favor, selecione uma opção.");
                 } else {
                     FeedbackVisual.limparFeedback($radioGroup);
@@ -1520,18 +1558,18 @@ class ValidadorRadio extends Validador {
 // -------------------------- → Validador TextArea ← -------------------------- //
 class ValidadorTextArea extends Validador {
     inicializar() {
-        $(".input-validar-textarea").on("input blur", (event) => {
+        $(".input-validar-textarea").on("input blur", event => {
             const campo = event.target;
             const textArea = $(campo).val().trim();
 
             if (textArea === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe alguma informação.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
                 }
             } else if (textArea.length > 3000) {
-                FeedbackVisual.mostrarErro(campo, "O campo deve conter meno de 3000 caracteres.");
+                FeedbackVisual.mostrarErro(campo, "O campo deve ser menor de 3000 caracteres.");
             } else {
                 FeedbackVisual.limparFeedback(campo);
             }
@@ -1593,15 +1631,19 @@ class ValidadorCheckbox extends Validador {
     verificarGrupoCheckbox($checkboxGroup, groupName) {
         const isValid = this.validar(groupName);
 
-        if (!isValid && $checkboxGroup.hasClass("campo-obrigatorio")) {
+        if (!isValid && $checkboxGroup.hasClass(this.campoObrigatorio)) {
             // Se o grupo já tem um container personalizado para mensagem de erro
             if ($checkboxGroup.find(".feedback-container").length > 0) {
                 const $feedbackContainer = $checkboxGroup.find(".feedback-container");
-                $feedbackContainer.html('<div class="invalid-feedback error-message d-block">Selecione pelo menos uma opção.</div>');
+                $feedbackContainer.html(
+                    '<div class="invalid-feedback error-message d-block">Selecione pelo menos uma opção.</div>',
+                );
             } else {
                 // Se ainda não tem erro
                 if ($checkboxGroup.find(".error-message").length === 0) {
-                    $checkboxGroup.append('<div class="invalid-feedback error-message d-block">Selecione pelo menos uma opção.</div>');
+                    $checkboxGroup.append(
+                        '<div class="invalid-feedback error-message d-block">Selecione pelo menos uma opção.</div>',
+                    );
                 }
             }
         } else {
@@ -1625,7 +1667,7 @@ class ValidadorCheckbox extends Validador {
      * @param {String} formSelector - Seletor do formulário
      * @returns {Boolean} - Verdadeiro se todos os grupos obrigatórios tiverem pelo menos um checkbox marcado
      */
-    validarTodosGrupos(formSelector = 'form') {
+    validarTodosGrupos(formSelector = "form") {
         let todosValidos = true;
 
         // Validar grupos com classe específica
@@ -1648,20 +1690,20 @@ class ValidadorCheckbox extends Validador {
 // -------------------------- → Validador Input ← -------------------------- //
 class ValidadorInput extends Validador {
     inicializar() {
-        $(".input-validar-input").on("input blur", (event) => {
+        $(".input-validar-input").on("input blur", event => {
             const campo = event.target;
             const palavra = $(campo).val().trim();
 
             if (palavra === "") {
-                if ($(campo).hasClass("campo-obrigatorio")) {
+                if ($(campo).hasClass(this.campoObrigatorio)) {
                     FeedbackVisual.mostrarErro(campo, "Por favor, informe alguma informação.");
                 } else {
                     FeedbackVisual.limparFeedback(campo);
                 }
             } else if (palavra.length > 255) {
-                FeedbackVisual.mostrarErro(campo, "O campo deve conter menor que 255 caracteres.");
+                FeedbackVisual.mostrarErro(campo, "O campo deve ser menor que 255 caracteres.");
             } else if (palavra.length < 3) {
-                FeedbackVisual.mostrarErro(campo, "O campo deve conter pelo menos 3 caracteres.");
+                FeedbackVisual.mostrarErro(campo, "O campo deve ter pelo menos 3 caracteres.");
             } else {
                 FeedbackVisual.limparFeedback(campo);
             }
@@ -1687,15 +1729,12 @@ class ValidadorInput extends Validador {
     }
 }
 
-
-
 /**
  *  Criação dos Validadores
  *  Cria os validadores
  */
 // -------------------------- → Cria Validadores ← -------------------------- //
 $(function () {
-
     function criarValidadores() {
         // Validações de documentos
         window.validadorCPF = new ValidadorCPF();
@@ -1703,7 +1742,7 @@ $(function () {
         window.validadorCEP = new ValidadorCEP();
         window.validadorNumeroEndereco = new ValidadorNumeroEndereco();
 
-        // Validações de Nome e Valores
+        // Validações de Valores
         window.validadorNome = new ValidadorNome();
         window.validadorDataNascimento = new ValidadorDataNascimento();
         window.validadorData = new ValidadorData();
@@ -1735,14 +1774,104 @@ $(function () {
     criarValidadores();
 
     Object.keys(window).forEach(key => {
-        if (key.startsWith('validador') && window[key] === null) {
+        if (key.startsWith("validador") && window[key] === null) {
             console.warn(`Validador ${key} não pode ser inicializado.`);
         }
     });
 
+    /**
+     * Reinicializa todos os validadores para elementos criados dinamicamente
+     * Pode ser chamada de qualquer lugar do projeto
+     */
+    function reinicializarValidadores() {
+        try {
+            // Validações de documentos
+            if (typeof window.validadorCPF !== "undefined") {
+                window.validadorCPF.inicializar();
+            }
+            if (typeof window.validadorCNPJ !== "undefined") {
+                window.validadorCNPJ.inicializar();
+            }
+            if (typeof window.validadorCEP !== "undefined") {
+                window.validadorCEP.inicializar();
+            }
+            if (typeof window.validadorNumeroEndereco !== "undefined") {
+                window.validadorNumeroEndereco.inicializar();
+            }
+
+            // Validações de Valores
+            if (typeof window.validadorNome !== "undefined") {
+                window.validadorNome.inicializar();
+            }
+            if (typeof window.validadorDataNascimento !== "undefined") {
+                window.validadorDataNascimento.inicializar();
+            }
+            if (typeof window.validadorData !== "undefined") {
+                window.validadorData.inicializar();
+            }
+            if (typeof window.validadorHorario !== "undefined") {
+                window.validadorHorario.inicializar();
+            }
+            if (typeof window.validadorValor !== "undefined") {
+                window.validadorValor.inicializar();
+            }
+
+            // Validações de Número de Celular e WhatsApp
+            if (typeof window.validadorWhatsapp !== "undefined") {
+                window.validadorWhatsapp.inicializar();
+            }
+
+            // Validações de Campos de Login
+            if (typeof window.validadorEmail !== "undefined") {
+                window.validadorEmail.inicializar();
+            }
+            if (typeof window.validadorSenha !== "undefined") {
+                window.validadorSenha.inicializar();
+            }
+
+            // Validações das Informações de empresas
+            if (typeof window.validadorRazaoSocial !== "undefined") {
+                window.validadorRazaoSocial.inicializar();
+            }
+            if (typeof window.validadorNomeFantasia !== "undefined") {
+                window.validadorNomeFantasia.inicializar();
+            }
+            if (typeof window.validadorNomeEmpresa !== "undefined") {
+                window.validadorNomeEmpresa.inicializar();
+            }
+            if (typeof window.validadorResponsavel !== "undefined") {
+                window.validadorResponsavel.inicializar();
+            }
+
+            // Validações de Campos Diversos
+            if (typeof window.validadorSelect !== "undefined") {
+                window.validadorSelect.inicializar();
+            }
+            if (typeof window.validadorSelectSelecionado !== "undefined") {
+                window.validadorSelectSelecionado.inicializar();
+            }
+            if (typeof window.validadorRadio !== "undefined") {
+                window.validadorRadio.inicializar();
+            }
+            if (typeof window.validadorTextArea !== "undefined") {
+                window.validadorTextArea.inicializar();
+            }
+            if (typeof window.validadorCheckbox !== "undefined") {
+                window.validadorCheckbox.inicializar();
+            }
+            if (typeof window.validadorInput !== "undefined") {
+                window.validadorInput.inicializar();
+            }
+        } catch (error) {
+            console.warn("Erro ao reinicializar validadores:", error);
+        }
+    }
+
+    // Adicionar no final do $(function () { ... }) no validador.js:
+    window.reinicializarValidadores = reinicializarValidadores;
+
     // Não inicializa mais os gerenciadores de formulário aqui
     // Isso será feito no cliente.js
-
 
     // $("#observacao").before('<span class="caracteres-contador small text-muted">3000 caracteres restantes</span>');
 

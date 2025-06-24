@@ -12,7 +12,6 @@ $db = new Database();
 //     exit;
 // }
 
-$conexao = $db->getConnection();
 
 $cliente_id = isset($_POST["id"]) ? $_POST["id"] : NULL;
 
@@ -24,7 +23,45 @@ if (!$cliente_id) {
     exit;
 }
 
-$cliente = $conexao->prepare("DELETE FROM `cliente` WHERE `id` = :id");
+$query = "SELECT
+            COUNT(*)
+        FROM
+            `empresa_cliente`
+        WHERE
+            `cliente_id` = :cliente_id";
+
+$existeEmpresaCliente = $db->prepare($query);
+$existeEmpresaCliente->bindParam(":cliente_id", $cliente_id, PDO::PARAM_INT);
+$existeEmpresaCliente->execute();
+
+if ($existeEmpresaCliente->fetchColumn() > 0) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Não é possível excluir o cliente, pois ele está vinculado a uma empresa."
+    ]);
+    exit;
+}
+
+$query = "SELECT COUNT(*) FROM `suporte` WHERE `cliente_id` = :cliente_id";
+
+$existeSuporteCliente = $db->prepare($query);
+$existeSuporteCliente->bindParam(":cliente_id", $cliente_id, PDO::PARAM_INT);
+$existeSuporteCliente->execute();
+
+if ($existeSuporteCliente->fetchColumn() > 0) {
+    echo json_encode([
+        "status" => "error",
+        "message" => "Não é possível excluir o cliente, pois ele está vinculado a um suporte."
+    ]);
+    exit;
+}
+
+$query = "DELETE FROM
+        `cliente`
+    WHERE
+        `id` = :id";
+
+$cliente = $db->prepare($query);
 $cliente->bindParam(":id", $cliente_id, PDO::PARAM_INT);
 $cliente->execute();
 

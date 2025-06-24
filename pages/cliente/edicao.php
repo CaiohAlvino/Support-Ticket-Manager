@@ -4,7 +4,7 @@
 $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
 $aba = isset($_GET["aba"]) ? $_GET["aba"] : "dados";
 
-$registro = $cliente->pegarPorId($id);
+$registro = $classCliente->pegarPorId($id);
 ?>
 
 <div class="cliente-edicao mt-2">
@@ -117,7 +117,7 @@ $registro = $cliente->pegarPorId($id);
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <label for="responsavel_cliente" class="form-label dados-label-nome-cliente"></label>
-                            <input type="text" class="form-control input-validar-responsavel campo-obrigatorio" id="responsavel_cliente" name="responsavel_nome" value="<?php echo $registro->responsavel; ?>">
+                            <input type="text" class="form-control input-validar-responsavel campo-obrigatorio" id="responsavel_cliente" name="responsavel_nome" value="<?php echo $registro->responsavel_nome; ?>">
                         </div>
 
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">

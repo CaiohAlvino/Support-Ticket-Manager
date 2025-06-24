@@ -3,10 +3,8 @@
 
 $id = isset($_GET["id"]) ? $_GET["id"] : NULL;
 
-$suporte_registro = $suporte->pegarPorId($id);
-$mensagem_registro = $suporteMensagem->pegarPorSuporteId($id);
-$empresaSuporte = $empresa->pegarPorId($suporte_registro->empresa_id ?? null);
-$servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
+$suporte_registro = $classSuporte->pegarPorId($id);
+$mensagem_registro = $classSuporteMensagem->pegarPorSuporteId($id);
 ?>
 
 <div class="suporte-mensagem-detalhe mt-2">
@@ -27,7 +25,7 @@ $servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
         <div class="sessao">
             <div class="row">
                 <div class="col-xl-2 col-lg-2 col-md-4 col-sm-12 col-12">
-                    <a href="index.php" class="btn btn-voltar botao-noty-voltar">
+                    <a href="#" onclick="history.back(); return false;" class="btn btn-voltar botao-noty-voltar">
                         <i class="bi-chevron-left me-2"></i>
                         Voltar
                     </a>
@@ -71,12 +69,12 @@ $servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
 
                 <div class="col-md-3 col-sm-6">
                     <span class="text-muted d-block">Empresa</span>
-                    <span class="fw-medium"><?php echo isset($empresaSuporte->nome) ? htmlspecialchars($empresaSuporte->nome) : '-' ?></span>
+                    <span class="fw-medium"><?php echo isset($suporte_registro->empresa_nome) ? htmlspecialchars($suporte_registro->empresa_nome) : '-' ?></span>
                 </div>
 
                 <div class="col-md-3 col-sm-6">
                     <span class="text-muted d-block">Serviço</span>
-                    <span class="fw-medium"><?php echo isset($servicoSuporte->nome) ? htmlspecialchars($servicoSuporte->nome) : '-' ?></span>
+                    <span class="fw-medium"><?php echo isset($suporte_registro->servico_nome) ? htmlspecialchars($suporte_registro->servico_nome) : '-' ?></span>
                 </div>
 
                 <div class="col-md-12 mt-3">
@@ -89,6 +87,7 @@ $servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
                 </div>
             </div>
         </div>
+
         <div class="sessao">
             <h2 class="subtitulo mb-0">Histórico de Interação</h2>
             <?php
@@ -97,31 +96,16 @@ $servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
             ?>
                 <div class=" p-3 border border-1 rounded mt-2">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <?php if ($mensagens->proprietario == "USUARIO"): ?>
+                        <?php if ($mensagens->proprietario == "CLIENTE"): ?>
                             <span class="usuario-nome-cliente fw-bold">
                                 <?php
-                                // Buscar nome do cliente
-                                static $cliente = null;
-                                if ($cliente === null && isset($suporte_registro->cliente_id)) {
-                                    $clienteObj = new Cliente($db->getConnection());
-                                    $cliente = $clienteObj->pegarPorId($suporte_registro->cliente_id);
-                                }
-                                echo $cliente && isset($cliente->nome_fantasia) ? htmlspecialchars($cliente->nome_fantasia) : 'Cliente';
+                                echo $suporte_registro->cliente_nome_fantasia ? htmlspecialchars($suporte_registro->cliente_nome_fantasia) : ($suporte_registro->cliente_responsavel_nome ? htmlspecialchars($suporte_registro->cliente_responsavel_nome) : 'Cliente');
                                 ?>
                             </span>
                         <?php else: ?>
                             <span class="usuario-nome-suporte fw-bold">
                                 <?php
-                                // Buscar nome do admin (usuário do sistema)
-                                static $admin = null;
-                                if ($admin === null && isset($suporte_registro->usuario_id)) {
-                                    $pdo = $db->getConnection();
-                                    $stmt = $pdo->prepare("SELECT nome FROM usuario WHERE id = :id LIMIT 1");
-                                    $stmt->bindParam(":id", $suporte_registro->usuario_id, PDO::PARAM_INT);
-                                    $stmt->execute();
-                                    $admin = $stmt->fetch(PDO::FETCH_OBJ);
-                                }
-                                echo $admin && isset($admin->nome) ? htmlspecialchars($admin->nome) : 'Suporte';
+                                echo $suporte_registro->usuario_nome ? htmlspecialchars($suporte_registro->usuario_nome) : 'Suporte';
                                 ?>
                             </span>
                         <?php endif; ?>
@@ -135,7 +119,11 @@ $servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
             <div class="text-end mt-3" <?php echo $suporte_registro->status == "FECHADO" ? '' : 'style="display:none;"'; ?>>
                 <form id="suporte-reabrir" data-action="suporte-mensagem/cadastrar.php">
                     <input type="hidden" name="id" value="<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '' ?>">
-                    <input type="hidden" name="usuario_id" value="<?php echo isset($suporte_registro->usuario_id) ? htmlspecialchars($suporte_registro->usuario_id) : '' ?>">
+                    <?php if ($_SESSION["usuario_grupo"] != 2): ?>
+                        <input type="hidden" name="usuario_id" value="<?php echo $_SESSION["usuario_id"] ?>">
+                    <?php else: ?>
+                        <input type="hidden" name="usuario_id" value="">
+                    <?php endif ?>
                     <input type="hidden" name="cliente_id" value="<?php echo isset($suporte_registro->cliente_id) ? htmlspecialchars($suporte_registro->cliente_id) : '' ?>">
                     <input type="hidden" name="empresa_id" value="<?php echo isset($suporte_registro->empresa_id) ? htmlspecialchars($suporte_registro->empresa_id) : '' ?>">
                     <input type="hidden" name="mensagem">
@@ -149,7 +137,11 @@ $servicoSuporte = $servico->pegarPorId($suporte_registro->servico_id ?? null);
         <div class="sessao" <?php echo $suporte_registro->status != "FECHADO" ? '' : 'style="display:none;"'; ?>>
             <form id="suporte-mensagem-detalhe" data-action="suporte-mensagem/cadastrar.php">
                 <input type="hidden" name="id" value="<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '' ?>">
-                <input type="hidden" name="usuario_id" value="<?php echo isset($suporte_registro->usuario_id) ? htmlspecialchars($suporte_registro->usuario_id) : '' ?>">
+                <?php if ($_SESSION["usuario_grupo"] != 2): ?>
+                    <input type="hidden" name="usuario_id" value="<?php echo $_SESSION["usuario_id"] ?>">
+                <?php else: ?>
+                    <input type="hidden" name="usuario_id" value="">
+                <?php endif ?>
                 <input type="hidden" name="cliente_id" value="<?php echo isset($suporte_registro->cliente_id) ? htmlspecialchars($suporte_registro->cliente_id) : '' ?>">
                 <input type="hidden" name="empresa_id" value="<?php echo isset($suporte_registro->empresa_id) ? htmlspecialchars($suporte_registro->empresa_id) : '' ?>">
                 <h6>Responder ao Ticket</h6>

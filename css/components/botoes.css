@@ -48,6 +48,17 @@
     color: #fff !important;
 }
 
+.btn-imprimir {
+    background: var(--btn-imprimir-bg);
+    color: var(--btn-imprimir-texto) !important;
+    border: none;
+}
+.btn-imprimir:hover,
+.btn-imprimir:focus {
+    background: var(--btn-imprimir-bg);
+    color: var(--btn-imprimir-texto) !important;
+}
+
 .btn-desabilitado {
     background-color: var(--btn-desabilitado-bg) !important;
     color: var(--btn-disabilitado-texto) !important;
@@ -62,6 +73,28 @@
 .btn-confirmar:focus {
     background: #1e265c;
     color: #fff !important;
+}
+
+.btn-empresa {
+    background: var(--btn-empresa-bg);
+    color: var(--btn-empresa-texto) !important;
+    border: 1px solid var(--btn-empresa-borda);
+}
+.btn-empresa:hover,
+.btn-empresa:focus {
+    background: #e3e7ed;
+    color: var(--btn-empresa-texto) !important;
+}
+
+.btn-servico {
+    background: var(--btn-servico-bg);
+    color: var(--btn-servico-texto) !important;
+    border: 1px solid var(--btn-servico-borda);
+}
+.btn-servico:hover,
+.btn-servico:focus {
+    background: #e3e7ed;
+    color: var(--btn-servico-texto) !important;
 }
 
 .btn-editar {
@@ -197,14 +230,6 @@
     background-color: var(--btn-ver-resposta-formulario-bg);
     border: 1px solid var(--btn-ver-resposta-formulario-borda);
     color: var(--btn-ver-resposta-formulario-texto);
-}
-.btn-nao-mostrar-impressao,
-.btn-nao-mostrar-impressao:hover {
-    background-color: var(--btn-nao-mostrar-impressao-bg);
-    color: var(--btn-nao-mostrar-impressao-texto);
-    @media print {
-        display: none;
-    }
 }
 
 .btn-recebimento,

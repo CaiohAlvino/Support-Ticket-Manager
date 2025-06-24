@@ -246,3 +246,55 @@ body,
 [aria-label] {
     cursor: pointer;
 }
+
+.mostrar-impressao {
+    display: none !important;
+}
+
+@media print {
+    .nao-mostrar-impressao {
+        display: none !important;
+    }
+    .mostrar-impressao {
+        display: block !important;
+    }
+    .cabecalho-impressao {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 2px solid #222;
+        padding-bottom: 12px;
+        margin-bottom: 28px;
+        background: none !important;
+        box-shadow: none !important;
+    }
+    .cabecalho-impressao img {
+        height: 48px;
+        width: 48px;
+        margin-right: 16px;
+    }
+    .cabecalho-impressao .fw-bold {
+        font-size: 1.5rem;
+        color: #222 !important;
+    }
+    .cabecalho-impressao .text-muted {
+        color: #555 !important;
+        font-size: 1rem;
+    }
+    .cabecalho-impressao div {
+        font-size: 1rem;
+    }
+    .rodape-impressao {
+        text-align: center;
+        font-size: 0.95rem;
+        color: #555;
+        padding-top: 18px;
+        border-top: 1px solid #ccc;
+        margin-top: 32px;
+        background: none !important;
+        box-shadow: none !important;
+    }
+    body, .main-content {
+        background: #fff !important;
+    }
+}

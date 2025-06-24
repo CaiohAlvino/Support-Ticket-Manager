@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Tempo de geração: 01/06/2025 às 16:24
+-- Tempo de geração: 11/06/2025 às 14:51
 -- Versão do servidor: 10.4.32-MariaDB
 -- Versão do PHP: 8.2.12
 
@@ -30,24 +30,24 @@ SET time_zone = "+00:00";
 CREATE TABLE `cliente` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
-  `tipo` tinyint(1) NOT NULL,
-  `documento` varchar(14) NOT NULL,
+  `tipo` varchar(255) NOT NULL DEFAULT 'CNPJ' COMMENT 'CNPJ ou CPF',
+  `documento` varchar(255) NOT NULL COMMENT 'xx.xxx.xxx/xxxx-xx ou xxx.xxx.xxx-xx',
   `razao_social` varchar(255) DEFAULT NULL,
   `nome_fantasia` varchar(255) NOT NULL,
-  `telefone` varchar(13) NOT NULL,
+  `telefone` varchar(20) NOT NULL COMMENT 'Formato: (XX) X XXXX-XXXX',
   `email` varchar(255) DEFAULT NULL,
   `responsavel_nome` varchar(255) NOT NULL,
   `responsavel_email` varchar(255) DEFAULT NULL,
-  `responsavel_telefone` varchar(14) NOT NULL,
-  `responsavel_documento` varchar(11) NOT NULL,
-  `cep` int(11) DEFAULT NULL,
+  `responsavel_telefone` varchar(20) NOT NULL COMMENT 'Formato: (XX) X XXXX-XXXX',
+  `responsavel_documento` varchar(18) NOT NULL COMMENT 'CPF: XXX.XXX.XXX-XX ou RG',
+  `cep` varchar(10) DEFAULT NULL COMMENT 'Formato: XXXXX-XXX',
   `cidade` varchar(255) DEFAULT NULL,
   `estado` varchar(255) DEFAULT NULL,
   `pais` varchar(255) DEFAULT NULL,
   `endereco` varchar(255) DEFAULT NULL,
   `numero` varchar(50) DEFAULT NULL,
   `bairro` varchar(255) DEFAULT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -57,7 +57,11 @@ CREATE TABLE `cliente` (
 --
 
 INSERT INTO `cliente` (`id`, `usuario_id`, `tipo`, `documento`, `razao_social`, `nome_fantasia`, `telefone`, `email`, `responsavel_nome`, `responsavel_email`, `responsavel_telefone`, `responsavel_documento`, `cep`, `cidade`, `estado`, `pais`, `endereco`, `numero`, `bairro`, `situacao`, `cadastrado`, `alterado`) VALUES
-(2, 1, 0, '', NULL, 'Teste Fantasia', '(44) 9 9169-2', NULL, 'CAIO HENRIQUE ALMEIDA ALVINO', '', '', '121.969.859', 87203, 'Cianorte', 'Paraná', NULL, NULL, '390', 'Jardim Universidade I', 1, '2025-05-17 21:37:41', '2025-06-01 14:20:10');
+(1, 1, 'CPF', '', NULL, 'Caio Vendas', '(44) 9 9169-2589', NULL, 'CAIO', 'caio@caio.com', '(44) 9 9169-2589', '556.246.944-82', '87203-460', 'Cianorte', 'Paraná', NULL, '', '123', 'Jardim Universidade I', 1, '2025-05-17 21:37:41', '2025-06-08 03:22:22'),
+(2, 3, 'CNPJ', '86.642.481/0001-54', 'HHM', 'oficinas de Saul Goodman & asociados', '(44) 9 9999-9999', 'saul.goodman@goodman.com', 'Saul Goodman', 'saul.goodman@gmail.com', '(64) 9 2486-3658', '266.365.221-88', '53425-460', NULL, NULL, NULL, NULL, NULL, NULL, 1, '2025-06-03 12:06:23', '2025-06-10 23:20:36'),
+(3, 7, 'CPF', '', NULL, 'Los Pollos Hermanos', '(32) 4 2725-6236', NULL, 'Gustavo Fring', 'gus.meth@LPH.com', '(23) 6 2625-6236', '651.978.767-19', '66630-580', 'Belém', 'Pará', NULL, 'Alameda Ananindeua', '48', 'Bengui', 1, '2025-06-08 03:28:50', '2025-06-08 03:28:50'),
+(4, 8, 'CNPJ', '25.264.232/0001-88', 'Gray Matter Technologies LTDA', 'Gray Matter Technologies', '(25) 6 2562-4562', NULL, 'Elliott Schwartz', 'elliott.gray@matter.com', '(24) 5 2362-5656', '350.969.484-80', '60346-206', 'Fortaleza', 'Ceará', NULL, 'Vila Santa Cecília', '720', 'Jardim Guanabara', 1, '2025-06-08 03:31:17', '2025-06-08 03:31:17'),
+(5, 9, 'CPF', '', NULL, 'A1A Car Wash', '(67) 6 7365-7356', NULL, 'Walter White', 'walter.white@a1a.com', '(35) 6 3457-5346', '183.326.832-62', '08081-150', 'São Paulo', 'São Paulo', NULL, 'Rua Bonito de Santa Fé', '34', 'Parque Paulistano', 1, '2025-06-08 03:33:27', '2025-06-08 03:33:27');
 
 -- --------------------------------------------------------
 
@@ -68,7 +72,7 @@ INSERT INTO `cliente` (`id`, `usuario_id`, `tipo`, `documento`, `razao_social`, 
 CREATE TABLE `empresa` (
   `id` int(11) NOT NULL,
   `nome` varchar(255) NOT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -78,7 +82,11 @@ CREATE TABLE `empresa` (
 --
 
 INSERT INTO `empresa` (`id`, `nome`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 'WDevel', 0, '2025-06-01 14:10:29', '2025-06-01 14:10:29');
+(1, 'Venezia\'s', 1, '2025-06-01 14:10:29', '2025-06-11 11:31:54'),
+(2, 'Caltech', 1, '2025-06-03 11:58:32', '2025-06-10 23:19:36'),
+(3, 'methtech', 1, '2025-06-03 11:58:32', '2025-06-10 23:21:53'),
+(4, 'AMC', 1, '2025-06-11 03:16:24', '2025-06-11 03:16:24'),
+(5, 'Dos Hombres', 1, '2025-06-11 03:25:23', '2025-06-11 03:25:23');
 
 -- --------------------------------------------------------
 
@@ -90,10 +98,18 @@ CREATE TABLE `empresa_cliente` (
   `id` int(11) NOT NULL,
   `empresa_id` int(11) NOT NULL,
   `cliente_id` int(11) NOT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Despejando dados para a tabela `empresa_cliente`
+--
+
+INSERT INTO `empresa_cliente` (`id`, `empresa_id`, `cliente_id`, `situacao`, `cadastrado`, `alterado`) VALUES
+(1, 3, 2, 1, '2025-06-03 12:09:12', '2025-06-03 12:09:12'),
+(2, 1, 1, 1, '2025-06-03 12:09:12', '2025-06-03 12:09:12');
 
 -- --------------------------------------------------------
 
@@ -102,13 +118,25 @@ CREATE TABLE `empresa_cliente` (
 --
 
 CREATE TABLE `empresa_servico` (
+  `id` int(11) NOT NULL,
   `empresa_id` int(11) NOT NULL,
   `servico_id` int(11) NOT NULL,
-  `id` int(11) NOT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+--
+-- Despejando dados para a tabela `empresa_servico`
+--
+
+INSERT INTO `empresa_servico` (`id`, `empresa_id`, `servico_id`, `situacao`, `cadastrado`, `alterado`) VALUES
+(1, 1, 1, 1, '2025-06-03 12:00:08', '2025-06-03 12:00:08'),
+(2, 2, 2, 1, '2025-06-03 12:00:08', '2025-06-03 12:00:08'),
+(3, 3, 1, 1, '2025-06-03 12:00:25', '2025-06-03 12:00:25'),
+(4, 1, 2, 1, '2025-06-03 12:00:25', '2025-06-03 12:00:25'),
+(5, 1, 3, 1, '2025-06-03 12:00:38', '2025-06-03 12:00:38'),
+(6, 3, 4, 1, '2025-06-11 00:29:17', '2025-06-11 00:29:17');
 
 -- --------------------------------------------------------
 
@@ -120,7 +148,7 @@ CREATE TABLE `empresa_usuario` (
   `id` int(11) NOT NULL,
   `usuario_id` int(11) NOT NULL,
   `empresa_id` int(11) NOT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -130,7 +158,10 @@ CREATE TABLE `empresa_usuario` (
 --
 
 INSERT INTO `empresa_usuario` (`id`, `usuario_id`, `empresa_id`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 1, 1, 1, '2025-06-01 14:21:25', '2025-06-01 14:21:25');
+(1, 1, 1, 1, '2025-06-01 14:21:25', '2025-06-01 14:21:25'),
+(2, 1, 2, 1, '2025-06-03 12:01:10', '2025-06-03 12:01:10'),
+(3, 1, 3, 1, '2025-06-03 12:01:10', '2025-06-03 12:01:10'),
+(4, 3, 2, 1, '2025-06-03 12:02:47', '2025-06-03 12:02:47');
 
 -- --------------------------------------------------------
 
@@ -141,7 +172,7 @@ INSERT INTO `empresa_usuario` (`id`, `usuario_id`, `empresa_id`, `situacao`, `ca
 CREATE TABLE `grupo` (
   `id` int(11) NOT NULL,
   `nome` varchar(255) NOT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -152,7 +183,11 @@ CREATE TABLE `grupo` (
 
 INSERT INTO `grupo` (`id`, `nome`, `situacao`, `cadastrado`, `alterado`) VALUES
 (1, 'MASTER', 1, '2025-05-17 21:31:12', '2025-05-17 21:31:12'),
-(2, 'CLIENTE', 1, '2025-05-17 21:32:17', '2025-05-17 21:33:00');
+(2, 'CLIENTE', 1, '2025-05-17 21:32:17', '2025-05-17 21:33:00'),
+(3, 'SUPORTE', 1, '2025-06-03 12:01:37', '2025-06-08 03:15:46'),
+(4, 'SUPORTE 2', 1, '2025-06-08 03:16:03', '2025-06-08 03:16:03'),
+(5, 'SUPORTE 3', 1, '2025-06-08 03:16:09', '2025-06-08 03:16:09'),
+(6, 'SUPORTE 4', 1, '2025-06-11 03:59:44', '2025-06-11 03:59:44');
 
 -- --------------------------------------------------------
 
@@ -163,7 +198,7 @@ INSERT INTO `grupo` (`id`, `nome`, `situacao`, `cadastrado`, `alterado`) VALUES
 CREATE TABLE `servico` (
   `id` int(11) NOT NULL,
   `nome` varchar(255) NOT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -173,7 +208,12 @@ CREATE TABLE `servico` (
 --
 
 INSERT INTO `servico` (`id`, `nome`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 'Site', 1, '2025-06-01 14:09:38', '2025-06-01 14:09:52');
+(1, 'Site', 1, '2025-06-01 14:09:38', '2025-06-01 14:09:52'),
+(2, 'Software', 1, '2025-06-03 11:59:28', '2025-06-03 11:59:28'),
+(3, 'Marketing Orgânico', 1, '2025-06-03 11:59:28', '2025-06-03 11:59:28'),
+(4, 'Lojas Virtuais', 1, '2025-06-11 00:29:17', '2025-06-11 00:29:17'),
+(5, 'Caltech Insight', 1, '2025-06-11 00:38:59', '2025-06-11 00:38:59'),
+(6, 'Banco de Dados', 1, '2025-06-11 03:25:45', '2025-06-11 11:36:01');
 
 -- --------------------------------------------------------
 
@@ -186,10 +226,10 @@ CREATE TABLE `suporte` (
   `empresa_id` int(11) NOT NULL,
   `servico_id` int(11) NOT NULL,
   `cliente_id` int(11) NOT NULL,
-  `usuario_id` int(11) NOT NULL,
+  `usuario_id` int(11) DEFAULT NULL COMMENT 'Só é atribuído manualmente ou se interagir com o SUPORTE',
   `assunto` longtext NOT NULL,
-  `status` varchar(255) NOT NULL DEFAULT 'ABERTO',
-  `situacao` tinyint(1) DEFAULT 1,
+  `status` varchar(255) NOT NULL DEFAULT 'ABERTO' COMMENT 'ABERTO, FECHADO, RESPONDIDO, AGUARDANDO_SUPORTE',
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -199,7 +239,10 @@ CREATE TABLE `suporte` (
 --
 
 INSERT INTO `suporte` (`id`, `empresa_id`, `servico_id`, `cliente_id`, `usuario_id`, `assunto`, `status`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 1, 1, 2, 1, 'Quebrou o cell', 'ABERTO', 1, '2025-06-01 14:22:22', '2025-06-01 14:22:22');
+(1, 1, 1, 2, 2, 'Meu Site de caiu (https://salahmed-ctrlz.github.io/BetterCallSaul/#/)', 'FECHADO', 1, '2025-06-01 14:22:22', '2025-06-11 12:41:26'),
+(2, 3, 2, 3, 1, 'O sistema da minha lanchonete está com defeito no Login', 'RESPONDIDO', 1, '2025-06-03 12:10:31', '2025-06-08 04:12:24'),
+(3, 1, 3, 5, NULL, 'O marketing não está trazendo resultado', 'ABERTO', 1, '2025-06-03 12:10:31', '2025-06-08 03:49:48'),
+(4, 2, 5, 4, 5, 'Problemas de captura de leads', 'AGUARDANDO_SUPORTE', 1, '2025-06-11 12:37:03', '2025-06-11 12:48:27');
 
 -- --------------------------------------------------------
 
@@ -211,8 +254,8 @@ CREATE TABLE `suporte_mensagem` (
   `id` int(11) NOT NULL,
   `suporte_id` int(11) NOT NULL,
   `mensagem` longtext NOT NULL,
-  `proprietario` varchar(255) DEFAULT NULL,
-  `respondido` tinyint(1) NOT NULL DEFAULT 0,
+  `proprietario` varchar(255) DEFAULT NULL COMMENT 'CLIENTE ou USUARIO',
+  `respondido` tinyint(1) DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -222,7 +265,17 @@ CREATE TABLE `suporte_mensagem` (
 --
 
 INSERT INTO `suporte_mensagem` (`id`, `suporte_id`, `mensagem`, `proprietario`, `respondido`, `cadastrado`, `alterado`) VALUES
-(1, 1, 'Meu celular quebrou', 'USUARIO', 0, '2025-06-01 14:23:18', '2025-06-01 14:23:18');
+(1, 1, 'Poderia resolver isso rápido? Estou perdendo clientes assim.', 'CLIENTE', 0, '2025-06-01 14:23:18', '2025-06-08 03:51:03'),
+(2, 2, 'Ninguém consegue fazer o login no sistema, estamos fazendo os pedidos e os lançamentos tudo pelo papel, pode resolver isso?', 'CLIENTE', 1, '2025-06-03 12:11:08', '2025-06-08 03:52:26'),
+(3, 3, 'Preciso de mais pessoas vindo para meu Lava rápido, a polícia vai suspeitar se tiver vindo poucos clientes', 'CLIENTE', 1, '2025-06-03 12:12:13', '2025-06-08 03:54:51'),
+(4, 2, 'Arrumamos o sistema e fizemos a atualização, poderia verificar se está tudo certo?', 'USUARIO', 1, '2025-06-08 03:14:38', '2025-06-08 03:53:36'),
+(5, 1, 'Acabamos de arrumar o servidor, seu site voltará a ficar ativo apartir de alguns minutos', 'USUARIO', 1, '2025-06-11 11:49:39', '2025-06-11 11:49:39'),
+(6, 1, 'Acabou de voltar, muito obrigado!', 'CLIENTE', 1, '2025-06-11 12:30:17', '2025-06-11 12:30:17'),
+(7, 4, 'Após os dia 25/05/2025 não está mais fazendo captura de leads novos, testamos e com os nossos testes os leads não estão chegando no sistema. Poderia arrumar esse problema urgentemente!!', NULL, 1, '2025-06-11 12:37:03', '2025-06-11 12:37:03'),
+(8, 4, 'Acabamos de ver sobre, é uma falha na API, estamos resolvendo esse problema imediatamente.', 'USUARIO', 1, '2025-06-11 12:38:26', '2025-06-11 12:38:26'),
+(9, 4, 'Obrigado, poderia me informar quando estiver funcionando?', 'CLIENTE', 1, '2025-06-11 12:39:29', '2025-06-11 12:39:29'),
+(10, 4, 'Arrumamos o problema.\r\nPoderia confirmar se está tudo certo?', 'USUARIO', 1, '2025-06-11 12:47:00', '2025-06-11 12:47:00'),
+(11, 4, 'Ainda está com problemas...', 'CLIENTE', 1, '2025-06-11 12:48:27', '2025-06-11 12:48:27');
 
 -- --------------------------------------------------------
 
@@ -236,8 +289,8 @@ CREATE TABLE `usuario` (
   `nome` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `senha` varchar(255) NOT NULL,
-  `token` varchar(255) DEFAULT NULL,
-  `situacao` tinyint(1) NOT NULL DEFAULT 1,
+  `token` varchar(255) DEFAULT NULL COMMENT 'TOKEN PARA VALIDAÇÕES',
+  `situacao` tinyint(1) NOT NULL DEFAULT 1 COMMENT '0 = INATIVO ou 1 = ATIVO',
   `cadastrado` timestamp NULL DEFAULT current_timestamp(),
   `alterado` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
@@ -247,8 +300,16 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `grupo_id`, `nome`, `email`, `senha`, `token`, `situacao`, `cadastrado`, `alterado`) VALUES
-(1, 1, 'Admin', 'caioh.alvino22@gmail.com', '123', NULL, 1, '2025-05-17 21:34:48', '2025-05-17 21:34:48'),
-(3, 2, 'Cliente', 'cliente@gmail.com', '123', NULL, 1, '2025-05-17 21:35:48', '2025-05-17 21:35:48');
+(1, 1, 'Caio Alvino', 'caioh.alvino22@gmail.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', '0f397d2bbd14ccfee003f1e749375c7d0be683580375dd8d95f9180da6a413da', 1, '2025-05-17 21:34:48', '2025-06-11 12:47:55'),
+(2, 1, 'Admin', 'admin@admin.com', '$2y$10$HxWB.6ytu.D4RyVW3BwsJ.4fTzSG6JXBNoPINzniejd9VpRui/Hn.', '3a0d01e95d5c151548991effc49c6332d3b3ad3b63859a00da6863d6638a3b81', 1, '2025-05-17 21:35:48', '2025-06-11 11:45:26'),
+(3, 2, 'Saul Goodman', 'saul.goodman@goodman.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', '4a65741170206ab88a3a74ce726e209dffff6b2e893c459a18ba8e89177d52a5', 1, '2025-06-03 12:02:20', '2025-06-11 11:53:41'),
+(4, 3, 'Suporte', 'suporte@suporte.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', '2a3cc09f7c8fcd5aff32399c2eccfe485e2495611d2a9bd8925f083aa8b41915', 1, '2025-06-08 03:16:50', '2025-06-11 12:37:30'),
+(5, 4, 'Suporte 2', 'suporte2@suporte.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', '494aad6bf22fab78472a19afd5a7b34657c6ff12704976c2f08a12444a6e7ad8', 1, '2025-06-08 03:17:14', '2025-06-11 12:46:03'),
+(6, 5, 'Suporte 3', 'suporte3@suporte.com', '$2y$10$kv32YhV1OWyVYIJQucLqa.Y7Em6LV0oY44a.hqBtIdDhuyij3l.0G', NULL, 1, '2025-06-08 03:18:37', '2025-06-08 03:18:37'),
+(7, 2, 'Gustavo Fring', 'gus.meth@LPH.com', '$2y$10$XHkPYYsa6/A/0A1dnFllzu7mve4ctmmgMyAbbo3SFCPyL5xE3gMIy', NULL, 1, '2025-06-08 03:28:50', '2025-06-08 03:28:50'),
+(8, 2, 'Elliott Schwartz', 'elliott.gray@matter.com', '$2y$10$xN8V8UKRoTBdTLt4TPFpMebF3YNzpvj5AURtyDnkyFqID9FoFEqTm', '7ff609a936f0f6d538c05a70b202a78e5e4dfa2e5104bb8fe15905bf2d4f3f26', 1, '2025-06-08 03:31:17', '2025-06-11 12:48:12'),
+(9, 2, 'Walter White', 'walter.white@a1a.com', '$2y$10$vQoclea3qTyueg9fTuM83OG4a1reGpXQ09ZnvN2JRgkMbAWLztLc2', NULL, 1, '2025-06-08 03:33:27', '2025-06-08 03:33:27'),
+(10, 3, 'Hyper Suporte', 'hyper.suporte@suporte.com', '123', NULL, 1, '2025-06-11 03:54:54', '2025-06-11 03:54:54');
 
 --
 -- Índices para tabelas despejadas
@@ -335,55 +396,61 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de tabela `cliente`
 --
 ALTER TABLE `cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `empresa`
 --
 ALTER TABLE `empresa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de tabela `empresa_cliente`
 --
 ALTER TABLE `empresa_cliente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de tabela `empresa_servico`
 --
 ALTER TABLE `empresa_servico`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `empresa_usuario`
 --
 ALTER TABLE `empresa_usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT de tabela `grupo`
+--
+ALTER TABLE `grupo`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `servico`
 --
 ALTER TABLE `servico`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de tabela `suporte`
 --
 ALTER TABLE `suporte`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de tabela `suporte_mensagem`
 --
 ALTER TABLE `suporte_mensagem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de tabela `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- Restrições para tabelas despejadas

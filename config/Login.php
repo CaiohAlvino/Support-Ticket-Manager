@@ -17,8 +17,8 @@ class Login
     public function autenticar($email, $senha)
     {
         try {
-            // Busca usuário pelo e-mail
-            $query = "SELECT * FROM usuario WHERE email = :email LIMIT 1";
+            // Busca usuário pelo e-mail + nome do grupo
+            $query = "SELECT usuario.*, grupo.nome AS grupo_nome FROM usuario LEFT JOIN grupo ON grupo.id = usuario.grupo_id WHERE usuario.email = :email LIMIT 1";
             $stmt = $this->db->prepare($query);
             $stmt->bindValue(":email", $email, PDO::PARAM_STR);
             $stmt->execute();
@@ -55,6 +55,8 @@ class Login
             $_SESSION['usuario_id'] = $usuario['id'];
             $_SESSION['usuario_nome'] = $usuario['nome'];
             $_SESSION['usuario_email'] = $usuario['email'];
+            $_SESSION['usuario_grupo'] = $usuario['grupo_id'];
+            $_SESSION['usuario_grupo_nome'] = $usuario['grupo_nome'];
             $_SESSION['usuario_token'] = $token;
             $_SESSION['empresa_id'] = $usuario['empresa_id'] ?? null;
 
