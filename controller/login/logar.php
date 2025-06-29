@@ -3,22 +3,31 @@ require('../../config/Database.php');
 require('../../config/Login.php');
 require('../../config/Logger.php');
 
+// Conexão com o banco
+// Ajuste conforme a implementação real da classe Database
+$db = new Database();
+$logger = new Logger();
+$login = new Login($db);
+$logger->setLogLevel("INFO"); // Só registra INFO, WARNING e ERROR (opcional)
+
 // Validação básica de entrada
 $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 $senha = isset($_POST['senha']) ? $_POST['senha'] : '';
 
 if (empty($email) || empty($senha)) {
+
+    $logger->log(
+        "Tentativa de login com campos vazios",
+        "ERROR",
+        null,
+        ["ip" => $_SERVER["REMOTE_ADDR"] ?? null]
+    );
+
     echo json_encode([
         'erro' => 'E-mail e senha são obrigatórios.'
     ]);
     exit;
 }
-
-// Conexão com o banco
-// Ajuste conforme a implementação real da classe Database
-$db = new Database();
-$logger = new Logger();
-$logger->setLogLevel("INFO"); // Só registra INFO, WARNING e ERROR (opcional)
 
 // Autentica usuário
 $resposta = $login->autenticar($email, $senha);
