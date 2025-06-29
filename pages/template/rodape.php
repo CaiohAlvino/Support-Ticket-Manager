@@ -31,6 +31,7 @@
 <script src="../../js/empresa.js"></script>
 <script src="../../js/usuario.js"></script>
 <script src="../../js/grupo.js"></script>
+<script src="../../js/JWT-token.js"></script>
 
 </body>
 

@@ -1,8 +1,22 @@
 <?php
-
 require("../../config/Database.php");
+require("../../config/JWT.php");
 
 $db = new Database();
+
+$dados = JWT::verificar($db);
+if (!$dados) {
+    http_response_code(401);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Não autorizado"
+    ]);
+    exit;
+}
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 $usuario_id = isset($_POST["id"]) ? $_POST["id"] : NULL;
 

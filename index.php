@@ -57,6 +57,7 @@
     <script src="./libs/noty/script.js"></script>
     <script src="./js/utils/Noty.js"></script>
     <script src="./js/login.js"></script>
+    <script src="./js/JWT-token.js"></script>
 </body>
 
 </html>

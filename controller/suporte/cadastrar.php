@@ -1,16 +1,19 @@
 <?php
 require("../../config/Database.php");
 require("../../config/Suporte.php");
-// require("../../config/JWT.php");
+require("../../config/JWT.php");
 
 $db = new Database();
 
-// $tokenEValido = JWT::verificar($db);
-
-// if (!$tokenEValido) {
-//     echo json_encode(["status" => "error", "message" => "Token inválido."]);
-//     exit;
-// }
+$dados = JWT::verificar($db);
+if (!$dados) {
+    http_response_code(401);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Não autorizado"
+    ]);
+    exit;
+}
 
 $conexao = $db->getConnection();
 $classeSuporte = new Suporte($conexao);

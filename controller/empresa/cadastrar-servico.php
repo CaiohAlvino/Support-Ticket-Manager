@@ -1,7 +1,18 @@
 <?php
 require("../../config/Database.php");
+require("../../config/JWT.php");
 
 $db = new Database();
+
+$dados = JWT::verificar($db);
+if (!$dados) {
+    http_response_code(401);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Não autorizado"
+    ]);
+    exit;
+}
 
 $servico_id = isset($_POST["servico_id"]) ? (int)$_POST["servico_id"] : NULL;
 $empresa_id = isset($_POST["empresa_id"]) ? (int)$_POST["empresa_id"] : NULL;
