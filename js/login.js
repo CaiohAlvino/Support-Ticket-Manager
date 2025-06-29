@@ -18,10 +18,17 @@ $(document).ready(function () {
             data: { email: email, senha: senha },
             dataType: "json",
             success: function (response) {
-                NotyE.exception({ response, replace: `pages/home/index.php` });
+                if (response.status === "success" && response.usuario && response.usuario.token) {
+                    document.cookie = "token=" + response.usuario.token + "; path=/";
+                    NotyE.exception({ response, replace: `pages/home/index.php` });
+                } else {
+                    NotyE.exception({ response });
+                }
             },
             error: function (xhr, status, error) {
-                NotyE.exception({ error: true, xhr });
+                if (xhr.status !== 401) {
+                    NotyE.exception({ error: true, xhr });
+                }
             },
             complete: function () {
                 btn.prop("disabled", false).text("Entrar no Sistema");

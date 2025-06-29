@@ -33,6 +33,7 @@ require("../../config/Usuario.php");
 require("../../config/EmpresaCliente.php");
 require("../../config/EmpresaServico.php");
 require("../../config/EmpresaUsuario.php");
+require("../../config/JWT.php");
 
 $db = new Database();
 $validador = new Validador();

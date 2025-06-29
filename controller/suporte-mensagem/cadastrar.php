@@ -1,15 +1,29 @@
 <?php
 require("../../config/Database.php");
-// require("../../config/JWT.php");
+require("../../config/JWT.php");
+require("../../config/Logger.php");
 
 $db = new Database();
+$logger = new Logger();
+$logger->setLogLevel("INFO"); // Só registra INFO, WARNING e ERROR (opcional)
 
-// $tokenEValido = JWT::verificar($db);
+$dados = JWT::verificar($db);
+if (!$dados) {
 
-// if (!$tokenEValido) {
-//     echo json_encode(["status" => "error", "message" => "Token inválido."]);
-//     exit;
-// }
+    $logger->log(
+        "Tentativa de acesso não autorizado",
+        "WARNING",
+        $_SESSION["usuario_id"] ?? null,
+        ["ip" => $_SERVER["REMOTE_ADDR"] ?? null]
+    );
+
+    http_response_code(401);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Não autorizado"
+    ]);
+    exit;
+}
 
 $conexao = $db->getConnection();
 
@@ -25,6 +39,17 @@ $mensagem = isset($_POST["mensagem"]) ? $_POST["mensagem"] : NULL;
 $status = isset($_POST["status"]) ? $_POST["status"] : null;
 
 if (!$suporte_id) {
+
+    $logger->log(
+        "Tentativa de cadastro de mensagem sem ID de suporte",
+        "WARNING",
+        $usuario_id,
+        [
+            "suporte_id" => $suporte_id,
+            "mensagem" => $mensagem
+        ]
+    );
+
     echo json_encode([
         "status" => "error",
         "message" => "ID do suporte não informado!"
@@ -42,15 +67,18 @@ try {
             $status = ($_SESSION["usuario_grupo"] == 2) ? 'AGUARDANDO_SUPORTE' : 'RESPONDIDO';
         }
 
-        $suporte_mensagem = $conexao->prepare("INSERT INTO `suporte_mensagem` (
-            `suporte_id`,
-            `mensagem`,
-            `proprietario`
+        $suporte_mensagem = $conexao->prepare(
+            "INSERT INTO
+                `suporte_mensagem` (
+                `suporte_id`,
+                `mensagem`,
+                `proprietario`
             ) VALUES (
-            :suporte_id,
-            :mensagem,
-            :proprietario
-            )");
+                :suporte_id,
+                :mensagem,
+                :proprietario
+            )"
+        );
 
         $suporte_mensagem->bindParam(":suporte_id", $suporte_id, PDO::PARAM_INT);
         $suporte_mensagem->bindParam(":mensagem", $mensagem, PDO::PARAM_STR);
@@ -100,18 +128,51 @@ try {
 
     switch ($status) {
         case "FECHADO":
+
+            $logger->log(
+                "Ticket fechado com sucesso",
+                "INFO",
+                $_SESSION["usuario_id"] ?? null,
+                [
+                    "suporte_id" => $suporte_id,
+                    "status" => $status
+                ]
+            );
+
             echo json_encode([
                 "status" => "success",
                 "message" => "Ticket fechado!",
             ]);
             break;
         case "ABERTO":
+
+            $logger->log(
+                "Ticket aberto com sucesso",
+                "INFO",
+                $_SESSION["usuario_id"] ?? null,
+                [
+                    "suporte_id" => $suporte_id,
+                    "status" => $status
+                ]
+            );
+
             echo json_encode([
                 "status" => "success",
                 "message" => isset($mensagem) ? "Mensagem enviada!" : "Ticket aberto!",
             ]);
             break;
         default:
+
+            $logger->log(
+                "Mensagem enviada com sucesso",
+                "INFO",
+                $_SESSION["usuario_id"] ?? null,
+                [
+                    "suporte_id" => $suporte_id,
+                    "mensagem" => $mensagem
+                ]
+            );
+
             echo json_encode([
                 "status" => "success",
                 "message" => "Mensagem enviada!",
@@ -119,6 +180,15 @@ try {
     }
 } catch (\Throwable $th) {
     $conexao->rollBack();
+
+    $logger->logException(
+        $th,
+        $_SESSION["usuario_id"] ?? null,
+        [
+            "suporte_id" => $suporte_id,
+            "mensagem" => $mensagem
+        ]
+    );
 
     echo json_encode([
         "status" => "error",
