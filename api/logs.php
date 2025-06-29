@@ -27,6 +27,17 @@ $type = isset($_GET['type']) ? strtoupper($_GET['type']) : null;
 $limit = isset($_GET['limit']) ? intval($_GET['limit']) : 100;
 $format = isset($_GET['format']) ? strtolower($_GET['format']) : 'json'; // json ou csv
 
+// Permite receber parâmetros via JSON no body (POST)
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $input = json_decode(file_get_contents('php://input'), true);
+    if (is_array($input)) {
+        $week = isset($input['week']) ? $input['week'] : $week;
+        $type = isset($input['type']) ? strtoupper($input['type']) : $type;
+        $limit = isset($input['limit']) ? intval($input['limit']) : $limit;
+        $format = isset($input['format']) ? strtolower($input['format']) : $format;
+    }
+}
+
 $logDir = __DIR__ . '/../logs';
 $dirs = glob($logDir . '/*', GLOB_ONLYDIR);
 $weeks = array_map('basename', $dirs);
