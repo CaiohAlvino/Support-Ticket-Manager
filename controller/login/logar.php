@@ -19,8 +19,8 @@ if (empty($email) || empty($senha)) {
     $logger->log(
         "Tentativa de login com campos vazios",
         "ERROR",
-        null,
-        ["ip" => $_SERVER["REMOTE_ADDR"] ?? null]
+        $email ?? NULL,
+        ["ip" => $_SERVER["REMOTE_ADDR"] ?? NULL]
     );
 
     echo json_encode([
@@ -36,15 +36,15 @@ if ($resposta['status'] === 'success') {
     $logger->log(
         "Usuário autenticado com sucesso",
         "INFO",
-        $resposta['usuario_id'] ?? null,
-        ["ip" => $_SERVER["REMOTE_ADDR"] ?? null]
+        $resposta['usuario_id'] ?? NULL,
+        ["ip" => $_SERVER["REMOTE_ADDR"] ?? NULL]
     );
 } else {
     $logger->log(
         "Falha na autenticação do usuário",
         "WARNING",
-        null,
-        ["ip" => $_SERVER["REMOTE_ADDR"] ?? null]
+        NULL,
+        ["ip" => $_SERVER["REMOTE_ADDR"] ?? NULL]
     );
 }
 
