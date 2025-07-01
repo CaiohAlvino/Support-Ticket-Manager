@@ -135,7 +135,7 @@ Support-Ticket-Manager/
 -   **Usuário**: Controle de usuários
 -   **Grupos**: Controle de grupos de usuários
 -   **Suporte**: Tickets de suporte
-    └── **SuporteMensagem**: Mensagens dos tickets
+-   **SuporteMensagem**: Mensagens dos tickets
 
 ## 🐳 Instalação e Configuração
 
