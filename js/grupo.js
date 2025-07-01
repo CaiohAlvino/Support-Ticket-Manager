@@ -27,7 +27,9 @@ $(document).ready(function () {
                     NotyE.exception({ response });
                 },
                 error: function (xhr, status, error) {
-                    NotyE.exception({ error: true, xhr });
+                    if (xhr.status !== 401) {
+                        NotyE.exception({ error: true, xhr });
+                    }
                 }
             });
         }
@@ -61,7 +63,9 @@ $(document).ready(function () {
                     NotyE.exception({ response, reload: true });
                 },
                 error: function (xhr, status, error) {
-                    NotyE.exception({ error: true, xhr });
+                    if (xhr.status !== 401) {
+                        NotyE.exception({ error: true, xhr });
+                    }
                 }
             });
         }

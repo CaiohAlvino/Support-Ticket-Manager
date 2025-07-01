@@ -1,4 +1,5 @@
 <?php
+require_once("JWT.php");
 class Login
 {
     private $db;
@@ -39,12 +40,17 @@ class Login
                 ];
             }
 
-            // Gera token simples (pode ser JWT futuramente)
-            $token = bin2hex(random_bytes(32));
+            $jwt = JWT::gerar([
+                "id" => $usuario['id'],
+                "nome" => $usuario['nome'],
+                "email" => $usuario['email'],
+                "empresa_id" => $usuario['empresa_id'] ?? null,
+                "grupo_id" => $usuario['grupo_id'] ?? null
+            ], 60);
 
-            // Salva token no banco (opcional, para controle de sessão)
+            // Salva o JWT no banco (opcional, mas recomendado para logout/controlar sessões)
             $stmt = $this->db->prepare("UPDATE usuario SET token = :token WHERE id = :id");
-            $stmt->bindValue(":token", $token, PDO::PARAM_STR);
+            $stmt->bindValue(":token", $jwt, PDO::PARAM_STR);
             $stmt->bindValue(":id", $usuario['id'], PDO::PARAM_INT);
             $stmt->execute();
 
@@ -57,7 +63,7 @@ class Login
             $_SESSION['usuario_email'] = $usuario['email'];
             $_SESSION['usuario_grupo'] = $usuario['grupo_id'];
             $_SESSION['usuario_grupo_nome'] = $usuario['grupo_nome'];
-            $_SESSION['usuario_token'] = $token;
+            $_SESSION['usuario_token'] = $jwt;
             $_SESSION['empresa_id'] = $usuario['empresa_id'] ?? null;
 
             // Retorna dados para AJAX/front-end
@@ -69,7 +75,7 @@ class Login
                     "nome" => $usuario['nome'],
                     "email" => $usuario['email'],
                     "empresa_id" => $usuario['empresa_id'] ?? null,
-                    "token" => $token
+                    "token" => $jwt
                 ]
             ];
         } catch (\Throwable $th) {

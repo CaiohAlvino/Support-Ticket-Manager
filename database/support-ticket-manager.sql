@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: tcc_db:3306
--- Tempo de geração: 24/06/2025 às 02:22
+-- Tempo de geração: 01/07/2025 às 00:13
 -- Versão do servidor: 9.3.0
 -- Versão do PHP: 8.2.27
 
@@ -31,7 +31,7 @@ CREATE TABLE `cliente` (
   `id` int NOT NULL,
   `usuario_id` int NOT NULL,
   `tipo` varchar(255) NOT NULL DEFAULT 'CNPJ' COMMENT 'CNPJ ou CPF',
-  `documento` varchar(255) NOT NULL COMMENT 'xx.xxx.xxx/xxxx-xx ou xxx.xxx.xxx-xx',
+  `documento` varchar(255) DEFAULT NULL COMMENT 'xx.xxx.xxx/xxxx-xx ou xxx.xxx.xxx-xx',
   `razao_social` varchar(255) DEFAULT NULL,
   `nome_fantasia` varchar(255) NOT NULL,
   `telefone` varchar(20) NOT NULL COMMENT 'Formato: (XX) X XXXX-XXXX',
@@ -178,7 +178,7 @@ INSERT INTO `empresa_usuario` (`id`, `usuario_id`, `empresa_id`, `situacao`, `ca
 (1, 1, 1, 1, '2025-06-01 14:21:25', '2025-06-01 14:21:25'),
 (2, 1, 2, 1, '2025-06-03 12:01:10', '2025-06-03 12:01:10'),
 (3, 1, 3, 1, '2025-06-03 12:01:10', '2025-06-03 12:01:10'),
-(4, 3, 2, 1, '2025-06-03 12:02:47', '2025-06-03 12:02:47');
+(4, 6, 2, 1, '2025-06-03 12:02:47', '2025-07-01 00:05:15');
 
 -- --------------------------------------------------------
 

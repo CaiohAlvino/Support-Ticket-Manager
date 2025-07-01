@@ -25,7 +25,9 @@ $("#servico-cadastrar").submit(function (event) {
                 NotyE.exception({ response });
             },
             error: function (xhr, status, error) {
-                NotyE.exception({ error: true, xhr });
+                if (xhr.status !== 401) {
+                    NotyE.exception({ error: true, xhr });
+                }
             },
         });
     }
@@ -58,7 +60,9 @@ $("#servico-editar").submit(function (event) {
                 NotyE.exception({ response });
             },
             error: function (xhr, status, error) {
-                NotyE.exception({ error: true, xhr });
+                if (xhr.status !== 401) {
+                    NotyE.exception({ error: true, xhr });
+                }
             },
         });
     }

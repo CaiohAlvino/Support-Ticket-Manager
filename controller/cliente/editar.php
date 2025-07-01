@@ -2,25 +2,38 @@
 require("../../config/Database.php");
 require("../../config/Validador.php");
 require("../../config/Cliente.php");
-// require("../../config/JWT.php");
+require("../../config/JWT.php");
+require("../../config/Logger.php");
 
 $db = new Database();
+$logger = new Logger();
+$logger->setLogLevel("INFO"); // Só registra INFO, WARNING e ERROR (opcional)
 
-// $tokenEValido = JWT::verificar($db);
+$dados = JWT::verificar($db);
+if (!$dados) {
 
-// if (!$tokenEValido) {
-//     echo json_encode(["status" => "error", "message" => "Token inválido."]);
-//     exit;
-// }
+    $logger->log(
+        "Tentativa de acesso não autorizado",
+        "WARNING",
+        $_SESSION["usuario_id"] ?? null,
+        ["ip" => $_SERVER["REMOTE_ADDR"] ?? null]
+    );
+
+    http_response_code(401);
+    echo json_encode([
+        "status" => "error",
+        "message" => "Não autorizado"
+    ]);
+    exit;
+}
 
 $conexao = $db->getConnection();
 
-// if (session_status() === PHP_SESSION_NONE) {
-//     session_start();
-// }
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
-
-$clientedadosCliente = [
+$dadosCliente = [
     "id" => isset($_POST["id"]) ? $_POST["id"] : NULL,
     "tipo" => isset($_POST["tipo"]) ? trim($_POST["tipo"]) : NULL,
     "nome_fantasia" => isset($_POST["nome_fantasia"]) ? trim($_POST["nome_fantasia"]) : NULL,
@@ -39,7 +52,15 @@ $clientedadosCliente = [
     "estado" => isset($_POST["estado"]) ? trim($_POST["estado"]) : NULL,
 ];
 
-if (empty($clientedadosCliente["id"])) {
+if (empty($dadosCliente["id"])) {
+
+    $logger->log(
+        "Parâmetro importante faltando para editar o cliente",
+        "WARNING",
+        $_SESSION["usuario_id"] ?? null,
+        ["cliente_id" => $dadosCliente["id"]]
+    );
+
     echo json_encode([
         "status" => "error",
         "message" => "cliente não Encontrado."
@@ -47,7 +68,7 @@ if (empty($clientedadosCliente["id"])) {
     exit;
 }
 
-// $validacao = Validador::validarCliente($clientedadosCliente, $conexao, $empresa_id);
+// $validacao = Validador::validarCliente($dadosCliente, $conexao, $empresa_id);
 
 // if (!$validacao["valido"]) {
 //     echo json_encode([
@@ -60,7 +81,7 @@ if (empty($clientedadosCliente["id"])) {
 try {
     $conexao->beginTransaction();
 
-    if ($clientedadosCliente["tipo"] == "CNPJ") {
+    if ($dadosCliente["tipo"] == "CNPJ") {
         $sql = "UPDATE `cliente` SET
             `tipo` = :tipo,
             `nome_fantasia` = :nome_fantasia,
@@ -81,22 +102,22 @@ try {
 
         $stmt = $conexao->prepare($sql);
 
-        $stmt->bindParam(":id", $clientedadosCliente["id"], PDO::PARAM_INT);
-        $stmt->bindParam(":tipo", $clientedadosCliente["tipo"], PDO::PARAM_STR);
-        $stmt->bindParam(":nome_fantasia", $clientedadosCliente["nome_fantasia"], PDO::PARAM_STR);
-        $stmt->bindParam(":razao_social", $clientedadosCliente["razao_social"], PDO::PARAM_STR);
-        $stmt->bindParam(":documento", $clientedadosCliente["documento"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_nome", $clientedadosCliente["responsavel_nome"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_documento", $clientedadosCliente["responsavel_documento"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_telefone", $clientedadosCliente["responsavel_telefone"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_email", $clientedadosCliente["responsavel_email"], PDO::PARAM_STR);
-        $stmt->bindParam(":telefone", $clientedadosCliente["telefone"], PDO::PARAM_STR);
-        $stmt->bindParam(":cep", $clientedadosCliente["cep"], PDO::PARAM_STR);
-        $stmt->bindParam(":endereco", $clientedadosCliente["endereco"], PDO::PARAM_STR);
-        $stmt->bindParam(":numero", $clientedadosCliente["numero"], PDO::PARAM_STR);
-        $stmt->bindParam(":bairro", $clientedadosCliente["bairro"], PDO::PARAM_STR);
-        $stmt->bindParam(":cidade", $clientedadosCliente["cidade"], PDO::PARAM_STR);
-        $stmt->bindParam(":estado", $clientedadosCliente["estado"], PDO::PARAM_STR);
+        $stmt->bindParam(":id", $dadosCliente["id"], PDO::PARAM_INT);
+        $stmt->bindParam(":tipo", $dadosCliente["tipo"], PDO::PARAM_STR);
+        $stmt->bindParam(":nome_fantasia", $dadosCliente["nome_fantasia"], PDO::PARAM_STR);
+        $stmt->bindParam(":razao_social", $dadosCliente["razao_social"], PDO::PARAM_STR);
+        $stmt->bindParam(":documento", $dadosCliente["documento"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_nome", $dadosCliente["responsavel_nome"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_documento", $dadosCliente["responsavel_documento"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_telefone", $dadosCliente["responsavel_telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_email", $dadosCliente["responsavel_email"], PDO::PARAM_STR);
+        $stmt->bindParam(":telefone", $dadosCliente["telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":cep", $dadosCliente["cep"], PDO::PARAM_STR);
+        $stmt->bindParam(":endereco", $dadosCliente["endereco"], PDO::PARAM_STR);
+        $stmt->bindParam(":numero", $dadosCliente["numero"], PDO::PARAM_STR);
+        $stmt->bindParam(":bairro", $dadosCliente["bairro"], PDO::PARAM_STR);
+        $stmt->bindParam(":cidade", $dadosCliente["cidade"], PDO::PARAM_STR);
+        $stmt->bindParam(":estado", $dadosCliente["estado"], PDO::PARAM_STR);
     } else {
         $sql = "UPDATE `cliente` SET
             `tipo` = :tipo,
@@ -118,24 +139,31 @@ try {
 
         $stmt = $conexao->prepare($sql);
 
-        $stmt->bindParam(":id", $clientedadosCliente["id"], PDO::PARAM_INT);
-        $stmt->bindParam(":tipo", $clientedadosCliente["tipo"], PDO::PARAM_STR);
-        $stmt->bindParam(":nome_fantasia", $clientedadosCliente["nome_fantasia"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_nome", $clientedadosCliente["responsavel_nome"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_documento", $clientedadosCliente["responsavel_documento"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_telefone", $clientedadosCliente["responsavel_telefone"], PDO::PARAM_STR);
-        $stmt->bindParam(":responsavel_email", $clientedadosCliente["responsavel_email"], PDO::PARAM_STR);
-        $stmt->bindParam(":telefone", $clientedadosCliente["telefone"], PDO::PARAM_STR);
-        $stmt->bindParam(":cep", $clientedadosCliente["cep"], PDO::PARAM_STR);
-        $stmt->bindParam(":endereco", $clientedadosCliente["endereco"], PDO::PARAM_STR);
-        $stmt->bindParam(":numero", $clientedadosCliente["numero"], PDO::PARAM_STR);
-        $stmt->bindParam(":bairro", $clientedadosCliente["bairro"], PDO::PARAM_STR);
-        $stmt->bindParam(":cidade", $clientedadosCliente["cidade"], PDO::PARAM_STR);
-        $stmt->bindParam(":estado", $clientedadosCliente["estado"], PDO::PARAM_STR);
+        $stmt->bindParam(":id", $dadosCliente["id"], PDO::PARAM_INT);
+        $stmt->bindParam(":tipo", $dadosCliente["tipo"], PDO::PARAM_STR);
+        $stmt->bindParam(":nome_fantasia", $dadosCliente["nome_fantasia"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_nome", $dadosCliente["responsavel_nome"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_documento", $dadosCliente["responsavel_documento"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_telefone", $dadosCliente["responsavel_telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":responsavel_email", $dadosCliente["responsavel_email"], PDO::PARAM_STR);
+        $stmt->bindParam(":telefone", $dadosCliente["telefone"], PDO::PARAM_STR);
+        $stmt->bindParam(":cep", $dadosCliente["cep"], PDO::PARAM_STR);
+        $stmt->bindParam(":endereco", $dadosCliente["endereco"], PDO::PARAM_STR);
+        $stmt->bindParam(":numero", $dadosCliente["numero"], PDO::PARAM_STR);
+        $stmt->bindParam(":bairro", $dadosCliente["bairro"], PDO::PARAM_STR);
+        $stmt->bindParam(":cidade", $dadosCliente["cidade"], PDO::PARAM_STR);
+        $stmt->bindParam(":estado", $dadosCliente["estado"], PDO::PARAM_STR);
     }
     $stmt->execute();
 
     $conexao->commit();
+
+    $logger->log(
+        "Dados do cliente atualizados com sucesso",
+        "INFO",
+        $_SESSION["usuario_id"] ?? null,
+        ["dadosCliente" => $dadosCliente]
+    );
 
     echo json_encode([
         "status" => "success",
@@ -143,6 +171,12 @@ try {
     ]);
 } catch (PDOException $e) {
     $conexao->rollBack();
+
+    $logger->logException(
+        $e,
+        $_SESSION["usuario_id"] ?? null,
+        ["dadosCliente" => $dadosCliente]
+    );
 
     echo json_encode([
         "status" => "error",

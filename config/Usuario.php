@@ -39,7 +39,7 @@ class Usuario
                 $queryCount .= " WHERE " . implode(" AND ", $where);
             }
 
-            $query .= " ORDER BY `id` ASC";
+            $query .= " ORDER BY `grupo_id` ASC";
 
             // Só adiciona LIMIT/OFFSET se limite for definido e maior que zero
             if ($limite !== null && $limite > 0) {
