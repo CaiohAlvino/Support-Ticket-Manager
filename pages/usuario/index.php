@@ -89,9 +89,11 @@ $paginacao = $indexRegistros["paginacao"];
                                         </button>
                                     <?php endif; ?>
 
-                                    <a href="empresa.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-empresa">
-                                        <i class="bi-building"></i> Empresas
-                                    </a>
+                                    <?php if ($registro->grupo_id != 2): ?>
+                                        <a href="empresa.php?id=<?php echo $registro->id; ?>" class="btn btn-sm btn-empresa">
+                                            <i class="bi-building"></i> Empresas
+                                        </a>
+                                    <?php endif; ?>
                                 </td>
                             </tr>
 

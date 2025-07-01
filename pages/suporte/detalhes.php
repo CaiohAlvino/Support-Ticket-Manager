@@ -121,8 +121,6 @@ $mensagem_registro = $classSuporteMensagem->pegarPorSuporteId($id);
                     <input type="hidden" name="id" value="<?php echo isset($suporte_registro->id) ? htmlspecialchars($suporte_registro->id) : '' ?>">
                     <?php if ($_SESSION["usuario_grupo"] != 2): ?>
                         <input type="hidden" name="usuario_id" value="<?php echo $_SESSION["usuario_id"] ?>">
-                    <?php else: ?>
-                        <input type="hidden" name="usuario_id" value="">
                     <?php endif ?>
                     <input type="hidden" name="cliente_id" value="<?php echo isset($suporte_registro->cliente_id) ? htmlspecialchars($suporte_registro->cliente_id) : '' ?>">
                     <input type="hidden" name="empresa_id" value="<?php echo isset($suporte_registro->empresa_id) ? htmlspecialchars($suporte_registro->empresa_id) : '' ?>">
