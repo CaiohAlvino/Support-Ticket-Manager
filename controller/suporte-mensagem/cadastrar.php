@@ -98,21 +98,27 @@ try {
 
     // Atualiza o suporte apenas se não for cliente (grupo diferente de 2)
     if ($_SESSION["usuario_grupo"] != 2) {
-        $suporte = $conexao->prepare("UPDATE `suporte` SET
-                                        `usuario_id` = :usuario_id,
-                                        `status` = :status
-                                    WHERE
-                                        `id` = :id");
-
-        $suporte->bindParam(":id", $suporte_id, PDO::PARAM_INT);
-        if ($usuario_id === NULL) {
-            $suporte->bindValue(":usuario_id", NULL, PDO::PARAM_NULL);
-        } else {
+        // Só atualiza usuario_id se vier no POST e não for vazio
+        if (isset($_POST["usuario_id"]) && $_POST["usuario_id"] !== "") {
+            $suporte = $conexao->prepare("UPDATE `suporte` SET
+                                            `usuario_id` = :usuario_id,
+                                            `status` = :status
+                                        WHERE
+                                            `id` = :id");
+            $suporte->bindParam(":id", $suporte_id, PDO::PARAM_INT);
             $suporte->bindParam(":usuario_id", $usuario_id, PDO::PARAM_INT);
+            $suporte->bindParam(":status", $status, PDO::PARAM_STR);
+            $suporte->execute();
+        } else {
+            // Só atualiza o status
+            $suporte = $conexao->prepare("UPDATE `suporte` SET
+                                            `status` = :status
+                                        WHERE
+                                            `id` = :id");
+            $suporte->bindParam(":id", $suporte_id, PDO::PARAM_INT);
+            $suporte->bindParam(":status", $status, PDO::PARAM_STR);
+            $suporte->execute();
         }
-        $suporte->bindParam(":status", $status, PDO::PARAM_STR);
-
-        $suporte->execute();
     } else {
         // Cliente só pode atualizar o status
         $suporte = $conexao->prepare("UPDATE `suporte` SET
