@@ -24,7 +24,7 @@ O **Support Ticket Manager** é um sistema completo de gerenciamento de tickets 
 
 -   **Múltiplos Grupos**: Sistema de permissões por grupos de usuários
 -   **Controle de Acesso**: Diferentes níveis de acesso (Admin, Suporte, Cliente)
--   **Autenticação Segura**: Sistema de login com validação de empresa
+-   **Autenticação Segura**: Sistema de login
 
 ### 🏢 Gestão Empresarial
 
@@ -71,28 +71,71 @@ O **Support Ticket Manager** é um sistema completo de gerenciamento de tickets 
 
 ```
 Support-Ticket-Manager/
-├── api/                    # Endpoints da API
-├── assets/                 # Recursos estáticos
-├── config/                 # Classes de configuração e modelos
-├── controller/             # Controladores da aplicação
-├── css/                    # Estilos CSS
-├── database/               # Scripts do banco de dados
-├── js/                     # Scripts JavaScript
-├── libs/                   # Bibliotecas externas
-├── pages/                  # Páginas da aplicação
-├── docker-compose.yml      # Configuração Docker
-├── Dockerfile             # Imagem Docker
-└── index.php              # Página inicial
+├── 📁 api/                    # Endpoints da API
+│   └── logs.php               # Log de requisições
+├── 📁 config/                 # Classes de configuração e modelos
+│   ├── Cliente.php
+│   ├── Database.php
+│   ├── Empresa.php
+│   └── ...
+├── 📁 controller/             # Controladores da aplicação
+│   ├── 📁 cliente/
+│   │       ├── cadastrar.php
+│   │       ├── editar.php
+│   │       ├── excluir.php
+│   │       └── ...
+│   ├── 📁 empresa/
+│   └── ...
+├── 📁 css/                    # Estilos CSS
+├── 📁 database/               # Scripts do banco de dados
+├── 📁 js/                     # Scripts JavaScript
+│   ├── 📁 Utils/
+│   │   ├── Noty.js
+│   │   ├── Select2.js
+│   │   ├── Validador.js
+│   │   └── ...
+│   ├── cliente.js
+│   ├── empresa.js
+│   ├── suporte.js
+│   └── ...
+├── 📁 libs/                   # Bibliotecas externas
+│   ├── 📁 Bootstrap/
+│   ├── 📁 Chart.js/
+│   ├── 📁 jQuery/
+│   ├── 📁 Select2/
+│   ├── 📁 Noty/
+│   └── ...
+├── 📁 logs/                   # Logs da aplicação
+│   ├── 📁 2025-06-29_a_2025-07-05/
+│   │   ├── all.json
+│   │   ├── all.log
+│   │   └── error.log
+│   ├── 📁 2025-07-06_a_2025-07-12/
+│   └── ...
+├── 📁 pages/                  # Páginas da aplicação
+│   ├── 📁 empresa/
+│   │   ├── cadastro.php
+│   │   ├── edicao.php
+│   │   ├── index.php
+│   │   └── ...
+│   ├── 📁 suporte/
+│   └── ...
+├── 🐳 docker-compose.yml      # Configuração Docker
+├── 🐳 Dockerfile              # Imagem Docker
+├── 📄 index.php               # Página inicial
+├── 📄 LICENSE.txt             # Licença do projeto
+└── 📚 README.md               # Esta documentação
 ```
 
 ### Modelos de Dados
 
--   **Cliente**: Gestão de clientes (pessoa física/jurídica)
 -   **Empresa**: Empresas do sistema
--   **Usuário**: Controle de usuários e permissões
--   **Suporte**: Tickets de suporte
--   **SuporteMensagem**: Mensagens dos tickets
 -   **Serviço**: Categorização de serviços
+-   **Cliente**: Gestão de clientes (pessoa física/jurídica)
+-   **Usuário**: Controle de usuários
+-   **Grupos**: Controle de grupos de usuários
+-   **Suporte**: Tickets de suporte
+    └── **SuporteMensagem**: Mensagens dos tickets
 
 ## 🐳 Instalação e Configuração
 
@@ -166,9 +209,9 @@ O sistema está rodando em uma VPS da Digital Ocean, gerenciado pelo EasyPanel, 
 ### 1. Administrador (Grupo 1)
 
 -   Acesso total ao sistema
--   Gestão de usuários, empresas e clientes
+-   Gestão de empresas, serviços, clientes, usuários e grupos
 -   Visualização de todos os tickets
--   Relatórios completos
+-   Relatórios
 
 ### 2. Cliente (Grupo 2)
 
@@ -177,12 +220,13 @@ O sistema está rodando em uma VPS da Digital Ocean, gerenciado pelo EasyPanel, 
 -   Comunicação com o suporte
 -   Dashboard personalizado
 
-### 3. Suporte (Grupos 3-6)
+### 3. Suporte (Grupos 3-...)
 
 -   Atendimento de tickets
 -   Comunicação com clientes
 -   Fechamento de tickets
--   Acesso restrito por empresa
+-   Acesso restrito de empresa, serviço e cliente
+-   Relatórios
 
 ## 📱 Interface do Sistema
 
@@ -192,7 +236,7 @@ O sistema está rodando em uma VPS da Digital Ocean, gerenciado pelo EasyPanel, 
 -   **Dashboard**: Visão geral com gráficos e estatísticas
 -   **Tickets**: Listagem e gerenciamento de tickets
 -   **Meus Tickets**: Tickets do usuário logado
--   **Cadastros**: Gestão de empresas, clientes e usuários
+-   **Cadastros**: Gestão de empresas, serviços, clientes, usuários e grupos
 
 ### Características da Interface
 
@@ -242,25 +286,6 @@ docker-compose down
 -   Distribuição por serviços
 -   Tempo de resposta médio
 -   Tickets por empresa/cliente
-
-## 🤝 Contribuição
-
-### Para Contribuir
-
-1. Faça um fork do projeto
-2. Crie uma branch para sua feature (`git checkout -b feature/nova-funcionalidade`)
-3. Commit suas alterações (`git commit -m 'Adiciona nova funcionalidade'`)
-4. Push para a branch (`git push origin feature/nova-funcionalidade`)
-5. Abra um Pull Request
-
-### Padrões de Commit
-
--   `feat:` Nova funcionalidade
--   `fix:` Correção de bug
--   `docs:` Documentação
--   `style:` Formatação
--   `refactor:` Refatoração
--   `test:` Testes
 
 ## 📄 Licença
 
