@@ -257,19 +257,6 @@ O sistema está rodando em uma VPS da Digital Ocean, gerenciado pelo EasyPanel, 
 
 ## 🛠️ Desenvolvimento
 
-### Estrutura de Desenvolvimento
-
-```bash
-# Iniciar ambiente de desenvolvimento
-docker-compose up -d
-
-# Acessar logs
-docker-compose logs -f
-
-# Parar ambiente
-docker-compose down
-```
-
 ### Padrões de Código
 
 -   **PSR-4**: Autoloading de classes
