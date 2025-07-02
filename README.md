@@ -10,6 +10,12 @@
 
 O **Support Ticket Manager** é um sistema completo de gerenciamento de tickets de suporte desenvolvido em PHP. O sistema permite que empresas gerenciem solicitações de suporte de forma eficiente, com controle de usuários, empresas, clientes e serviços.
 
+## 🎓 Projeto de TCC
+
+Este sistema foi desenvolvido como **Trabalho de Conclusão de Curso (TCC)** e obteve a **nota máxima de 10,0** na avaliação acadêmica. O projeto demonstra a aplicação prática de conceitos de desenvolvimento web, banco de dados, arquitetura de software e boas práticas de programação.
+
+**Avaliação Final**: 📊 **10,0/10,0** ⭐
+
 ## ✨ Funcionalidades Principais
 
 ### 🎫 Gerenciamento de Tickets
