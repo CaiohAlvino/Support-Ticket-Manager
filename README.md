@@ -242,7 +242,6 @@ Para suporte técnico ou dúvidas sobre o sistema:
 
 -   [ ] Integração com e-mail
 -   [ ] Sistema de anexos
--   [ ] Notificações push
 -   [ ] Integração com ferramentas externas
 
 ---
