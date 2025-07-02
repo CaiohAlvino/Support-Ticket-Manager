@@ -246,9 +246,20 @@ Para suporte técnico ou dúvidas sobre o sistema:
 
 ## 🎯 Próximas Funcionalidades
 
+### Melhorias Atuais
 -   [ ] Integração com e-mail
 -   [ ] Sistema de anexos
 -   [ ] Integração com ferramentas externas
+
+### 🚀 Versão 2.0 - Laravel
+Está planejada uma **versão completamente reescrita em Laravel**, que trará:
+-   🔧 **Framework Moderno**: Migração para Laravel (PHP Framework mais popular)
+-   🏗️ **Arquitetura Aprimorada**: Uso de Eloquent ORM, Migrations, Seeders
+-   🎨 **Interface Renovada**: Frontend com tecnologias mais modernas
+-   ⚡ **Performance Otimizada**: Melhor performance e escalabilidade
+-   🧪 **Testes Automatizados**: Cobertura completa de testes
+-   📱 **API RESTful**: API robusta para integrações
+-   🔐 **Segurança Avançada**: Implementação das melhores práticas de segurança do Laravel
 
 ---
 
