@@ -1,90 +1,92 @@
 # Support Ticket Manager
 
-![Sistema de Tickets](https://img.shields.io/badge/Sistema-Tickets%20de%20Suporte-blue)
+![Ticket System](https://img.shields.io/badge/Sistema-Tickets%20de%20Suporte-blue)
 ![PHP](https://img.shields.io/badge/PHP-8.2-777BB4)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-orange)
 ![Docker](https://img.shields.io/badge/Docker-Containerized-blue)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.x-purple)
 
-## 📋 Descrição
+Versão em português: [README_pt-br.md](README_pt-br.md)
 
-O **Support Ticket Manager** é um sistema completo de gerenciamento de tickets de suporte desenvolvido em PHP. O sistema permite que empresas gerenciem solicitações de suporte de forma eficiente, com controle de usuários, empresas, clientes e serviços.
+## 📋 Description
 
-## 🎓 Projeto de TCC
+**Support Ticket Manager** is a complete support ticket management system developed in PHP. The system allows companies to efficiently manage support requests, with control over users, companies, clients, and services.
 
-Este sistema foi desenvolvido como **Trabalho de Conclusão de Curso (TCC)** e obteve a **nota máxima de 10,0** na avaliação acadêmica. O projeto demonstra a aplicação prática de conceitos de desenvolvimento web, banco de dados, arquitetura de software e boas práticas de programação.
+## 🎓 Graduation Project
 
-**Avaliação Final**: 📊 **10,0/10,0** ⭐
+This system was developed as a **Final Graduation Project (TCC)** and received the **maximum grade of 10.0** in the academic evaluation. The project demonstrates the practical application of web development concepts, databases, software architecture, and programming best practices.
 
-## ✨ Funcionalidades Principais
+**Final Grade**: 📊 **10.0/10.0** ⭐
 
-### 🎫 Gerenciamento de Tickets
+## ✨ Main Features
 
--   **Criação de Tickets**: Abertura de tickets com assunto, descrição e categoria
--   **Status Dinâmico**: Controle de status (Aberto, Aguardando Suporte, Respondido, Fechado)
--   **Sistema de Mensagens**: Comunicação bidirecional entre cliente e suporte
--   **Histórico Completo**: Rastreamento de todas as interações
--   **Dashboard Intuitivo**: Visão geral com gráficos e estatísticas
+### 🎫 Ticket Management
 
-### 👥 Gestão de Usuários e Permissões
+-   **Ticket Creation**: Open tickets with subject, description, and category
+-   **Dynamic Status**: Status control (Open, Waiting for Support, Answered, Closed)
+-   **Messaging System**: Two-way communication between client and support
+-   **Full History**: Track all interactions
+-   **Intuitive Dashboard**: Overview with charts and statistics
 
--   **Múltiplos Grupos**: Sistema de permissões por grupos de usuários
--   **Controle de Acesso**: Diferentes níveis de acesso (Admin, Suporte, Cliente)
--   **Autenticação Segura**: Sistema de login
+### 👥 User and Permission Management
 
-### 🏢 Gestão Empresarial
+-   **Multiple Groups**: Permission system by user groups
+-   **Access Control**: Different access levels (Admin, Support, Client)
+-   **Secure Authentication**: Login system
 
--   **Cadastro de Empresas**: Gerenciamento completo de empresas
--   **Vinculação de Clientes**: Associação de clientes às empresas
--   **Serviços por Empresa**: Categorização de serviços oferecidos
--   **Controle de Usuários**: Associação de usuários às empresas
+### 🏢 Company Management
 
-### 📊 Relatórios e Dashboard
+-   **Company Registration**: Full company management
+-   **Client Linking**: Associate clients to companies
+-   **Services per Company**: Categorize offered services
+-   **User Control**: Associate users to companies
 
--   **Dashboard Interativo**: Gráficos de distribuição de tickets
--   **Estatísticas em Tempo Real**: Contadores de tickets por status
--   **Relatórios por Usuário**: Tickets por responsável
--   **Métricas de Desempenho**: Análise de serviços mais solicitados
+### 📊 Reports and Dashboard
 
-## 🚀 Tecnologias Utilizadas
+-   **Interactive Dashboard**: Ticket distribution charts
+-   **Real-Time Statistics**: Ticket counters by status
+-   **User Reports**: Tickets by responsible user
+-   **Performance Metrics**: Analysis of most requested services
+
+## 🚀 Technologies Used
 
 ### Backend
 
--   **PHP 8.2**: Linguagem principal do sistema
--   **MySQL**: Banco de dados relacional
--   **PDO**: Abstração de banco de dados
--   **Session Management**: Controle de sessões
+-   **PHP 8.2**: Main language
+-   **MySQL**: Relational database
+-   **PDO**: Database abstraction
+-   **Session Management**: Session control
 
 ### Frontend
 
--   **Bootstrap 5**: Framework CSS responsivo
--   **jQuery**: Biblioteca JavaScript
--   **Bootstrap Icons**: Ícones do sistema
--   **Chart.js**: Gráficos interativos
--   **Select2**: Componente de seleção avançada
--   **Noty**: Sistema de notificações
+-   **Bootstrap 5**: Responsive CSS framework
+-   **jQuery**: JavaScript library
+-   **Bootstrap Icons**: System icons
+-   **Chart.js**: Interactive charts
+-   **Select2**: Advanced selection component
+-   **Noty**: Notification system
 
-### Infraestrutura
+### Infrastructure
 
--   **Docker**: Containerização da aplicação
--   **Apache**: Servidor web
--   **EasyPanel**: Gerenciamento do servidor
--   **Digital Ocean**: Hospedagem VPS
+-   **Docker**: Application containerization
+-   **Apache**: Web server
+-   **EasyPanel**: Server management
+-   **Digital Ocean**: VPS hosting
 
-## 🏗️ Arquitetura do Sistema
+## 🏗️ System Architecture
 
-### Estrutura de Diretórios
+### Directory Structure
 
 ```
 Support-Ticket-Manager/
-├── 📁 api/                    # Endpoints da API
-│   └── logs.php               # Log de requisições
-├── 📁 config/                 # Classes de configuração e modelos
+├── 📁 api/                    # API Endpoints
+│   └── logs.php               # Request logs
+├── 📁 config/                 # Config and model classes
 │   ├── Cliente.php
 │   ├── Database.php
 │   ├── Empresa.php
 │   └── ...
-├── 📁 controller/             # Controladores da aplicação
+├── 📁 controller/             # Application controllers
 │   ├── 📁 cliente/
 │   │       ├── cadastrar.php
 │   │       ├── editar.php
@@ -92,9 +94,9 @@ Support-Ticket-Manager/
 │   │       └── ...
 │   ├── 📁 empresa/
 │   └── ...
-├── 📁 css/                    # Estilos CSS
-├── 📁 database/               # Scripts do banco de dados
-├── 📁 js/                     # Scripts JavaScript
+├── 📁 css/                    # CSS styles
+├── 📁 database/               # Database scripts
+├── 📁 js/                     # JavaScript scripts
 │   ├── 📁 Utils/
 │   │   ├── Noty.js
 │   │   ├── Select2.js
@@ -104,21 +106,21 @@ Support-Ticket-Manager/
 │   ├── empresa.js
 │   ├── suporte.js
 │   └── ...
-├── 📁 libs/                   # Bibliotecas externas
+├── 📁 libs/                   # External libraries
 │   ├── 📁 Bootstrap/
 │   ├── 📁 Chart.js/
 │   ├── 📁 jQuery/
 │   ├── 📁 Select2/
 │   ├── 📁 Noty/
 │   └── ...
-├── 📁 logs/                   # Logs da aplicação
+├── 📁 logs/                   # Application logs
 │   ├── 📁 2025-06-29_a_2025-07-05/
 │   │   ├── all.json
 │   │   ├── all.log
 │   │   └── error.log
 │   ├── 📁 2025-07-06_a_2025-07-12/
 │   └── ...
-├── 📁 pages/                  # Páginas da aplicação
+├── 📁 pages/                  # Application pages
 │   ├── 📁 empresa/
 │   │   ├── cadastro.php
 │   │   ├── edicao.php
@@ -126,141 +128,141 @@ Support-Ticket-Manager/
 │   │   └── ...
 │   ├── 📁 suporte/
 │   └── ...
-├── 🐳 docker-compose.yml      # Configuração Docker
-├── 🐳 Dockerfile              # Imagem Docker
-├── 📄 index.php               # Página inicial
-├── 📄 LICENSE.txt             # Licença do projeto
-└── 📚 README.md               # Esta documentação
+├── 🐳 docker-compose.yml      # Docker config
+├── 🐳 Dockerfile              # Docker image
+├── 📄 index.php               # Home page
+├── 📄 LICENSE.txt             # Project license
+└── 📚 README.md               # This documentation
 ```
 
-### Modelos de Dados
+### Data Models
 
--   **Empresa**: Empresas do sistema
--   **Serviço**: Categorização de serviços
--   **Cliente**: Gestão de clientes (pessoa física/jurídica)
--   **Usuário**: Controle de usuários
--   **Grupos**: Controle de grupos de usuários
--   **Suporte**: Tickets de suporte
--   **SuporteMensagem**: Mensagens dos tickets
+-   **Company**: System companies
+-   **Service**: Service categorization
+-   **Client**: Client management (individual/legal entity)
+-   **User**: User control
+-   **Groups**: User group control
+-   **Support**: Support tickets
+-   **SupportMessage**: Ticket messages
 
-## 🌐 Ambientes de Desenvolvimento
+## 🌐 Development Environments
 
 ### Branches
 
--   **main**: Código de produção estável
--   **desenvolvimento**: Versão em desenvolvimento
--   **producao**: Versão para deploy em produção
+-   **main**: Stable production code
+-   **development**: Development version
+-   **production**: Production deployment version
 
 ### Deploy
 
-O sistema está rodando em uma VPS da Digital Ocean, gerenciado pelo EasyPanel, com:
+The system runs on a Digital Ocean VPS, managed by EasyPanel, with:
 
--   **Container Docker**: Aplicação containerizada
--   **Banco de dados exclusivo**: MySQL dedicado
--   **SSL/HTTPS**: Certificado de segurança
--   **Backup automatizado**: Rotinas de backup
+-   **Docker Container**: Containerized application
+-   **Dedicated database**: Dedicated MySQL
+-   **SSL/HTTPS**: Security certificate
+-   **Automated backup**: Backup routines
 
-## 👥 Tipos de Usuário
+## 👥 User Types
 
-### 1. Administrador (Grupo 1)
+### 1. Administrator (Group 1)
 
--   Acesso total ao sistema
--   Gestão de empresas, serviços, clientes, usuários e grupos
--   Visualização de todos os tickets
--   Relatórios
+-   Full system access
+-   Manage companies, services, clients, users, and groups
+-   View all tickets
+-   Reports
 
-### 2. Cliente (Grupo 2)
+### 2. Client (Group 2)
 
--   Abertura de tickets de suporte
--   Visualização dos próprios tickets
--   Comunicação com o suporte
--   Dashboard personalizado
+-   Open support tickets
+-   View own tickets
+-   Communicate with support
+-   Personalized dashboard
 
-### 3. Suporte (Grupos 3-...)
+### 3. Support (Groups 3-...)
 
--   Atendimento de tickets
--   Comunicação com clientes
--   Fechamento de tickets
--   Acesso restrito de empresa, serviço e cliente
--   Relatórios
+-   Handle tickets
+-   Communicate with clients
+-   Close tickets
+-   Restricted access to company, service, and client
+-   Reports
 
-## 📱 Interface do Sistema
+## 📱 System Interface
 
-### Páginas Principais
+### Main Pages
 
--   **Login**: Autenticação com seleção de empresa
--   **Dashboard**: Visão geral com gráficos e estatísticas
--   **Tickets**: Listagem e gerenciamento de tickets
--   **Meus Tickets**: Tickets do usuário logado
--   **Cadastros**: Gestão de empresas, serviços, clientes, usuários e grupos
+-   **Login**: Authentication with company selection
+-   **Dashboard**: Overview with charts and statistics
+-   **Tickets**: Ticket listing and management
+-   **My Tickets**: Logged-in user's tickets
+-   **Registers**: Management of companies, services, clients, users, and groups
 
-### Características da Interface
+### Interface Features
 
--   **Design Responsivo**: Compatível com dispositivos móveis
--   **Tema Moderno**: Interface clean e profissional
--   **Notificações**: Sistema de alertas e confirmações
--   **Navegação Intuitiva**: Sidebar colapsível e breadcrumb
+-   **Responsive Design**: Mobile compatible
+-   **Modern Theme**: Clean and professional interface
+-   **Notifications**: Alerts and confirmations system
+-   **Intuitive Navigation**: Collapsible sidebar and breadcrumb
 
-## 🔒 Segurança
+## 🔒 Security
 
-### Medidas Implementadas
+### Implemented Measures
 
--   **Prepared Statements**: Proteção contra SQL Injection
--   **Validação de Entrada**: Sanitização de dados
--   **Controle de Sessão**: Gerenciamento seguro de sessões
--   **Permissões**: Sistema de grupos e permissões
--   **HTTPS**: Conexão segura (em produção)
+-   **Prepared Statements**: Protection against SQL Injection
+-   **Input Validation**: Data sanitization
+-   **Session Control**: Secure session management
+-   **Permissions**: Group and permission system
+-   **HTTPS**: Secure connection (in production)
 
-## 🛠️ Desenvolvimento
+## 🛠️ Development
 
-### Padrões de Código
+### Code Standards
 
--   **PSR-4**: Autoloading de classes
--   **Separação de Responsabilidades**: MVC pattern
--   **Validação**: Classes dedicadas para validação
--   **Documentação**: Comentários em métodos importantes
+-   **PSR-4**: Class autoloading
+-   **Separation of Concerns**: MVC pattern
+-   **Validation**: Dedicated validation classes
+-   **Documentation**: Comments on important methods
 
-## 📊 Monitoramento
+## 📊 Monitoring
 
-### Métricas Disponíveis
+### Available Metrics
 
--   Total de tickets por status
--   Tickets por usuário responsável
--   Distribuição por serviços
--   Tempo de resposta médio
--   Tickets por empresa/cliente
+-   Total tickets by status
+-   Tickets by responsible user
+-   Distribution by services
+-   Average response time
+-   Tickets by company/client
 
-## 📄 Licença
+## 📄 License
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE.txt) para mais detalhes.
+This project is under the MIT license. See the [LICENSE](LICENSE.txt) file for more details.
 
-## 📞 Suporte
+## 📞 Support
 
-Para suporte técnico ou dúvidas sobre o sistema:
+For technical support or questions about the system:
 
 -   **Email**: caioh.alvino22@gmail.com
--   **Horário**: Dias úteis, 8h às 18h
--   **Documentação**: Disponível no sistema
+-   **Hours**: Business days, 8am to 6pm
+-   **Documentation**: Available in the system
 
 ---
 
-## 🎯 Próximas Funcionalidades
+## 🎯 Next Features
 
-### Melhorias Atuais
--   [ ] Integração com e-mail
--   [ ] Sistema de anexos
--   [ ] Integração com ferramentas externas
+### Current Improvements
+-   [ ] Email integration
+-   [ ] Attachment system
+-   [ ] Integration with external tools
 
-### 🚀 Versão 2.0 - Laravel
-Está planejada uma **versão completamente reescrita em Laravel**, que trará:
--   🔧 **Framework Moderno**: Migração para Laravel (PHP Framework mais popular)
--   🏗️ **Arquitetura Aprimorada**: Uso de Eloquent ORM, Migrations, Seeders
--   🎨 **Interface Renovada**: Frontend com tecnologias mais modernas
--   ⚡ **Performance Otimizada**: Melhor performance e escalabilidade
--   🧪 **Testes Automatizados**: Cobertura completa de testes
--   📱 **API RESTful**: API robusta para integrações
--   🔐 **Segurança Avançada**: Implementação das melhores práticas de segurança do Laravel
+### 🚀 Version 2.0 - Laravel
+A **completely rewritten version in Laravel** is planned, which will bring:
+-   🔧 **Modern Framework**: Migration to Laravel (most popular PHP framework)
+-   🏗️ **Improved Architecture**: Use of Eloquent ORM, Migrations, Seeders
+-   🎨 **Renewed Interface**: Frontend with more modern technologies
+-   ⚡ **Optimized Performance**: Better performance and scalability
+-   🧪 **Automated Tests**: Full test coverage
+-   📱 **RESTful API**: Robust API for integrations
+-   🔐 **Advanced Security**: Implementation of Laravel's best security practices
 
 ---
 
-**Desenvolvido com ❤️ para otimizar o atendimento ao cliente**
+**Developed with ❤️ to optimize customer service**
